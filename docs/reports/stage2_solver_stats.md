@@ -3,7 +3,7 @@
 - **Base:** `main` = `22842de` (Stage 1 engine freeze). No engine rule was changed.
 - **Branch:** `chaitanya/solver-stats`.
 - **Commits that produced results:** `c801b5e` (N = 3 and N = 4, M = 0 solves), `c801b5e`
-  (M = 1 solves, cross-checks, both match ablations), this commit (`analysis.json`). Every
+  (M = 1 solves, cross-checks, both match ablations), `b4287cc` (`analysis.json`). Every
   result JSON records the commit and a dirty flag (all `false`) in `run.source` (and in
   `source` for solver, cross-check and ablation files), plus the command, Python version
   (3.12.5), platform and UTC date. Solver code is identical in all three commits; later commits
