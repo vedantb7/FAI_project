@@ -76,7 +76,7 @@
     "step": 200022
   },
   "manifest_written_at_commit": {
-    "commit": "97707c8fc02b11a3b258d365e87a7053ca1e5a2f",
+    "commit": "f303db26ac7ce1e9a7cef9c13760142901667b07",
     "dirty": true
   },
   "note": "Same configs/training.yaml board_3 values and code for all five seeds; --max-minutes differed but no run paused (each finished in one session). Training code is identical for every run (only the run_config.json write changed). Commit and dirty flag reconstructed from the commit log at run start."
