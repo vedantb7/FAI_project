@@ -4,7 +4,7 @@
 - **Branch:** `chaitanya/solver-stats`.
 - **Commits that produced results:** `c801b5e` (N = 3 and N = 4, M = 0 solves), `c801b5e`
   (M = 1 solves, cross-checks, 6-ply ablation), `753c604` (4-ply primary and 2-ply
-  pilot-comparison ablations), this commit (`analysis.json`). commit `b4287cc` (merged) held the first
+  pilot-comparison ablations), `c61ed12` (`analysis.json`). commit `b4287cc` (merged) held the first
   round; this follow-up change holds the distinct-opening rework. Every
   result JSON records the commit and a dirty flag (all `false`) in `run.source` (and in
   `source` for solver, cross-check and ablation files), plus the command, Python version

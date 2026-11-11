@@ -5,7 +5,7 @@
   the original Stage 2 audit.
 - **Base:** `main` = `753c604`. Branch `vedant/hop-aware-eval`.
 - **Code commit that produced every result:** `753c604` (tree clean; `source` in every JSON).
-  Results committed in this commit. No engine change. `agents/minimax.py` is unchanged.
+  Results committed in `c61ed12`. No engine change. `agents/minimax.py` is unchanged.
 - **Results folder:** `experiments/results/final_minimax_hop/`.
 - **Machine:** Windows, Python 3.12.5. Teammates shared the machine, so every time is load-affected.
 
