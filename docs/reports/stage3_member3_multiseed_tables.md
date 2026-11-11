@@ -3,7 +3,7 @@
 - **Base:** `main` = `f303db2`. Branch `chaitanya/multiseed-tables`.
 - **No engine, solver or agent code changed.**
 - **Result commits (all clean, recorded in each file's `source`):** `7e73e14` (multi-seed),
-  `7e73e14` (agreement), this commit (tables, `final_eval/tables/manifest.json` `run.source`).
+  `7e73e14` (agreement), `13fa2e3` (tables, `final_eval/tables/manifest.json` `run.source`).
 - **Checkpoints:** Dhruv's `checkpoints\final\3x3_s<seed>\final.pt`,
   seeds 42-46. Each SHA-256 equals the committed `checkpoints/final/3x3_s<seed>/manifest.json`
   (`multi_seed_3x3.json` `seeds[*].manifest_sha256_match` all `true`; `agreement_N3_K1.json`
