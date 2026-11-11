@@ -14,7 +14,7 @@
   | `b4287cc` | `vs_greedy_N5_open4_depth{1,3}_diag*` |
   | `b4287cc` | `hop_stats.json` |
 | `b4287cc` | `hop_examples.json` (replays the match logs; plays nothing) |
-| this commit | `vs_greedy_N9_timed_r2*`, `n9_r2_load.json` |
+| `753c604` | `vs_greedy_N9_timed_r2*`, `n9_r2_load.json` |
   | `b4287cc` | `opening_maps.json` (read from the match logs; plays nothing) |
 - **Added:** `tests/test_minimax_final_compat.py` (14 tests), `scripts/final_minimax.py`
   (experiment driver), results in `experiments/results/final_minimax/`, this report,

@@ -1,6 +1,6 @@
 {
   "source": {
-    "commit": "b4287cc887a8c9fce3525644b8c25c8cac23e6c1",
+    "commit": "753c60411f22b2ba49e40c305bb9a79c30f5d936",
     "dirty": false
   },
   "command": "python scripts/final_minimax.py vs-greedy -N 9 --seeds 10 --opening-plies 2 --spec minimax:depth=2,time_limit=1.0 --tag N9_timed_r2",

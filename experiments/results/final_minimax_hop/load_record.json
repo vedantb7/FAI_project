@@ -1,0 +1,46 @@
+{
+  "source": {
+    "commit": "753c60411f22b2ba49e40c305bb9a79c30f5d936",
+    "dirty": false
+  },
+  "date": "2026-11-11T05:49:02+05:30",
+  "python": "3.12.5",
+  "note": "decision times and depth reached are load-affected; runs were started beside teammates without HEAVY.lock, as agreed by the team",
+  "runs": {
+    "vs_greedy_N5_hop_d3": {
+      "resource_check_start": "posture ample, 5.5 GB available (05:42)",
+      "resource_check_end": "posture ample, 5.5 GB available (05:47)",
+      "start": {
+        "time": "2026-11-11T05:43:04",
+        "free_mb": 5579,
+        "heavy_lock": "chaitanya 2026-11-11T05:37:35 ablation 640 (open4) + 144 (open2) matches",
+        "other_python_jobs": []
+      },
+      "end": {
+        "time": "2026-11-11T05:46:51",
+        "free_mb": 5449,
+        "heavy_lock": "chaitanya 2026-11-11T05:37:35 ablation 640 (open4) + 144 (open2) matches",
+        "other_python_jobs": []
+      },
+      "wall_seconds": 226.8
+    },
+    "vs_greedy_N9_hop_timed": {
+      "resource_check_start": "posture ample, 5.4 GB available (05:47)",
+      "resource_check_end": "posture ample, 5.4 GB available (05:48)",
+      "start": {
+        "time": "2026-11-11T05:47:22",
+        "free_mb": 5429,
+        "heavy_lock": "chaitanya 2026-11-11T05:37:35 ablation 640 (open4) + 144 (open2) matches",
+        "other_python_jobs": []
+      },
+      "end": {
+        "time": "2026-11-11T05:48:22",
+        "free_mb": 5471,
+        "heavy_lock": "chaitanya 2026-11-11T05:37:35 ablation 640 (open4) + 144 (open2) matches",
+        "other_python_jobs": []
+      },
+      "wall_seconds": 58.5
+    }
+  },
+  "other_jobs": "No Dhruv or Chaitanya python process at the start or end of either run. HEAVY.lock was held by Chaitanya (\"ablation 640 (open4) + 144 (open2) matches\", 05:37:35) throughout. Right after the N9 run (about 05:49) Dhruv's wrapper train-chunk.ps1 for \"train dqn 3x3 s45\" was running with no python child, so Dhruv's training was queued, not computing, as far as these snapshots show. The d3 start/end snapshots filtered command lines containing \"scripts\"; the N9 ones listed every non-KiroCrew python process."
+}
