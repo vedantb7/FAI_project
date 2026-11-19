@@ -19,7 +19,7 @@ default:
   eval_freq: 10000
   eval_matches: 20
   seed: 42
-  device: "cpu"
+  device: "auto"  # CUDA when available, else CPU; set "cpu" to force CPU
 
 board_3:
   board_size: 3

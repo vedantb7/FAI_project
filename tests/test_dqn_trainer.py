@@ -115,7 +115,7 @@ class TestDQNTrainer(unittest.TestCase):
 
         # Check Q-value of action 0 on obs
         with torch.no_grad():
-            x = torch.as_tensor(obs, dtype=torch.float32).unsqueeze(0)
+            x = torch.as_tensor(obs, dtype=torch.float32, device=win_trainer.device).unsqueeze(0)
             q_win = win_trainer.online_net(x)[0, 0].item()
         self.assertGreater(q_win, 0.5, f"Expected Q-value > 0.5 for winning transition, got {q_win}")
 
@@ -151,9 +151,23 @@ class TestDQNTrainer(unittest.TestCase):
 
         # Now online_net should predict negative value for action 0
         with torch.no_grad():
-            x = torch.as_tensor(obs, dtype=torch.float32).unsqueeze(0)
+            x = torch.as_tensor(obs, dtype=torch.float32, device=loss_trainer.device).unsqueeze(0)
             q_loss = loss_trainer.online_net(x)[0, 0].item()
         self.assertLess(q_loss, -0.5, f"Expected Q-value < -0.5 for losing transition, got {q_loss}")
+
+
+@unittest.skipUnless(DEPS_AVAILABLE, "PyTorch required")
+class TestDeviceAuto(unittest.TestCase):
+    def test_auto_follows_cuda_availability(self):
+        from unittest import mock
+        from agents.dqn.network import resolve_device
+        self.assertEqual(resolve_device('cpu'), 'cpu')
+        with mock.patch.object(torch.cuda, 'is_available', return_value=True):
+            self.assertEqual(resolve_device('auto'), 'cuda')
+        with mock.patch.object(torch.cuda, 'is_available', return_value=False):
+            self.assertEqual(resolve_device('auto'), 'cpu')
+            trainer = DQNTrainer(DQNConfig(board_size=3, rules={'A': False, 'B': False, 'C': False, 'M': 0}))
+            self.assertEqual(trainer.config.device, 'cpu')  # resolved name is recorded
 
 
 if __name__ == '__main__':

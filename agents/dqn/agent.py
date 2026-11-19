@@ -21,7 +21,7 @@ except ImportError:
     torch = None
 
 from agents.dqn.encoding import encode_observation, OBS_VERSION
-from agents.dqn.network import QNetwork
+from agents.dqn.network import QNetwork, resolve_device
 try:
     from modified_wallz.actions import ActionCodec, CODEC_VERSION
 except ImportError:
@@ -54,8 +54,9 @@ class DQNAgent:
         rules: dict,
         codec_version: int = CODEC_VERSION,
         obs_version: int = OBS_VERSION,
-        device: str = "cpu",
+        device: str = "auto",
     ):
+        device = resolve_device(device)
         self.player_id = player_id
         self.model = model
         self.board_size = board_size
@@ -160,7 +161,7 @@ def load_checkpoint(
     player_id: int = 0,
     expected_board_size: Optional[int] = None,
     expected_rules: Optional[dict] = None,
-    device: str = "cpu",
+    device: str = "auto",
 ) -> DQNAgent:
     """Loads a DQNAgent from a checkpoint path and validates metadata (C9 contract).
 
@@ -169,7 +170,7 @@ def load_checkpoint(
         player_id: Target player seat (0 or 1).
         expected_board_size: If specified, validates match against meta['N'].
         expected_rules: If specified, validates match against meta['rules'].
-        device: Device to load model onto ('cpu' or 'cuda').
+        device: Device to load model onto ('auto', 'cpu' or 'cuda'); 'auto' picks CUDA when available.
 
     Returns:
         Configured DQNAgent with loaded weights in eval mode.
@@ -244,6 +245,7 @@ def load_checkpoint(
         dueling=meta.get('dueling', False),
     )
 
+    device = resolve_device(device)
     state_dict = torch.load(weights_file, map_location=device, weights_only=True)
     model.load_state_dict(state_dict)
 

@@ -79,7 +79,8 @@ def population_truth(sol, agent, batch=4096):
         engines = [g.restore(g.keys[u]) for u in chunk]
         obs = np.stack([encode_observation(e, mover=g.to_move[u]) for e, u in zip(engines, chunk)])
         with torch.no_grad():
-            q = model(torch.as_tensor(obs, dtype=torch.float32)).numpy()
+            dev = next(model.parameters()).device
+            q = model(torch.as_tensor(obs, dtype=torch.float32, device=dev)).cpu().numpy()
         for row, e, u in zip(q, engines, chunk):
             mover = g.to_move[u]
             ids = sorted(codec.encode(a, e, mover=mover) for a, _ in g.succ[u])

@@ -18,7 +18,7 @@ except ImportError:
     nn = None
     optim = None
 
-from agents.dqn.network import QNetwork
+from agents.dqn.network import QNetwork, resolve_device
 from agents.dqn.replay_buffer import ReplayBuffer
 try:
     from modified_wallz.actions import ActionCodec
@@ -50,7 +50,7 @@ class DQNConfig:
     hidden: int = 256
     mirror_prob: float = 0.5
     seed: int = 42
-    device: str = "cpu"
+    device: str = "auto"  # 'auto' = CUDA when available, else CPU
 
 
 class DQNTrainer:
@@ -60,6 +60,7 @@ class DQNTrainer:
         self.config = config
         self.board_size = config.board_size
         self.num_actions = ActionCodec.get_num_actions(config.board_size)
+        config.device = resolve_device(config.device)  # resolved name is what run_config.json records
         self.device = torch.device(config.device) if torch is not None else None
 
         # Seed initialization

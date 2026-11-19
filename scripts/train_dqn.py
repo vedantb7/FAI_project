@@ -44,7 +44,7 @@ def evaluate_agent(
     board_size: int,
     rules: dict,
     num_matches: int = 10,
-    device: str = "cpu",
+    device: str = "auto",
 ) -> Dict[str, Any]:
     """Evaluates the current online network against greedy and random baselines."""
     eval_results = {}
@@ -151,7 +151,8 @@ def q_probe_stats(model, probe) -> Dict[str, float]:
     was_training = model.training
     model.eval()
     with torch.no_grad():
-        q = model(torch.as_tensor(obs, dtype=torch.float32)).cpu().numpy()
+        dev = next(model.parameters()).device
+        q = model(torch.as_tensor(obs, dtype=torch.float32, device=dev)).cpu().numpy()
     if was_training:
         model.train()
     best = _np.where(masks, q, -_np.inf).max(axis=1)
@@ -218,7 +219,7 @@ def main():
     parser.add_argument("--board-size", type=int, default=3, help="Board size (3, 4, 5, 9)")
     parser.add_argument("--steps", type=int, default=None, help="Override total env steps")
     parser.add_argument("--seed", type=int, default=None, help="Random seed")
-    parser.add_argument("--device", type=str, default=None, help="Device ('cpu' or 'cuda')")
+    parser.add_argument("--device", type=str, default=None, help="Device ('auto', 'cpu' or 'cuda'); default from config, 'auto' uses CUDA when available")
     parser.add_argument("--output-dir", type=str, default=None, help="Output directory for checkpoints and logs")
     parser.add_argument("--eval-freq", type=int, default=None, help="Env steps between evaluations")
     parser.add_argument("--smoke", action="store_true", help="Run quick 2000-step smoke test")
@@ -294,10 +295,12 @@ def main():
         hidden=cfg_dict.get('hidden', 256),
         mirror_prob=cfg_dict.get('mirror_prob', 0.5 if board_size % 2 == 1 else 0.0),
         seed=seed,
-        device=cfg_dict.get('device', 'cpu'),
+        device=cfg_dict.get('device', 'auto'),
     )
 
     trainer = DQNTrainer(dqn_config)
+    cfg_dict['device'] = trainer.config.device  # record the resolved device, not 'auto'
+    print(f"Training on device: {trainer.config.device}")
     sp_manager = SelfPlayManager(
         trainer=trainer,
         snapshot_interval=cfg_dict.get('snapshot_interval', 20_000),

@@ -12,6 +12,13 @@ except ImportError:
     nn = None
 
 
+def resolve_device(device: str = "auto") -> str:
+    """'auto' -> 'cuda' when a CUDA GPU is available, else 'cpu'; other values pass through."""
+    if device != "auto":
+        return device
+    return "cuda" if torch is not None and torch.cuda.is_available() else "cpu"
+
+
 class QNetwork(nn.Module if nn is not None else object):
     """Convolutional Q-Network for Modified Wallz with optional Dueling streams."""
 
