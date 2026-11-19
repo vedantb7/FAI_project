@@ -40,7 +40,7 @@ export const RulesPage: React.FC = () => {
     try {
       const created = await api.createGameFromScenario(selectedName, 'human', 'greedy');
       // Hand the scenario game to the Play page; without this it started a fresh default game
-      navigate('/', { state: { sessionId: created.id } });
+      navigate('/play', { state: { sessionId: created.id } });
     } catch (err: any) {
       alert(err.message || 'Failed to initialize playable game');
     }
@@ -60,10 +60,10 @@ export const RulesPage: React.FC = () => {
             style={{ width: '100%', marginBottom: '1rem', fontSize: '0.8rem' }}
             onClick={() => setShowDoc(!showDoc)}
           >
-            {showDoc ? 'Hide Official Rules Doc' : '📖 View Rules Spec (Markdown)'}
+            {showDoc ? 'Hide full rules' : 'Show full rules'}
           </button>
 
-          <div className="card-title">Rule Scenarios ({scenarios.length})</div>
+          <div className="card-title">Rule scenarios ({scenarios.length})</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {scenarios.map((s) => (
               <div
@@ -79,8 +79,17 @@ export const RulesPage: React.FC = () => {
                 }}
               >
                 <div style={{ fontWeight: 600 }}>{s.title}</div>
-                <div style={{ fontSize: '0.75rem', color: selectedName === s.name ? '#ffffff' : 'var(--text-muted)' }}>
-                  {s.description.slice(0, 60)}...
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: selectedName === s.name ? '#ffffff' : 'var(--text-muted)',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {s.description}
                 </div>
               </div>
             ))}
@@ -91,8 +100,8 @@ export const RulesPage: React.FC = () => {
         <div className="board-container">
           {showDoc && (
             <div className="card" style={{ width: '100%', marginBottom: '1.5rem', maxHeight: '500px', overflowY: 'auto' }}>
-              <div className="card-title">Official Rules Specification (docs/game_rules.md)</div>
-              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.8rem', lineHeight: '1.4', color: 'var(--text-color)' }}>
+              <div className="card-title">Full rules (docs/game_rules.md)</div>
+              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.8rem', lineHeight: '1.4', color: 'var(--text-main)' }}>
                 {rulesDoc || 'Loading rules...'}
               </pre>
             </div>
@@ -112,7 +121,7 @@ export const RulesPage: React.FC = () => {
             </div>
           )}
 
-          {loading && <p>Executing scenario verification...</p>}
+          {loading && <p>Running this scenario through the engine…</p>}
 
           {currentFrame && (
             <>
@@ -154,7 +163,7 @@ export const RulesPage: React.FC = () => {
                 {currentFrame.checks && currentFrame.checks.length > 0 && (
                   <div style={{ marginTop: '0.75rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.5rem' }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-                      Rule Invariant Checks:
+                      Engine checks at this ply
                     </div>
                     {currentFrame.checks.map((chk, i) => (
                       <div

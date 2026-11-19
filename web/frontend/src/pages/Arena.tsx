@@ -5,6 +5,13 @@ import { Board } from '../components/Board';
 import { ConfigForm } from '../components/ConfigForm';
 import { TerminalBanner } from '../components/TerminalBanner';
 
+// e.g. "5×5 board, rules A+B+C, K=3, M=10", from the config the server echoes back, not the form.
+function batchConfigLabel(c: any): string {
+  if (!c) return 'Config not reported';
+  const on = ['A', 'B', 'C'].filter((k) => c[k]);
+  return `${c.board_size}×${c.board_size} board, rules ${on.length ? on.join('+') : 'none'}, K=${c.K}, M=${c.M}`;
+}
+
 export const ArenaPage: React.FC = () => {
   const [config, setConfig] = useState<GameConfig>({
     board_size: 5,
@@ -206,7 +213,7 @@ export const ArenaPage: React.FC = () => {
               onClick={handleRunBatch}
               disabled={isBatchRunning}
             >
-              {isBatchRunning ? 'Running Batch...' : 'Run Tournament Batch'}
+              {isBatchRunning ? 'Playing games…' : 'Play batch'}
             </button>
           </div>
         </div>
@@ -275,7 +282,12 @@ export const ArenaPage: React.FC = () => {
           {/* Tournament Batch Results Card */}
           {batchResults && (
             <div className="card" style={{ marginTop: '1rem' }}>
-              <div className="card-title">Tournament Results ({batchResults.games} games)</div>
+              <div className="card-title">Batch results ({batchResults.games} games)</div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
+                Played just now on this server by the engine. {batchConfigLabel(batchResults.config)}. Seats swap every
+                game; opening seeds start at 42. These are not the committed study results in{' '}
+                <code>experiments/results/final_*</code>.
+              </p>
               {Object.entries(batchResults.by_spec).map(([sp, st]: any) => (
                 <div key={sp} style={{ marginBottom: '0.5rem', fontSize: '0.85rem' }}>
                   <div>
@@ -288,7 +300,8 @@ export const ArenaPage: React.FC = () => {
                 </div>
               ))}
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                Avg Length: {batchResults.mean_length} plies
+                Average length: {batchResults.mean_length} plies. Truncated games hit the ply cap and are counted
+                separately, not as draws.
               </div>
             </div>
           )}

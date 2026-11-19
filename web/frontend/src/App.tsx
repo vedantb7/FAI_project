@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { HomePage } from './pages/Home';
 import { PlayPage } from './pages/Play';
 
 // Only the Play page is in the initial bundle; the other pages (and recharts, used by
@@ -15,13 +16,14 @@ export const App: React.FC = () => {
       <div className="app-container">
         <header className="navbar">
           <div className="nav-brand">
-            <span>♟ Modified Wallz</span>
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 400 }}>
-              Multi-Agent Spatial AI
-            </span>
+            <strong>Modified Wallz</strong>
+            <span>CS 329 multi-agent study</span>
           </div>
           <nav className="nav-links">
-            <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+            <NavLink to="/" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              Home
+            </NavLink>
+            <NavLink to="/play" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               Play
             </NavLink>
             <NavLink to="/arena" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
@@ -39,9 +41,9 @@ export const App: React.FC = () => {
           </nav>
         </header>
 
-        <Suspense fallback={<div className="main-content">Loading…</div>}>
+        <Suspense fallback={<div className="main-content"><p className="loading-figure">Loading…</p></div>}>
         <Routes>
-          <Route path="/" element={<PlayPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/arena" element={<ArenaPage />} />
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/replays" element={<ReplaysPage />} />
@@ -53,7 +55,7 @@ export const App: React.FC = () => {
               <div className="main-content">
                 <h2>Page not found</h2>
                 <p>
-                  Use the navigation above, or go to <NavLink to="/">Play</NavLink>.
+                  Use the navigation above, or go to the <NavLink to="/">home page</NavLink>.
                 </p>
               </div>
             }

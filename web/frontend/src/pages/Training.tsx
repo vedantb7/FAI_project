@@ -65,6 +65,8 @@ export const TrainingPage: React.FC = () => {
     }));
   }, [runData]);
 
+  const selectedRun = runs.find((r) => r.id === selectedRunId);
+
   const handleStartLive = async () => {
     setLiveStarting(true);
     try {
@@ -89,29 +91,40 @@ export const TrainingPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="main-content">Loading training metrics...</div>;
+    return <div className="main-content">Loading training runs…</div>;
   }
 
   return (
     <div className="main-content" data-testid="training-page">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h2>DQN Reinforcement Learning & Empirical Verification</h2>
+        <h2>DQN Training Runs</h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <label className="form-label" style={{ margin: 0 }}>Select Run:</label>
+          <label className="form-label" htmlFor="training-run" style={{ margin: 0 }}>Run</label>
           <select
+            id="training-run"
             className="form-select"
             value={selectedRunId}
             onChange={(e) => setSelectedRunId(e.target.value)}
-            style={{ width: '240px' }}
+            style={{ width: 'auto', maxWidth: '100%' }}
           >
             {runs.map((r) => (
               <option key={r.id} value={r.id}>
-                {r.id} {r.release ? '★ (Release)' : ''} {!r.has_log ? '(weights only)' : ''}
+                {r.id}{r.release ? ' (release, old HOP rule)' : ''}{!r.has_log ? ' (weights only)' : ''}
               </option>
             ))}
           </select>
         </div>
       </div>
+
+      {selectedRun?.release && (
+        <div className="card" role="note" style={{ marginBottom: '1.5rem' }}>
+          <strong>Not a final-rule result.</strong>{' '}
+          This release model was trained before the final HOP rule
+          {selectedRun.meta?.commit ? <> (commit <code>{selectedRun.meta.commit}</code>)</> : null}, so its numbers
+          do not describe the game as it is played now. Final-rule DQN evaluations are in{' '}
+          <code>experiments/results/final_dqn/</code>.
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
         {/* Win Rate Learning Curve */}
@@ -131,7 +144,7 @@ export const TrainingPage: React.FC = () => {
               </ResponsiveContainer>
             ) : (
               <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
-                No episode log curves available for this run.
+                This run has no training log (<code>train_log.jsonl</code>), so there is no win-rate curve to plot.
               </div>
             )}
           </div>
@@ -154,7 +167,7 @@ export const TrainingPage: React.FC = () => {
               </ResponsiveContainer>
             ) : (
               <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
-                No loss records for this run.
+                This run has no training log, so there is no loss curve to plot.
               </div>
             )}
           </div>
@@ -165,16 +178,17 @@ export const TrainingPage: React.FC = () => {
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <div className="card-title" style={{ margin: 0 }}>Interactive Live Mini-Training (N=3)</div>
+            <div className="card-title" style={{ margin: 0 }}>Live training demo (3×3 board)</div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: '0.25rem 0 0 0' }}>
-              Launch a live Double-DQN self-play training run in the background. Stream training logs and inspect checkpoints.
+              Runs a short Double-DQN self-play session on this server so you can watch training happen. It is a
+              demonstration, not one of the evaluated models.
             </p>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             {liveStatus?.active ? (
               <>
                 <span style={{ fontSize: '0.85rem', color: '#10b981', fontWeight: 600 }}>
-                  ● Training Active ({liveStatus.elapsed_seconds || 0}s)
+                  Training ({liveStatus.elapsed_seconds || 0}s elapsed)
                 </span>
                 <button className="btn" onClick={handleStopLive}>
                   Stop Training
@@ -186,7 +200,7 @@ export const TrainingPage: React.FC = () => {
                 disabled={liveStarting}
                 onClick={handleStartLive}
               >
-                {liveStarting ? 'Starting...' : '⚡ Start 2,000-Step Mini-Training'}
+                {liveStarting ? 'Starting…' : 'Start 2,000-step training'}
               </button>
             )}
           </div>
@@ -194,7 +208,7 @@ export const TrainingPage: React.FC = () => {
 
         {liveStatus?.checkpoints && liveStatus.checkpoints.length > 0 && (
           <div style={{ marginTop: '0.75rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.5rem', fontSize: '0.85rem' }}>
-            <span style={{ fontWeight: 600, color: 'var(--text-color)' }}>Generated Checkpoints: </span>
+            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>Checkpoints saved: </span>
             <span style={{ color: 'var(--primary)', fontFamily: 'monospace' }}>
               {liveStatus.checkpoints.join(', ')}
             </span>
@@ -205,7 +219,7 @@ export const TrainingPage: React.FC = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
         {/* Architecture & Run Meta */}
         <div className="card">
-          <div className="card-title">Network Architecture & Meta</div>
+          <div className="card-title">Network and run details</div>
           {runData?.meta ? (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.85rem' }}>
               <div className="stat-row"><span>Board Size:</span> <span className="stat-val">{runData.meta.N} × {runData.meta.N}</span></div>
@@ -218,12 +232,12 @@ export const TrainingPage: React.FC = () => {
               <div className="stat-row"><span>Obs Version:</span> <span className="stat-val">v{runData.meta.obs_version}</span></div>
             </div>
           ) : (
-            <p style={{ color: 'var(--text-muted)' }}>Metadata unavailable.</p>
+            <p style={{ color: 'var(--text-muted)' }}>This run has no <code>meta.json</code>, so its network details are unknown.</p>
           )}
 
           {runData?.opponents && (
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.75rem' }}>
-              <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.4rem' }}>Self-Play Opponent Pool Distribution</div>
+              <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.4rem' }}>Training opponents (games played against each)</div>
               <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.85rem' }}>
                 <div>Current: <strong>{runData.opponents.current}</strong></div>
                 <div>Snapshot: <strong>{runData.opponents.snapshot}</strong></div>
@@ -235,7 +249,7 @@ export const TrainingPage: React.FC = () => {
 
         {/* Canonical Hyperparameters */}
         <div className="card">
-          <div className="card-title">Canonical DQN Trainer Hyperparameters</div>
+          <div className="card-title">Default trainer settings</div>
           {trainerConfig ? (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.825rem' }}>
               <div className="stat-row"><span>Learning Rate:</span> <span className="stat-val">{trainerConfig.lr}</span></div>

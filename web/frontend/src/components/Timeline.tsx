@@ -1,62 +1,46 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { HistoryEntry } from '../api/types';
+import { describeAction } from '../lib/notation';
 
 interface TimelineProps {
   history: HistoryEntry[];
+  names: [string, string];
   onUndo?: () => void;
   canUndo?: boolean;
 }
 
-export const Timeline: React.FC<TimelineProps> = ({ history, onUndo, canUndo = false }) => {
-  const formatAction = (entry: HistoryEntry) => {
-    const [actType, val] = entry.action;
-    if (actType === 'MOVE' || actType === 'HOP' || actType === 'BLOCK') {
-      return `${actType} (${val[0]}, ${val[1]})`;
-    } else if (actType === 'WALL' || actType === 'REPLACE') {
-      return `${actType} (${val[0]}, ${val[1]}, ${val[2]})`;
-    }
-    return String(entry.action);
-  };
+/** Ply list: P0 moves in the left column, P1 moves in the right. */
+export const Timeline: React.FC<TimelineProps> = ({ history, names, onUndo, canUndo = false }) => {
+  const listRef = useRef<HTMLOListElement>(null);
+  useEffect(() => {
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [history.length]);
 
   return (
-    <div className="card" style={{ marginTop: '1rem' }} data-testid="timeline">
-      <div className="card-title">
-        <span>Action Timeline</span>
+    <div data-testid="timeline">
+      <div className="section-head">
+        <h3>Plies</h3>
         {onUndo && (
-          <button
-            className="btn"
-            style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem' }}
-            onClick={onUndo}
-            disabled={!canUndo}
-          >
+          <button className="btn" onClick={onUndo} disabled={!canUndo}>
             Undo
           </button>
         )}
       </div>
-
-      <div className="timeline-list">
-        {history.length === 0 ? (
-          <div style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '1rem' }}>
-            No moves yet.
-          </div>
-        ) : (
-          history.map((entry, idx) => (
-            <div
-              key={`ply-${idx}`}
-              className={`timeline-item ${entry.player === 0 ? 'p0' : 'p1'}`}
-            >
-              <span>
-                <strong>{entry.ply}.</strong> P{entry.player}: {formatAction(entry)}
+      {history.length === 0 ? (
+        <p className="muted">No moves yet.</p>
+      ) : (
+        <ol className="ply-list" ref={listRef} aria-label="Moves played">
+          {history.map((entry, idx) => (
+            <li key={`ply-${idx}`} className={idx === history.length - 1 ? 'current' : undefined}>
+              <span className="n">{entry.ply}</span>
+              <span className={`p${entry.player}`}>
+                {names[entry.player]} {describeAction(entry.action)}
               </span>
-              {entry.decision_seconds > 0 && (
-                <span style={{ color: 'var(--text-muted)' }}>
-                  {(entry.decision_seconds * 1000).toFixed(1)}ms
-                </span>
-              )}
-            </div>
-          ))
-        )}
-      </div>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 };

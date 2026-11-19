@@ -9,82 +9,46 @@ interface ActionBarProps {
   disabled?: boolean;
 }
 
-export const ActionBar: React.FC<ActionBarProps> = ({
-  state,
-  currentMode,
-  onSelectMode,
-  disabled = false,
-}) => {
+export interface ModeInfo {
+  mode: Exclude<ActionMode, null>;
+  label: string;
+  key: string;
+  count: number;
+  shown: boolean;
+  spent: boolean;
+}
+
+/** The action modes for the player to move, all read from engine state. */
+export function modeInfo(state: GameState): ModeInfo[] {
   const legal = state.legal || { MOVE: [], HOP: [], WALL: [], REPLACE: [], BLOCK: [] };
+  const p = state.to_move;
+  const walls = legal.WALL || [];
+  return [
+    { mode: 'MOVE', label: 'Move', key: '1', count: legal.MOVE?.length || 0, shown: true, spent: false },
+    { mode: 'WALL_H', label: 'Horizontal wall', key: '2', count: walls.filter((w) => w[2] === 'H').length, shown: true, spent: false },
+    { mode: 'WALL_V', label: 'Vertical wall', key: '3', count: walls.filter((w) => w[2] === 'V').length, shown: true, spent: false },
+    { mode: 'REPLACE', label: 'Move wall', key: '4', count: legal.REPLACE?.length || 0, shown: state.rules.A, spent: false },
+    { mode: 'HOP', label: 'Hop', key: '5', count: legal.HOP?.length || 0, shown: state.rules.B, spent: !state.hop[p] },
+    { mode: 'BLOCK', label: 'Block', key: '6', count: legal.BLOCK?.length || 0, shown: state.rules.C, spent: !state.block[p] },
+  ];
+}
 
-  const nMove = legal.MOVE?.length || 0;
-  const nHop = legal.HOP?.length || 0;
-  const nWallH = (legal.WALL || []).filter(([, , o]) => o === 'H').length;
-  const nWallV = (legal.WALL || []).filter(([, , o]) => o === 'V').length;
-  const nReplace = legal.REPLACE?.length || 0;
-  const nBlock = legal.BLOCK?.length || 0;
-
-  return (
-    <div className="action-bar" data-testid="action-bar">
-      {nMove > 0 && (
+export const ActionBar: React.FC<ActionBarProps> = ({ state, currentMode, onSelectMode, disabled = false }) => (
+  <div className="segmented" role="toolbar" aria-label="Action mode" data-testid="action-bar">
+    {modeInfo(state)
+      .filter((m) => m.shown)
+      .map((m) => (
         <button
-          className={`btn ${currentMode === 'MOVE' ? 'active' : ''}`}
-          onClick={() => onSelectMode(currentMode === 'MOVE' ? null : 'MOVE')}
-          disabled={disabled}
+          key={m.mode}
+          className={`btn${m.spent ? ' is-spent' : ''}`}
+          aria-pressed={currentMode === m.mode}
+          aria-keyshortcuts={m.key}
+          disabled={disabled || m.count === 0}
+          title={m.spent ? `${m.label}: already used this game` : `${m.label} (${m.count} legal)`}
+          onClick={() => onSelectMode(m.mode)}
         >
-          Move ({nMove})
+          {m.label} <span className="key">{m.key}</span>
         </button>
-      )}
-
-      {nHop > 0 && (
-        <button
-          className={`btn ${currentMode === 'HOP' ? 'active' : ''}`}
-          onClick={() => onSelectMode(currentMode === 'HOP' ? null : 'HOP')}
-          disabled={disabled}
-        >
-          Hop ({nHop})
-        </button>
-      )}
-
-      {nWallH > 0 && (
-        <button
-          className={`btn ${currentMode === 'WALL_H' ? 'active' : ''}`}
-          onClick={() => onSelectMode(currentMode === 'WALL_H' ? null : 'WALL_H')}
-          disabled={disabled}
-        >
-          Wall H ({nWallH})
-        </button>
-      )}
-
-      {nWallV > 0 && (
-        <button
-          className={`btn ${currentMode === 'WALL_V' ? 'active' : ''}`}
-          onClick={() => onSelectMode(currentMode === 'WALL_V' ? null : 'WALL_V')}
-          disabled={disabled}
-        >
-          Wall V ({nWallV})
-        </button>
-      )}
-
-      {nReplace > 0 && (
-        <button
-          className={`btn ${currentMode === 'REPLACE' ? 'active' : ''}`}
-          onClick={() => onSelectMode(currentMode === 'REPLACE' ? null : 'REPLACE')}
-          disabled={disabled}
-        >
-          Replace ({nReplace})
-        </button>
-      )}
-
-      {nBlock > 0 && (
-        <button
-          className={`btn ${currentMode === 'BLOCK' ? 'active' : ''}`}
-          onClick={() => onSelectMode(currentMode === 'BLOCK' ? null : 'BLOCK')}
-          disabled={disabled}
-        >
-          Block ({nBlock})
-        </button>
-      )}
-    </div>
-  );
-};
+      ))}
+  </div>
+);

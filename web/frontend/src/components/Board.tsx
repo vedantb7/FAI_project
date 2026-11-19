@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ActionJson, GameState, OverlayItem } from '../api/types';
 import {
   boardDimensions,
@@ -7,6 +7,7 @@ import {
   wallSlotRect,
   DEFAULT_GEOMETRY,
 } from '../lib/geometry';
+import { cellName } from '../lib/notation';
 import { buildOverlayLookup, getHeatmapColor } from './Heatmap';
 
 export type ActionMode =
@@ -23,43 +24,84 @@ export interface BoardProps {
   mode?: ActionMode;
   overlay?: OverlayItem[];
   showPaths?: boolean;
+  /** Player names for the path-length labels (d_You = 6); labels are drawn when given. */
+  names?: [string, string];
   onAction?: (action: ActionJson) => void;
   interactive?: boolean;
+  className?: string;
 }
+
+// Wall-slot tap target thickness in SVG units (about 24px at phone scale)
+const SLOT_HIT = 26;
+
+const isTypingTarget = (t: EventTarget | null): boolean => {
+  const el = t as HTMLElement | null;
+  if (!el || !el.tagName) return false;
+  return ['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName) || el.isContentEditable;
+};
+
+const activate = (fn: () => void) => (e: React.KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    fn();
+  }
+};
 
 export const Board: React.FC<BoardProps> = ({
   state,
   mode = null,
   overlay,
   showPaths = true,
+  names,
   onAction,
   interactive = true,
+  className = '',
 }) => {
   const n = state.n;
   const { width, height } = useMemo(() => boardDimensions(n), [n]);
+  const viewWidth = width;
+  const { cellSize, wallGap, padding } = DEFAULT_GEOMETRY;
+
+  // The SVG scales to its column. k = SVG units per screen pixel, so annotations (labels,
+  // badges) can be sized in pixels and stay readable at any board size or viewport.
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [k, setK] = useState(1);
+  useLayoutEffect(() => {
+    const el = svgRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => {
+      const w = el.getBoundingClientRect().width;
+      if (w > 0) setK(viewWidth / w);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [viewWidth]);
+  // px -> SVG units, never larger than a fraction of a cell
+  const px = (v: number, maxCell = 0.45) => Math.min(v * k, cellSize * maxCell);
+  // Pawns: about 40px across on screen, but always inside their cell
+  const pawnR = Math.min(px(20, 0.42), cellSize * 0.42);
+  // label at least 9px on screen, but never wider than the pawn
+  const pawnFont = Math.min(Math.max(pawnR * 0.8, 9 * k), pawnR * 1.05);
   const overlayLookup = useMemo(() => buildOverlayLookup(overlay), [overlay]);
 
-  // Keyboard navigation for MOVE
+  // Arrow keys play MOVE; ignored while a form field has focus
   useEffect(() => {
     if (!interactive || !onAction || state.terminal.over) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      const p0Pos = state.pawns[state.to_move];
-      if (!p0Pos) return;
+      if (isTypingTarget(e.target) || e.altKey || e.ctrlKey || e.metaKey) return;
+      const pos = state.pawns[state.to_move];
+      if (!pos) return;
 
-      let targetR = p0Pos[0];
-      let targetC = p0Pos[1];
-
+      let targetR = pos[0];
+      let targetC = pos[1];
       if (e.key === 'ArrowUp') targetR += 1;
       else if (e.key === 'ArrowDown') targetR -= 1;
       else if (e.key === 'ArrowLeft') targetC -= 1;
       else if (e.key === 'ArrowRight') targetC += 1;
       else return;
 
-      const legalMoves = state.legal.MOVE || [];
-      const match = legalMoves.find(
-        ([r, c]) => r === targetR && c === targetC
-      );
+      const match = (state.legal.MOVE || []).find(([r, c]) => r === targetR && c === targetC);
       if (match) {
         e.preventDefault();
         onAction(['MOVE', match]);
@@ -70,38 +112,26 @@ export const Board: React.FC<BoardProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [state, interactive, onAction]);
 
-  // Lookup sets for active mode targets
   const targetCells = useMemo(() => {
-    const map = new Set<string>();
-    if (!interactive) return map;
-    if (mode === 'MOVE') {
-      (state.legal.MOVE || []).forEach(([r, c]) => map.add(`${r},${c}`));
-    } else if (mode === 'HOP') {
-      (state.legal.HOP || []).forEach(([r, c]) => map.add(`${r},${c}`));
-    } else if (mode === 'BLOCK') {
-      (state.legal.BLOCK || []).forEach(([r, c]) => map.add(`${r},${c}`));
-    }
-    return map;
+    const set = new Set<string>();
+    if (!interactive) return set;
+    const src = mode === 'MOVE' ? state.legal.MOVE : mode === 'HOP' ? state.legal.HOP : mode === 'BLOCK' ? state.legal.BLOCK : [];
+    (src || []).forEach(([r, c]) => set.add(`${r},${c}`));
+    return set;
   }, [state.legal, mode, interactive]);
 
   const targetWallSlots = useMemo(() => {
-    const map = new Set<string>();
-    if (!interactive) return map;
-    if (mode === 'WALL_H') {
-      (state.legal.WALL || [])
-        .filter(([, , o]) => o === 'H')
-        .forEach(([r, c]) => map.add(`${r},${c},H`));
-    } else if (mode === 'WALL_V') {
-      (state.legal.WALL || [])
-        .filter(([, , o]) => o === 'V')
-        .forEach(([r, c]) => map.add(`${r},${c},V`));
+    const set = new Set<string>();
+    if (!interactive) return set;
+    if (mode === 'WALL_H' || mode === 'WALL_V') {
+      const o = mode === 'WALL_H' ? 'H' : 'V';
+      (state.legal.WALL || []).filter(([, , wo]) => wo === o).forEach(([r, c]) => set.add(`${r},${c},${o}`));
     } else if (mode === 'REPLACE') {
-      (state.legal.REPLACE || []).forEach(([r, c, o]) => map.add(`${r},${c},${o}`));
+      (state.legal.REPLACE || []).forEach(([r, c, o]) => set.add(`${r},${c},${o}`));
     }
-    return map;
+    return set;
   }, [state.legal, mode, interactive]);
 
-  // Blocked cell map
   const blockedMap = useMemo(() => {
     const map = new Map<string, number>();
     (state.blocked || []).forEach((b) => map.set(`${b.r},${b.c}`, b.remaining));
@@ -110,13 +140,7 @@ export const Board: React.FC<BoardProps> = ({
 
   const handleCellClick = (r: number, c: number) => {
     if (!interactive || !onAction || state.terminal.over) return;
-    if (mode === 'MOVE') {
-      onAction(['MOVE', [r, c]]);
-    } else if (mode === 'HOP') {
-      onAction(['HOP', [r, c]]);
-    } else if (mode === 'BLOCK') {
-      onAction(['BLOCK', [r, c]]);
-    }
+    if (mode === 'MOVE' || mode === 'HOP' || mode === 'BLOCK') onAction([mode, [r, c]]);
   };
 
   const slotClickable = (m: ActionMode, o: 'H' | 'V'): boolean =>
@@ -133,111 +157,143 @@ export const Board: React.FC<BoardProps> = ({
     }
   };
 
+  const verb = mode === 'HOP' ? 'Hop to' : mode === 'BLOCK' ? 'Block' : 'Move to';
+
+  const renderSlot = (r: number, c: number, o: 'H' | 'V') => {
+    const slot = wallSlotRect(r, c, o, n);
+    const key = `${r},${c},${o}`;
+    const isTarget = targetWallSlots.has(key);
+    const color = getHeatmapColor(overlayLookup.walls.get(key), overlayLookup.scale);
+    const label = `${mode === 'REPLACE' ? 'Move latest wall to' : 'Place wall at'} ${o === 'H' ? 'horizontal' : 'vertical'} ${cellName(r, c)}`;
+    // Each candidate is a pill centred on its junction, so neighbouring slots stay distinct
+    const trim = cellSize / 2 + 4;
+    const pill = o === 'H'
+      ? { x: slot.x + trim, y: slot.y + 2, width: slot.width - 2 * trim, height: slot.height - 4 }
+      : { x: slot.x + 2, y: slot.y + trim, width: slot.width - 4, height: slot.height - 2 * trim };
+    const hit = o === 'H'
+      ? { x: pill.x, y: slot.y + slot.height / 2 - SLOT_HIT / 2, width: pill.width, height: SLOT_HIT }
+      : { x: slot.x + slot.width / 2 - SLOT_HIT / 2, y: pill.y, width: SLOT_HIT, height: pill.height };
+    const rect = (
+      <>
+        {(isTarget || color) && (
+          <rect
+            className={`bd-slot${isTarget ? ' target' : ''}`}
+            {...pill}
+            rx={3}
+            style={color && !isTarget ? { fill: color, opacity: 0.8 } : undefined}
+            pointerEvents="none"
+          />
+        )}
+        <rect
+          className="bd-slot-hit"
+          {...hit}
+          fill="transparent"
+          onClick={() => handleWallSlotClick(r, c, o)}
+          pointerEvents={slotClickable(mode, o) && isTarget ? 'all' : 'none'}
+          cursor={isTarget ? 'pointer' : 'default'}
+        />
+      </>
+    );
+    if (!isTarget) return <React.Fragment key={key}>{rect}</React.Fragment>;
+    return (
+      <g
+        key={key}
+        className="bd-target"
+        tabIndex={0}
+        role="button"
+        aria-label={label}
+        onKeyDown={activate(() => handleWallSlotClick(r, c, o))}
+      >
+        {rect}
+      </g>
+    );
+  };
+
+  const dist = (p: 0 | 1) => {
+    const path = state.paths?.[p];
+    return path && path.length > 0 ? path.length - 1 : null;
+  };
+
   return (
     <svg
-      className="svg-board"
-      width={width}
+      ref={svgRef}
+      className={`svg-board ${className}`}
+      width={viewWidth}
       height={height}
-      viewBox={`0 0 ${width} ${height}`}
+      viewBox={`0 0 ${viewWidth} ${height}`}
       data-testid="wallz-board"
+      role="group"
+      aria-label={`${n} by ${n} board. Player 0 at ${cellName(...state.pawns[0])}, Player 1 at ${cellName(...state.pawns[1])}.`}
     >
       <defs>
-        <pattern
-          id="block-hatch"
-          width="8"
-          height="8"
-          patternTransform="rotate(45 0 0)"
-          patternUnits="userSpaceOnUse"
-        >
-          <line
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="8"
-            stroke="#c084fc"
-            strokeWidth="2.5"
-          />
+        <pattern id="block-hatch" width="7" height="7" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+          <line className="bd-hatch" x1="0" y1="0" x2="0" y2="7" />
         </pattern>
-        <filter id="latest-wall-glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
       </defs>
 
-      {/* Grid Cells */}
+      {/* Figure plate */}
+      <rect
+        className="bd-plate"
+        x={padding - 8}
+        y={padding - 8}
+        width={n * cellSize + (n - 1) * wallGap + 16}
+        height={n * cellSize + (n - 1) * wallGap + 16}
+      />
+
+      {/* Cells */}
       {Array.from({ length: n }).map((_, r) =>
         Array.from({ length: n }).map((__, c) => {
           const rect = cellRect(r, c, n);
-          const cellKey = `${r},${c}`;
-          const isTarget = targetCells.has(cellKey);
-          const blockRemaining = blockedMap.get(cellKey);
-          const overlayItem = overlayLookup.cells.get(cellKey);
-          const heatmapBg = getHeatmapColor(overlayItem, overlayLookup.scale);
-
-          // Goal rows: P1 goal is row 0; P0 goal is row n-1
-          let cellFill = '#1e293b';
-          if (r === 0) cellFill = 'rgba(244, 63, 94, 0.08)';
-          if (r === n - 1) cellFill = 'rgba(56, 189, 248, 0.08)';
-          if (heatmapBg) cellFill = heatmapBg;
-          if (isTarget) cellFill = 'rgba(16, 185, 129, 0.25)';
+          const key = `${r},${c}`;
+          const isTarget = targetCells.has(key);
+          const blockRemaining = blockedMap.get(key);
+          const overlayItem = overlayLookup.cells.get(key);
+          const heat = getHeatmapColor(overlayItem, overlayLookup.scale);
+          // Goal rows: P1 aims for row 0, P0 for row n-1
+          const goal = r === n - 1 ? ' goal-p0' : r === 0 ? ' goal-p1' : '';
 
           return (
             <g
-              key={`cell-${cellKey}`}
+              key={`cell-${key}`}
               onClick={() => handleCellClick(r, c)}
               style={{ cursor: isTarget ? 'pointer' : 'default' }}
+              className={isTarget ? 'bd-target' : undefined}
+              tabIndex={isTarget ? 0 : undefined}
+              role={isTarget ? 'button' : undefined}
+              aria-label={isTarget ? `${verb} ${cellName(r, c)}` : undefined}
+              onKeyDown={isTarget ? activate(() => handleCellClick(r, c)) : undefined}
             >
               <rect
+                className={`bd-cell${goal}${isTarget ? ' target' : ''}`}
                 x={rect.x}
                 y={rect.y}
                 width={rect.width}
                 height={rect.height}
-                rx={6}
-                fill={cellFill}
-                stroke={isTarget ? '#10b981' : '#334155'}
-                strokeWidth={isTarget ? 2 : 1}
+                style={heat && !isTarget ? { fill: heat } : undefined}
               />
-
-              {/* Blocked Cell Hatching */}
               {blockRemaining !== undefined && (
                 <>
-                  <rect
-                    x={rect.x}
-                    y={rect.y}
-                    width={rect.width}
-                    height={rect.height}
-                    rx={6}
-                    fill="url(#block-hatch)"
-                    opacity={0.65}
-                  />
-                  <circle
-                    cx={rect.x + rect.width - 12}
-                    cy={rect.y + 12}
-                    r={9}
-                    fill="#a855f7"
-                  />
+                  <rect x={rect.x} y={rect.y} width={rect.width} height={rect.height} fill="url(#block-hatch)" />
+                  <circle className="bd-badge" cx={rect.x + rect.width - px(11, 0.25)} cy={rect.y + px(11, 0.25)} r={px(9, 0.2)} />
                   <text
-                    x={rect.x + rect.width - 12}
-                    y={rect.y + 16}
+                    className="bd-badge-text"
+                    x={rect.x + rect.width - px(11, 0.25)}
+                    y={rect.y + px(11, 0.25) + px(4, 0.1)}
                     textAnchor="middle"
-                    fill="#ffffff"
-                    fontSize={11}
-                    fontWeight="bold"
+                    style={{ fontSize: px(12, 0.26) }}
                   >
                     {blockRemaining}
                   </text>
+                  <title>{`Blocked for ${blockRemaining} more plies`}</title>
                 </>
               )}
-
-              {/* Heatmap overlay label */}
               {overlayItem && (
                 <text
+                  className="bd-overlay-label"
                   x={rect.x + rect.width / 2}
-                  y={rect.y + rect.height - 8}
+                  y={rect.y + rect.height - px(5, 0.12)}
                   textAnchor="middle"
-                  fill="#ffffff"
-                  fontSize={10}
-                  fontWeight="600"
+                  style={{ fontSize: px(11, 0.24) }}
                 >
                   {overlayItem.label}
                 </text>
@@ -247,147 +303,114 @@ export const Board: React.FC<BoardProps> = ({
         })
       )}
 
-      {/* Shortest Path Polylines */}
+      {/* Shortest paths, offset so both stay visible when they share a column */}
       {showPaths &&
         state.paths &&
-        state.paths.map((path, playerIdx) => {
+        state.paths.map((path, p) => {
           if (!path || path.length < 2) return null;
-          const points = path
-            .map(([r, c]) => {
-              const pt = cellCenter(r, c, n);
-              return `${pt.x},${pt.y}`;
-            })
-            .join(' ');
-          const strokeColor = playerIdx === 0 ? '#38bdf8' : '#f43f5e';
+          const points = path.map(([r, c]) => {
+            const pt = cellCenter(r, c, n);
+            return `${pt.x},${pt.y}`;
+          });
           return (
             <polyline
-              key={`path-${playerIdx}`}
-              points={points}
-              fill="none"
-              stroke={strokeColor}
-              strokeWidth={3}
-              strokeDasharray="4 4"
-              opacity={0.65}
-              strokeLinecap="round"
+              key={`path-${p}`}
+              className={`bd-path p${p}`}
+              points={points.join(' ')}
               pointerEvents="none"
             />
           );
         })}
 
-      {/* Wall Placement & Replacement Slots (Ghosts) */}
+      {/* Wall slots: legal targets are focusable */}
       {Array.from({ length: n - 1 }).map((_, r) =>
         Array.from({ length: n - 1 }).map((__, c) => (
           <React.Fragment key={`slots-${r}-${c}`}>
-            {/* Horizontal Slot */}
-            {(() => {
-              const slot = wallSlotRect(r, c, 'H', n);
-              const key = `${r},${c},H`;
-              const isTarget = targetWallSlots.has(key);
-              const overlayItem = overlayLookup.walls.get(key);
-              const color = getHeatmapColor(overlayItem, overlayLookup.scale);
-
-              return (
-                <rect
-                  x={slot.x}
-                  y={slot.y}
-                  width={slot.width}
-                  height={slot.height}
-                  rx={3}
-                  fill={color || (isTarget ? '#10b981' : 'transparent')}
-                  opacity={isTarget || color ? 0.75 : 0}
-                  stroke={isTarget ? '#10b981' : 'none'}
-                  strokeWidth={1}
-                  onClick={() => handleWallSlotClick(r, c, 'H')}
-                  pointerEvents={slotClickable(mode, 'H') ? 'all' : 'none'}
-                  style={{ cursor: isTarget ? 'pointer' : 'default' }}
-                />
-              );
-            })()}
-
-            {/* Vertical Slot */}
-            {(() => {
-              const slot = wallSlotRect(r, c, 'V', n);
-              const key = `${r},${c},V`;
-              const isTarget = targetWallSlots.has(key);
-              const overlayItem = overlayLookup.walls.get(key);
-              const color = getHeatmapColor(overlayItem, overlayLookup.scale);
-
-              return (
-                <rect
-                  x={slot.x}
-                  y={slot.y}
-                  width={slot.width}
-                  height={slot.height}
-                  rx={3}
-                  fill={color || (isTarget ? '#10b981' : 'transparent')}
-                  opacity={isTarget || color ? 0.75 : 0}
-                  stroke={isTarget ? '#10b981' : 'none'}
-                  strokeWidth={1}
-                  onClick={() => handleWallSlotClick(r, c, 'V')}
-                  pointerEvents={slotClickable(mode, 'V') ? 'all' : 'none'}
-                  style={{ cursor: isTarget ? 'pointer' : 'default' }}
-                />
-              );
-            })()}
+            {renderSlot(r, c, 'H')}
+            {renderSlot(r, c, 'V')}
           </React.Fragment>
         ))
       )}
 
-      {/* Placed Walls */}
+      {/* Placed walls: P1 walls carry a dashed centre mark so owners differ without colour */}
       {(state.walls || []).map((w, idx) => {
         const slot = wallSlotRect(w.r, w.c, w.o, n);
-        const wallColor = w.owner === 0 ? '#0284c7' : '#e11d48';
-
+        const replaceable = w.latest && state.rules.A;
+        const inset = 4;
+        const vertical = w.o === 'V';
         return (
-          <g
-            key={`wall-${idx}`}
-            aria-label={w.latest && state.rules.A ? 'Replaceable Wall' : undefined}
-          >
+          <g key={`wall-${idx}`} aria-label={replaceable ? 'Replaceable Wall' : undefined} pointerEvents="none">
             <rect
-              x={slot.x}
-              y={slot.y}
-              width={slot.width}
-              height={slot.height}
-              rx={3}
-              fill={wallColor}
-              stroke={w.latest && state.rules.A ? '#facc15' : '#0f172a'}
-              strokeWidth={w.latest && state.rules.A ? 2 : 1}
-              filter={w.latest && state.rules.A ? 'url(#latest-wall-glow)' : undefined}
+              className={`bd-wall p${w.owner}${replaceable ? ' latest' : ''}`}
+              x={slot.x + (vertical ? 2 : 0)}
+              y={slot.y + (vertical ? 0 : 2)}
+              width={slot.width - (vertical ? 4 : 0)}
+              height={slot.height - (vertical ? 0 : 4)}
             />
-            {w.latest && state.rules.A && (
-              <title>Replaceable Wall (Rule A active)</title>
+            {w.owner === 1 && (
+              <line
+                className="bd-wall-mark"
+                x1={vertical ? slot.x + slot.width / 2 : slot.x + inset}
+                y1={vertical ? slot.y + inset : slot.y + slot.height / 2}
+                x2={vertical ? slot.x + slot.width / 2 : slot.x + slot.width - inset}
+                y2={vertical ? slot.y + slot.height - inset : slot.y + slot.height / 2}
+              />
             )}
+            <title>{`${w.owner === 0 ? 'Player 0' : 'Player 1'} wall${replaceable ? ', latest: can be moved (Rule A)' : ''}`}</title>
           </g>
         );
       })}
 
       {/* Pawns */}
       {state.pawns &&
-        state.pawns.map(([r, c], pIdx) => {
+        state.pawns.map(([r, c], p) => {
           const pt = cellCenter(r, c, n);
-          const pColor = pIdx === 0 ? '#38bdf8' : '#f43f5e';
-          const pText = `P${pIdx}`;
-
           return (
-            <g key={`pawn-${pIdx}`} pointerEvents="none">
-              <circle
-                cx={pt.x}
-                cy={pt.y}
-                r={DEFAULT_GEOMETRY.cellSize * 0.36}
-                fill={pColor}
-                stroke="#ffffff"
-                strokeWidth={2.5}
-              />
+            <g key={`pawn-${p}`} pointerEvents="none">
+              <circle className={`bd-pawn p${p}`} cx={pt.x} cy={pt.y} r={pawnR} />
               <text
+                className="bd-pawn-label"
                 x={pt.x}
-                y={pt.y + 5}
+                y={pt.y + pawnFont * 0.36}
                 textAnchor="middle"
-                fill="#ffffff"
-                fontSize={13}
-                fontWeight="bold"
+                style={{ fontSize: pawnFont }}
               >
-                {pText}
+                {`P${p}`}
               </text>
+            </g>
+          );
+        })}
+
+      {/* Path lengths in the worked step's own notation, set beside each dashed path */}
+      {showPaths &&
+        names &&
+        ([0, 1] as const).map((p) => {
+          const path = state.paths?.[p];
+          const d = dist(p);
+          if (!path || path.length < 2 || d === null) return null;
+          // Never on the pawn's own cell: start one step along the path
+          const [mr, mc] = path[Math.max(1, Math.floor((path.length - 1) / 2))];
+          const pt = cellCenter(mr, mc, n);
+          const left = p === 0;
+          const fs = px(15, 0.9);
+          const sub = px(11, 0.65);
+          // paper backing so the label reads over cells and highlights
+          const w = fs * 0.55 + names[p].length * sub * 0.55 + fs * 1.6;
+          const x0 = pt.x + (left ? -px(8, 0.2) - w : px(12, 0.25));
+          return (
+            <g key={`d-${p}`} pointerEvents="none">
+            <rect className="bd-label-back" x={x0 - fs * 0.2} y={pt.y + px(5, 0.12) - fs * 0.95} width={w + fs * 0.4} height={fs * 1.45} />
+            <text
+              className={`bd-dim-label p${p}`}
+              x={pt.x + (left ? -px(8, 0.2) : px(12, 0.25))}
+              y={pt.y + px(5, 0.12)}
+              style={{ fontSize: px(15, 0.9) }}
+              textAnchor={left ? 'end' : 'start'}
+              pointerEvents="none"
+            >
+              d<tspan className="bd-dim-sub" dy={px(4, 0.1)} style={{ fontSize: sub }}>{names[p]}</tspan>
+              <tspan dy={-px(4, 0.1)}>{` = ${d}`}</tspan>
+            </text>
             </g>
           );
         })}

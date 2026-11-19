@@ -16,10 +16,14 @@ function outcomeText(rep: any): string {
   return cat.replace(/_/g, ' ');
 }
 
+const isFinal = (file: string) => file.startsWith('final_');
+
 export const ReplaysPage: React.FC = () => {
   const [replays, setReplays] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
+  // Final-rule results live in experiments/results/final_*; older folders predate rule changes (see STALE.md).
+  const [finalOnly, setFinalOnly] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   const [activeReplayData, setActiveReplayData] = useState<any | null>(null);
@@ -29,16 +33,19 @@ export const ReplaysPage: React.FC = () => {
 
   // Load replays
   useEffect(() => {
-    api.fetchReplays(0, 50, query)
+    // shortcut: with a typed query and finalOnly, final rows are filtered from the server's first 50 matches only;
+    // add a server-side folder filter if that ever hides results.
+    api.fetchReplays(0, 50, query || (finalOnly ? 'final_' : ''))
       .then((res) => {
-        setReplays(res.items);
-        setTotal(res.total);
-        if (res.items.length > 0 && !selectedItem) {
-          loadReplay(res.items[0]);
+        const items = finalOnly ? res.items.filter((it: any) => isFinal(it.file)) : res.items;
+        setReplays(items);
+        setTotal(finalOnly && query ? items.length : res.total);
+        if (items.length > 0 && !selectedItem) {
+          loadReplay(items[0]);
         }
       })
       .catch(console.error);
-  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [query, finalOnly]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadReplay = async (item: any) => {
     setSelectedItem(item);
@@ -101,7 +108,7 @@ export const ReplaysPage: React.FC = () => {
         {/* Left Column: Replay Catalog */}
         <div className="card">
           <div className="card-title">
-            <span>Experiment Replays ({total})</span>
+            <span>Match replays ({total})</span>
             <label className="btn" style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', cursor: 'pointer' }}>
               Upload
               <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} />
@@ -112,11 +119,28 @@ export const ReplaysPage: React.FC = () => {
             <input
               type="text"
               className="form-input"
-              placeholder="Filter by filename or ID..."
+              placeholder="Filter by file or match ID"
+              aria-label="Filter replays by file or match ID"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
+
+          <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 400 }}>
+            <input type="checkbox" checked={finalOnly} onChange={(e) => setFinalOnly(e.target.checked)} />
+            Final-rule results only
+          </label>
+          {!finalOnly && (
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', marginBottom: '0.75rem' }}>
+              Rows marked "older rules" come from folders made before the final rule changes.{' '}
+              <code>experiments/results/STALE.md</code> lists which still hold.
+            </p>
+          )}
+          {replays.length === 0 && (
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+              No replays match{query ? ` "${query}"` : ''}{finalOnly ? ' in the final-rule results' : ''}.
+            </p>
+          )}
 
           <div style={{ maxHeight: '600px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
             {replays.map((rep, idx) => {
@@ -137,9 +161,9 @@ export const ReplaysPage: React.FC = () => {
                   <div style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {rep.match_id}
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: isSelected ? '#ffffff' : 'var(--text-muted)', fontSize: '0.75rem' }}>
-                    <span>{rep.config_label}</span>
-                    <span>{outcomeText(rep)} · {rep.length} plies</span>
+                  <div style={{ color: isSelected ? '#ffffff' : 'var(--text-muted)', fontSize: '0.75rem' }}>
+                    <div>{rep.file.split('/')[0]} · {rep.config_label}{isFinal(rep.file) ? '' : ' · older rules'}</div>
+                    <div>{outcomeText(rep)} · {rep.length} plies</div>
                   </div>
                 </div>
               );
