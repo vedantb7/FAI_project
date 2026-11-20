@@ -1,0 +1,21 @@
+# Optional: run scripts/train_dqn_all.sh as a user service that restarts after a reboot.
+# Finished runs are skipped and paused runs resume from resume.pt.
+# Install (Linux, systemd):
+#   1. Set WorkingDirectory below to your clone of this repository.
+#   2. mkdir -p ~/.config/systemd/user && cp scripts/train_dqn_all.service ~/.config/systemd/user/
+#   3. systemctl --user daemon-reload && systemctl --user enable --now train_dqn_all
+#   4. loginctl enable-linger "$USER"   # start at boot without logging in
+# Progress: tail -f <repo>/checkpoints/runs/status.log
+# Stop: systemctl --user stop train_dqn_all      Remove: systemctl --user disable train_dqn_all
+[Unit]
+Description=Sequential DQN training for all boards (resumable)
+
+[Service]
+Type=simple
+WorkingDirectory=%h/path/to/FAI_project
+ExecStart=/usr/bin/systemd-inhibit --what=sleep:idle --why=DQN-training /bin/bash scripts/train_dqn_all.sh
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=default.target

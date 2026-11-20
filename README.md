@@ -29,7 +29,7 @@ Modified Wallz is a two-player, Quoridor-like pawn race on an $N \times N$ grid.
 | Greedy (`agents/greedy.py`) | Final match campaign done | `experiments/results/final_greedy/` | [`docs/reports/stage3_greedy_demo_docs.md`](docs/reports/stage3_greedy_demo_docs.md) |
 | Minimax (`agents/minimax.py`) | Validated; optional hop-aware scorer (`eval=hop`) | `experiments/results/final_minimax/`, `final_minimax_hop/` | [`docs/reports/stage2_minimax.md`](docs/reports/stage2_minimax.md), [`docs/reports/stage3_minimax_hop_eval.md`](docs/reports/stage3_minimax_hop_eval.md) |
 | Exact solver, ablations (`evaluation/`) | Final-rule solves and ablations | `experiments/results/final_eval/` | [`docs/reports/stage2_solver_stats.md`](docs/reports/stage2_solver_stats.md) |
-| DQN (`agents/dqn/`) | Release models stale (old HOP rule); retrained final-rule models evaluated | `experiments/results/final_dqn/` | [`docs/reports/stage2_dqn.md`](docs/reports/stage2_dqn.md) |
+| DQN (`agents/dqn/`) | Release models retrained under the final rules (3x3, 4x4, 5x5; 2026-11-20) and evaluated | `experiments/results/final_dqn/` | [`docs/reports/stage2_dqn.md`](docs/reports/stage2_dqn.md) |
 | Web demo (`web/`) | Rules only on the server; API checked against the engine | — | [`docs/web_demo.md`](docs/web_demo.md) |
 
 Older result folders (`experiments/results/greedy/`, `person3_pilot/`, `dqn/`, ...) were made under earlier rules or agents. [`experiments/results/STALE.md`](experiments/results/STALE.md) says which still hold. Earlier headline numbers such as Minimax's "22.66% node reduction" and DQN's "96.47% sign agreement" do not hold under the final rules; the reports above give the final values.
@@ -64,6 +64,7 @@ Frontend unit tests (Vitest) need `npm --prefix web/frontend ci` first, then `np
 ```bash
 python run_match.py --p0 minimax --p1 greedy --depth 2 --seed 42
 python scripts/final_greedy.py run --board N5 --pairing minimax2   # writes experiments/results/final_greedy/
+scripts/train_dqn_all.sh            # train all DQN models in sequence (resumable; docs/dqn.md)
 ```
 
 ## Web demo

@@ -83,7 +83,8 @@ Existing tests (`test_action_codec.py`, `test_dqn_encoding.py`) still pass.
 
 ## 4. Release checkpoints under the final rules (Task 4)
 
-The release models were trained under the old 2-cell HOP (meta: commit a665b58, about 50k
+Superseded on 2026-11-20: the release folders now hold final-rule models (Section 12). This
+section evaluates the earlier release models, which were trained under the old 2-cell HOP (meta: commit a665b58, about 50k
 steps). SHA-256: `dqn_3x3/model.pt` `63ff1130...d18485`, `dqn_4x4/model.pt` `9980e4c5...81c99d`.
 
 Protocol (`scripts/eval_dqn_final.py`): both seatings, opening_plies 2, runner cap 200;
@@ -357,3 +358,76 @@ it without checking. Reported for the engine owner; no engine change here.
 
 Not covered by the reviewer: exhaustive enumeration, boards above 7x7, the explicit
 `(old, new)` REPLACE form (the codec never emits it), clock-driven endings.
+
+## 12. Release refresh (2026-11-20)
+
+The three release models served by the web demo were replaced with models trained from scratch
+under the final rules, with `configs/training.yaml` unchanged. The old 50k-step release
+models (Section 4) stay in the git history.
+
+| Release | Source run | Rules | Env steps | Train min | SHA-256 `model.pt` |
+|---|---|---|---:|---:|---|
+| `checkpoints/release/dqn_3x3/` | 3x3 seed 46 | N3 A1B1C1 K1 M1 | 200,069 | 18.9 | `645da070...0912a5` |
+| `checkpoints/release/dqn_4x4/` | 4x4 seed 42 | N4 A1B1C1 K1 M0 | 500,001 | 70.7 | `a6f8178f...8d9c9f` |
+| `checkpoints/release/dqn_5x5/` (new) | 5x5 seed 42 | N5 A1B1C1 K3 M10 | 2,000,035 | 411.6 | `1f3e5e11...68267e` |
+
+Seed 46 was chosen for 3x3 because it has the highest value-optimal rate and sign agreement of
+the five seeds and no truncated games. 5x5 now reaches the planned 2M steps (Section 6.1 stopped
+at 500k).
+
+**Training.** Commit 6519e63 (clean), torch 2.15.0+cpu, Python 3.14.3, one laptop CPU
+(i7-1355U, 16 GB), `--threads 4`, one run at a time through `scripts/train_dqn_all.sh`
+(60-minute chunks with `resume.pt`, so a crash or reboot loses at most one chunk; status in
+`checkpoints/runs/status.log`). All five 3x3 seeds (42-46), 4x4 s42 and 5x5 s42 finished.
+9x9 (5M steps, about 35 h or more on this machine) was started and then stopped; it is not trained.
+Weights and logs are in `checkpoints/runs/<N>x<N>_s<seed>/` and are git-ignored except the
+three release copies.
+
+**Evaluation.** Same protocol and script as Sections 4-6 (`scripts/eval_dqn_final.py`, unchanged
+commands; 5x5 with `--skip-truth --exact-seeds 0 --distinct-openings 50`). Files:
+`experiments/results/final_dqn/overnight/dqn_3x3_s<seed>_eval.json`, `dqn_4x4_s42_eval.json`,
+`dqn_5x5_s42_2M_eval.json`.
+
+### Matches, all games (win / rule draw / truncated / loss, %)
+
+Random and greedy: 200 games (100 on 5x5); minimax depth 2 and the exact solver: 100 games; both
+seatings, opening_plies 2, runner cap 200.
+
+| Model | vs Random | vs Greedy | vs Minimax d2 | vs Exact |
+|---|---|---|---|---|
+| old release 3x3 (50k, old HOP) | 78.5 / 0.5 / 0 / 21.0 | 24.0 / 16.5 / 0 / 59.5 | 18.0 / 10.0 / 0 / 72.0 | 18.0 / 0 / 0 / 82.0 |
+| 3x3 s42 | 98.5 / 0 / 0 / 1.5 | 64.0 / 21.5 / 0 / 14.5 | 48.0 / 26.0 / 8.0 / 18.0 | 28.0 / 44.0 / 0 / 28.0 |
+| 3x3 s43 | 98.5 / 0.5 / 0 / 1.0 | 71.5 / 14.0 / 0 / 14.5 | 60.0 / 22.0 / 0 / 18.0 | 28.0 / 44.0 / 0 / 28.0 |
+| 3x3 s44 | 99.5 / 0 / 0 / 0.5 | 68.5 / 17.0 / 0 / 14.5 | 56.0 / 26.0 / 0 / 18.0 | 28.0 / 44.0 / 0 / 28.0 |
+| 3x3 s45 | 98.0 / 0 / 0 / 2.0 | 64.0 / 21.5 / 0 / 14.5 | 56.0 / 14.0 / 0 / 30.0 | 28.0 / 44.0 / 0 / 28.0 |
+| **3x3 s46 (release)** | 99.0 / 0.5 / 0 / 0.5 | 64.0 / 21.5 / 0 / 14.5 | 64.0 / 18.0 / 0 / 18.0 | 28.0 / 44.0 / 0 / 28.0 |
+| old release 4x4 (50k, old HOP) | 53.5 / 21.0 / 0 / 25.5 | 0 / 6.5 / 0 / 93.5 | 0 / 13.0 / 0 / 87.0 | 0 / 0 / 0 / 100.0 |
+| **4x4 s42 (release)** | 97.0 / 0 / 0 / 3.0 | 50.0 / 22.0 / 0 / 28.0 | 39.0 / 32.0 / 0 / 29.0 | 29.0 / 42.0 / 0 / 29.0 |
+| 5x5 s42 at 500k (Section 6.1) | 98.0 / 2.0 / 0 / 0 | 66.0 / 28.0 / 0 / 6.0 | 73.0 / 10.0 / 0 / 17.0 | — |
+| **5x5 s42 at 2M (release)** | 100.0 / 0 / 0 / 0 | 78.0 / 16.0 / 0 / 6.0 | 74.0 / 4.0 / 0 / 22.0 | — |
+
+Every new 3x3 seed matches the exact solver's result on every opening (28 / 44 / 28). The new
+4x4 model loses 29% to the exact solver, down from 44% for the November 11 retrain (Section 5)
+and 100% for the old release. At 2M steps, 5x5 beats greedy more often than at 500k (78% vs 66%);
+against minimax it wins slightly more and loses more (22% vs 17%).
+
+### Exact ground truth (every non-terminal state; 3x3 138,646 states, 4x4 4,350)
+
+| Model | Value-optimal | Rank-optimal | Sign agreement | 3-class value | MAE vs discounted value |
+|---|---:|---:|---:|---:|---:|
+| old release 3x3 | 77.98% | 75.54% | 82.88% | 65.39% | 0.446 |
+| 3x3 s42 | 95.83% | 91.88% | 97.95% | 90.85% | 0.164 |
+| 3x3 s43 | 96.08% | 92.81% | 97.58% | 86.81% | 0.188 |
+| 3x3 s44 | 95.89% | 91.67% | 97.83% | 88.03% | 0.190 |
+| 3x3 s45 | 96.62% | 92.90% | 97.77% | 88.39% | 0.190 |
+| **3x3 s46 (release)** | **96.72%** | **93.26%** | **98.09%** | **91.05%** | **0.165** |
+| old release 4x4 | 79.06% | 65.75% | 84.53% | 67.70% | 0.458 |
+| **4x4 s42 (release)** | **96.14%** | 88.74% | **97.56%** | **95.15%** | **0.083** |
+
+5x5 has no exact ground truth (the solve does not finish), so only match results are given.
+
+**Web check.** After a server restart, `/api/agents` lists each release model as available for
+its own rule set (3x3 step 200,069; 4x4 step 500,001; 5x5 step 2,000,035), `/api/config/defaults`
+adds a "DQN 5×5 (K=3, M=10)" preset, and one full DQN-vs-greedy game per model through
+`/api/games` plus `/analyze` finished without errors. `tests/test_dqn_final_compat.py`,
+`tests/test_agent_conformance.py` and the web tests pass (79 passed).

@@ -152,7 +152,7 @@ When `/step` or `/analyze` is called, the backend generates an explanation envel
    - Before 2026-11-09 the warm-up ran on a thread inside the server. Its pure-Python search held the GIL and made the first page load take about 47 s.
 3. **DQN Compatibility Gate**:
    - Checkpoints are strictly validated against board size and rules (`meta.N == config.N` and `meta.rules == config.rules`). Incompatible models are disabled with a message indicating the configuration they were trained for.
-   - The demo discovers `checkpoints/release/*` and `checkpoints/dqn_*`. The two release models were trained under the old 2-cell HOP rule (`experiments/results/STALE.md`); they still play only legal moves (the engine's legal mask), but their strength is measured in `experiments/results/final_dqn/` (`release_dqn_*_eval.json`). The final-rule retrained weights (`checkpoints/final/*`) are kept local; only their `manifest.json` is in git, so the demo does not list them.
+   - The demo discovers `checkpoints/release/*` and `checkpoints/dqn_*`. The three release models (3x3, 4x4, 5x5) were trained under the final rules on 2026-11-20; each is offered only for the rule set it was trained on, and a matching "DQN N×N" preset is added. Their evaluation is in `experiments/results/final_dqn/overnight/` and `docs/reports/stage2_dqn.md` Section 12.
 4. **Arena Batch Caps**:
    - Batch tournaments are capped at $n \le 50$ games synchronously to prevent server worker timeouts.
 

@@ -118,16 +118,24 @@ Command (run from the repo root; `python -m` puts the root on the import path):
 python -m scripts.train_dqn --board-size 3 --seed 42 --threads 2 --output-dir checkpoints/final/3x3_s42
 ```
 
+To train every model in the table, one run at a time, smallest board first (3x3 seeds 42-46,
+then 4x4, 5x5 and 9x9 seed 42), use `scripts/train_dqn_all.sh` (optionally with board sizes,
+e.g. `scripts/train_dqn_all.sh 3 4`). It is safe to stop and re-run: finished runs are skipped
+and paused runs resume. Runs go to `checkpoints/runs/`, progress to `checkpoints/runs/status.log`.
+Settings (`PYTHON`, `OUT_DIR`, `THREADS`, `CHUNK_MINUTES`, `DEVICE`) are listed in the script
+header; `scripts/train_dqn_all.service` restarts it after a reboot (systemd user service).
+
 Each evaluation appends a line to `train_log.jsonl` with win rates vs Greedy and Random
 (opening_plies 0, so these in-training numbers are a coarse signal only), the
 Q-probe statistics and the elapsed time, and saves `step_<n>.pt`.
 
 ## 7. Checkpoints
 
-- `checkpoints/release/dqn_3x3/` and `checkpoints/release/dqn_4x4/` were trained under
-  the **old HOP rule** (a 2-cell jump, replaced in 4e346a8). Their `meta.json` says
-  commit a665b58, seed 42, about 50,000 steps; the command that produced them is not
-  recorded. They are kept unchanged for comparison only.
+- `checkpoints/release/dqn_3x3/` (seed 46, 200k steps), `dqn_4x4/` (seed 42, 500k) and
+  `dqn_5x5/` (seed 42, 2M) were trained under the final rules on 2026-11-20 (commit 6519e63).
+  SHA-256 and evaluation (3x3: 96.72% value-optimal, 98.09% sign agreement; 4x4: 96.14% /
+  97.56%; 5x5: 78% wins vs greedy) are in `docs/reports/stage2_dqn.md` Section 12. The
+  earlier release models (old HOP rule, about 50k steps, commit a665b58) are in the git history.
 - Models retrained under the frozen rules are listed, with SHA-256 and evaluation
   files, in `docs/reports/stage2_dqn.md`.
 

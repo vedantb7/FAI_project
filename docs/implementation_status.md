@@ -18,7 +18,7 @@ Numbers in older tables below (Sections 1, 6 and the phase notes) were measured 
 | Greedy (Member 2) | Final match campaign: vs random, minimax depth 2, itself; N3, N5, N9 | `experiments/results/final_greedy/`, `docs/reports/stage3_greedy_demo_docs.md` |
 | Minimax (Member 1) | Validated; optional hop-aware scorer | `experiments/results/final_minimax/`, `experiments/results/final_minimax_hop/`, `docs/reports/stage2_minimax.md`, `docs/reports/stage3_minimax_hop_eval.md` |
 | Exact solver, ablation (Member 3) | Final-rule solves and ablations | `experiments/results/final_eval/`, `docs/reports/stage2_solver_stats.md` |
-| DQN (Member 4) | Release models are stale (old HOP); retrained final-rule models evaluated | `experiments/results/final_dqn/`, `docs/reports/stage2_dqn.md` |
+| DQN (Member 4) | Release models retrained under the final rules (3x3, 4x4, 5x5; 2026-11-20) and evaluated | `experiments/results/final_dqn/`, `docs/reports/stage2_dqn.md` |
 | Web demo | Rules only on the server; API checked against the engine | `docs/web_demo.md` Section 7, `tests/web/test_engine_sync.py` |
 | Tests | Counted per file on 2026-11-11 | Section 2 below |
 
@@ -27,7 +27,7 @@ Numbers in older tables below (Sections 1, 6 and the phase notes) were measured 
 | Phase | Description | Status | Verification Gate |
 | :---: | :--- | :---: | :--- |
 | **Phase 1** | DQN & Self-Play Architecture (ActionCodec C3, Observation C4, WallzEnv C5, Negamax Double-DQN) | **Complete** | Checkpoint round-trip, codec involution, legal masks |
-| **Phase 2** | DQN Training, Validation & Benchmarks (3×3, 4×4 models, IQM bootstrap metrics) | **Complete, stale** | Gate X-16 was passed under the old HOP rule; the release 3x3 model scores 86.8% under the final rules (`docs/reports/stage2_dqn.md`) |
+| **Phase 2** | DQN Training, Validation & Benchmarks (3×3, 4×4 models, IQM bootstrap metrics) | **Complete** | Gate X-16 was passed under the old HOP rule; the 2026-11-20 release models are retrained under the final rules (3x3 98.09% sign agreement; `docs/reports/stage2_dqn.md` Section 12) |
 | **Phase 3** | Engine Performance & Rule Corrections (WallzConfig, canonical position key, $O(1)$ ChainMap clone) | **Complete** | Legal actions $\le 1.54$ ms on 9×9, clone $\le 2.81\ \mu\text{s}$ |
 | **Phase 4** | Tier-1 Greedy Baseline (4-tier lexicographical tie order, draw scoring, seeded tie-break) | **Complete** | Seeded deterministic reproducibility |
 | **Phase 5** | Tier-2 Minimax / Negamax (PV-first ordering, history heuristic, goal extension, Contract C7) | **Complete** | Search cutoff efficiency, depth-2 latency |
@@ -124,9 +124,10 @@ An automated AST and regex scan (`tests/test_rules_draw_budget.py::test_no_hardc
 
 ## 6. Production Artifacts & Checkpoints
 
-- **Released Neural Network Weights** (trained under the old HOP rule, stale; see `experiments/results/STALE.md`):
-  - `checkpoints/release/dqn_3x3/model.pt` + `meta.json`: Double-DQN $3 \times 3$ model, 86.8% Gate X-16 sign agreement under the final rules.
-  - `checkpoints/release/dqn_4x4/model.pt` + `meta.json`: Double-DQN $4 \times 4$ model.
+- **Released Neural Network Weights** (final rules, 2026-11-20; `docs/reports/stage2_dqn.md` Section 12):
+  - `checkpoints/release/dqn_3x3/model.pt` + `meta.json`: Double-DQN $3 \times 3$ model (seed 46, 200k steps), 96.72% value-optimal, 98.09% sign agreement.
+  - `checkpoints/release/dqn_4x4/model.pt` + `meta.json`: Double-DQN $4 \times 4$ model (seed 42, 500k steps), 96.14% value-optimal, 97.56% sign agreement.
+  - `checkpoints/release/dqn_5x5/model.pt` + `meta.json`: Double-DQN $5 \times 5$ model (seed 42, 2M steps), 78% wins vs greedy, 74% vs minimax depth 2.
   - Final-rule retrained models: `checkpoints/final/*/manifest.json` (weights kept local), evaluated in `experiments/results/final_dqn/`.
 - **Exact Retrograde Ground-Truth Solves** (final rules): `experiments/results/final_eval/solve_N3_K1_M0.json`, `solve_N3_K1_M1.json`, `solve_N4_K1_M0.json` (all 8 cells exact), `solve_N4_K1_M1.json` (4 of 8 cells exact). The older `experiments/results/solves/` files: see `STALE.md`.
 - **Match results** (final rules): `experiments/results/final_greedy/`, `final_minimax/`, `final_minimax_hop/`, `final_eval/`, `final_dqn/`.

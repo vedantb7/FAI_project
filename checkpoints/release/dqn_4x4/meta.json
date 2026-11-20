@@ -3,7 +3,7 @@
   "blocks": 3,
   "channels": 64,
   "codec_version": 1,
-  "commit": "a665b58",
+  "commit": "6519e63",
   "double": true,
   "dueling": false,
   "gamma": 0.99,
@@ -17,5 +17,5 @@
     "M": 0
   },
   "seed": 42,
-  "step": 50002
+  "step": 500001
 }

@@ -141,7 +141,7 @@ class BaseAgent:
    - 14-plane spatial observation tensor ($14 \times N \times N$) under canonical mover perspective.
    - Uniform FIFO replay buffer with horizontal mirror data augmentation.
    - Self-play curriculum with historical snapshot pool and Greedy anchor.
-   - Release models in `checkpoints/release/dqn_3x3/` and `checkpoints/release/dqn_4x4/` were trained under the old 2-cell HOP rule. On the Gate X-16 protocol under the final rules the 3x3 release model scores 86.8% sign agreement (the old 96.47% no longer holds); the five final-rule 3x3 models score 97.6-98.6% on the same protocol (`experiments/results/final_dqn/tables.md`, `docs/reports/stage2_dqn.md`).
+   - Release models in `checkpoints/release/dqn_3x3/`, `dqn_4x4/` and `dqn_5x5/` were retrained under the final rules on 2026-11-20 (`docs/reports/stage2_dqn.md` Section 12; 3x3 legacy Gate X-16 sign agreement 98.23%). The earlier release models, trained under the old 2-cell HOP rule, scored 86.8% on that protocol (the old 96.47% no longer holds); the five final-rule 3x3 models score 97.6-98.6% on the same protocol (`experiments/results/final_dqn/tables.md`, `docs/reports/stage2_dqn.md`).
 
 ---
 
