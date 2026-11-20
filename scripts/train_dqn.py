@@ -209,7 +209,7 @@ def load_resume_state(path: Path, trainer, sp_manager) -> dict:
     trainer.total_grad_steps = state['total_grad_steps']
     _random.setstate(state['rng_python'])
     _np.random.set_state(state['rng_numpy'])
-    torch.set_rng_state(state['rng_torch'])
+    torch.set_rng_state(state['rng_torch'].cpu())
     return state
 
 
