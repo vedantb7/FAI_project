@@ -1,0 +1,21 @@
+{
+  "N": 9,
+  "blocks": 3,
+  "channels": 64,
+  "codec_version": 1,
+  "commit": "c05483a",
+  "double": true,
+  "dueling": false,
+  "gamma": 0.99,
+  "hidden": 256,
+  "obs_version": 1,
+  "rules": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "K": 3,
+    "M": 10
+  },
+  "seed": 42,
+  "step": 5000015
+}
