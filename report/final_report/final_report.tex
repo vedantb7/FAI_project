@@ -55,13 +55,13 @@ Indian Institute of Technology Gandhinagar\\
 \thispagestyle{empty}
 
 \begin{abstract}
-We study \Wallz{}, a turn-based, two-player zero-sum Markov game extending wall-placement mechanics with reusable walls (A), a one-time hop (B), and temporary cell blocking (C). We implement a unified rule engine and four agents: shortest-path heuristic, depth-limited Minimax with Alpha-Beta pruning, an exact retrograde solver, and masked negamax Double-DQN trained via self-play. On miniature boards, the solver determines exact minimax values for up to 462{,}606 states; DQN selects value-preserving actions in 96\% of non-terminal states. Paired $2^3$ factorial ablation on $5\times5$ reveals that only the hop statistically impacts match outcomes, whereas reusable walls and blocks increase branching by 136\% and 46\%, reducing Minimax search depth by 2.0 and 0.6 plies. Self-play DQN defeats the heuristic in 78\% of distinct games on $5\times5$ but 50\% on $9\times9$. Of proposed hypotheses, H1 holds, H3 holds on $4\times4$ only, and H2 and H4 are refuted.
+We study \Wallz{}, a turn-based, two-player zero-sum Markov game extending wall-placement mechanics with reusable walls (A), a one-time hop (B), and temporary cell blocking (C). We implement a unified rule engine and four agents: shortest-path heuristic, depth-limited Minimax with Alpha-Beta pruning, an exact retrograde solver, and masked negamax Double-DQN trained via self-play. On miniature boards, the solver determines exact minimax values for up to 462{,}606 states; DQN selects value-preserving actions in 96\% of non-terminal states. In a paired $2^3$ factorial ablation on $5\times5$ (40 distinct 4-ply openings), only the hop has a Holm-significant effect on match outcomes, whereas reusable walls and blocks increase branching by 136\% and 46\%, reducing Minimax search depth by 2.0 and 0.6 plies. Self-play DQN defeats the heuristic in 78\% of distinct games on $5\times5$ but 50\% on $9\times9$. Of the proposed hypotheses, H1 holds, H3 holds on $4\times4$ and, at the proposal's $5\times10^5$-step budget, on $3\times3$, and H2 and H4 are refuted.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Multi-Agent Reinforcement Learning, Deep Q-Network, Self-Play, Zero-Sum Games, Retrograde Analysis, Alpha-Beta Pruning, Legal-Action Masking
 
 \section{Introduction}
-In turn-based spatial games, wall placements alter navigable graph topology, dynamically shifting legal action spaces and position evaluations. \Wallz{} is a sequential zero-sum Markov game of perfect information where pawns race to opposite goal rows on an $N\times N$ grid under path preservation. We extend standard mechanics with three features: (A)~\emph{reusable walls}, repositioning a player's most recent wall; (B)~a \emph{one-time hop} across an opponent wall; and (C)~\emph{temporary cell blocking} for $K$ plies. An interactive demo is at \url{https://tagalpallewarabhishek.github.io/wallz-custom-game/}; implementation, results, and web demo are in our repository (\url{https://github.com/vedantb7/FAI_project.git}, Section~\ref{sec:repo}).
+In turn-based spatial games, wall placements alter navigable graph topology, dynamically shifting legal action spaces and position evaluations. \Wallz{} is a sequential zero-sum Markov game of perfect information where pawns race to opposite goal rows on an $N\times N$ grid under path preservation. We extend standard mechanics with three features: (A)~\emph{reusable walls}, repositioning a player's most recent wall; (B)~a \emph{one-time hop} across an opponent wall; and (C)~\emph{temporary cell blocking} for $K$ plies. Implementation, results, and a locally run web demo are in our repository (\url{https://github.com/vedantb7/FAI_project.git}, Section~\ref{sec:repo}).
 
 We investigate three research questions: \textbf{(RQ1)} how temporary and reusable constraints affect search and learning; \textbf{(RQ2)} how a one-time bypass alters planning; and \textbf{(RQ3)} how value-based MARL scales vs.\ exact values. We test four hypotheses in Section~\ref{sec:results}:
 \textbf{H1}: A and C each raise branching by $\geq 40\%$ and reduce Minimax depth under fixed time;
@@ -90,7 +90,7 @@ tracking player walls $W_{i,t}$, latest wall $r_i$, inventory $m_i\in\{0,\dots,M
 \end{itemize}
 Transitions follow proposal rules: $\tau_{t+1}(c^*)=K$ for new blocks and $\tau_{t+1}(c)=\max(0,\tau_t(c)-1)$ otherwise. All actions are verified against $\mathcal{A}_i(s)$ before application.
 
-\paragraph{Terminal states and rewards.} Reaching a goal row yields $R_i=+1, R_{-i}=-1$. Because boxed-in pawns may have no legal moves (48 such terminal states exist in $3\times3, M=1$), we define $\mathcal{A}_{z}(s)=\emptyset$ as a \emph{draw}, and declare draws on 5-fold repetition. Games reaching $T_{\max}=200$ plies are marked \emph{truncated}. The solution concept is minimax value $V^*(s)\in\{\text{WIN},\text{DRAW},\text{LOSS}\}$.
+\paragraph{Terminal states and rewards.} Reaching a goal row yields $R_i=+1, R_{-i}=-1$. Because boxed-in pawns may have no legal moves (48 such terminal states exist in $3\times3, M=1$), we define $\mathcal{A}_{z}(s)=\emptyset$ as a \emph{draw}, and declare draws on 5-fold repetition. Games reaching $T_{\max}=200$ plies are marked \emph{truncated}. Draws and truncations give $R_1=R_2=0$. The solution concept is the undiscounted minimax value $V^*(s)\in\{\text{WIN},\text{DRAW},\text{LOSS}\}$; $\gamma$ is used only by the DQN (Section~\ref{sec:method}). The repetition rule depends on the position history, which $s_t$ does not record: the engine keeps the history alongside $s_t$, and the solver solves the history-free position game (Section~3.4).
 
 \subsection{Deviations from the proposal}
 Table~\ref{tab:dev} details changes from the proposal. Crucially, the 2-cell hop was revised to a 1-cell step across opponent walls because the original rule yielded forced wins in 2--5 plies on all miniature boards. All reported results use the frozen final rules.
@@ -108,7 +108,7 @@ Binary outcomes only & Draw on no legal action and on 5-fold repetition & Such p
 Repeatable block & One block per player & Team rule decision; keeps the state finite and small\\
 500 matches/pairing, 2-ply openings & Distinct openings only (Sec.~\ref{sec:protocol}) & Agents are deterministic: on $5\times5$ only 9 distinct 2-ply openings exist\\
 DQN: 11 planes + 6 scalars, Adam $3\!\times\!10^{-4}$, warm-up & 14 planes, Adam $10^{-4}$, Double DQN, Huber loss; warm-up tested in H2 & Standard stabilisation; warm-up evaluated as an option\\
-$5\times10^5$ steps $\times$ 5 seeds on every board & 5 seeds on $3\times3$; one seed on $4\times4$ (500k), $5\times5$ (2M), $9\times9$ (5M) & Compute: one $9\times9$ run takes more than a day on a laptop CPU\\
+$5\times10^5$ steps $\times$ 5 seeds on every board & 5 seeds on $3\times3$ (200k; retrained to 500k for H3 only); one seed on $4\times4$ (500k), $5\times5$ (2M), $9\times9$ (5M) & Compute: one $9\times9$ run takes more than a day on a laptop CPU\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -166,7 +166,7 @@ Validation includes: 18 unit cases covering cycles, draws, block expiry, and hop
 \begin{equation}
 y=r-\gamma\,(1-\mathrm{done})\;Q_{\theta^-}\!\Big(s',\ \arg\max_{a':\mathcal{M}(s',a')=1} Q_\theta(s',a')\Big),\qquad \gamma=0.99,
 \end{equation}
-trained with Huber loss, Adam ($10^{-4}$), batch 128, gradient clipping (10), target updates every 1{,}000 steps, and decaying $\varepsilon$-greedy exploration. \textbf{Self-play.} Episodes mix current network (50\%), snapshot pool refreshed every $2\times10^4$ steps (40\%), and Greedy (10\%)~\cite{silver2018}, with left--right reflectional symmetry on odd boards.
+trained with Huber loss, Adam ($10^{-4}$), batch 128, gradient clipping (10), target updates every 1{,}000 steps, and decaying $\varepsilon$-greedy exploration. \textbf{Self-play.} Episodes mix current network (50\%), snapshot pool refreshed every $2\times10^4$ steps (40\%), and Greedy (10\%)~\cite{silver2018}, with left--right reflectional symmetry on odd boards. \textbf{Model sets.} Two independently trained sets of the five $3\times3$ seeds (42--46, 200k steps) exist: the study models (\path{checkpoints/final/}) used for agreement with exact values (Section~4.1) and the five-seed match results, and the retrained released models (\path{final_dqn/overnight/}) used for H2, H3 and RQ1. Both keep the value in 95.8--96.7\% of non-terminal states.
 
 \subsection{Evaluation protocol}\label{sec:protocol}
 \textbf{Distinct openings.} Deterministic policies yield identical games from identical openings. Matches start with $k$ random pawn moves shared across all factorial cells; only distinct openings are executed across both player seats (e.g., 40 distinct 4-ply openings on $5\times5$).
@@ -197,7 +197,7 @@ $N=4$, $M=2$ & 1/8 & LOSS in 20 (all mechanics off) & 7 cells UNKNOWN (cap $10^6
 \textbf{Agents vs.\ exact ground truth.} On 300 sampled states of $3\times3, M=1$ (all mechanics), value-optimal rates are 0.897 for Greedy, 0.953 for Minimax (d2), 0.967 for hop-aware Minimax, and 0.953--0.977 across five DQN seeds. Over all 138{,}646 non-terminal states, DQN preserves values in 96.0--96.6\% of states (rank-optimal 91.1--93.3\%, sign agreement 97.7--97.9\%). The $4\times4$ model ($M=0$, 4{,}350 states) preserves values in 96.3\% of states. Against the exact solver across 16 distinct openings and seats, every $3\times3$ DQN replicates exact game values (4 wins, 8 draws, 4 losses).
 
 \subsection{Mechanics and search complexity (H1, H4)}
-Figure~\ref{fig:branching} benchmarks 40 positions per cell on $5\times5$ ($K=3, M=10$) under Minimax (depth $\le 8$, 2.0\,s/move). Reusable walls increase mean branching from 14.7 to 34.5 ($+136\%$) and reduce completed depth from 6.35 to 4.28 plies. Blocks increase branching to 21.3 ($+46\%$), reducing depth by 0.6 plies. Hop affects neither ($+3\%$). Thus, \textbf{H1 holds} for A and C ($N=3, M=1$ exact solves show consistent trends: $+2.40$ actions for A, $+1.87$ for C).
+Figure~\ref{fig:branching} benchmarks 40 positions per cell on $5\times5$ ($K=3, M=10$) under Minimax (depth $\le 8$, 2.0\,s/move). Reusable walls increase mean branching from 14.7 to 34.5 ($+136\%$) and reduce completed depth from 6.35 to 4.28 plies. Blocks increase branching to 21.3 ($+46\%$), reducing depth by 0.6 plies. Hop affects neither ($+3\%$). Thus, \textbf{H1 holds} for A and C ($N=3, M=1$ exact solves show consistent trends: $+2.40$ actions for A, $+1.87$ for C). These are counts in the same fixed positions per cell. Averaged instead over the positions the ablation games reach (Section~4.3), every mechanic raises the mean legal-action count significantly, in a different order (C $+17.6$, B $+10.5$, A $+5.8$), because each cell's games pass through different positions; we did not separate the two effects.
 
 H4 predicts super-additive game length. Factorial ablation reveals mean lengths: 24.1 (none), 41.9 (A), 15.3 (B), 26.2 (C), and 18.2 with all three active (vs.\ additive expectation 35.1 plies). \textbf{H4 is refuted}: hops bypass walls, producing a significant AB interaction on game length ($-6.0$ plies, $p<0.05$ Holm-corrected).
 
@@ -209,9 +209,9 @@ H4 predicts super-additive game length. Factorial ablation reveals mean lengths:
 \end{figure}
 
 \subsection{Factorial ablation of the mechanics}
-The $2^3$ ablation evaluates Minimax (d2) vs.\ Greedy across 8 cells on $5\times5$ from 40 distinct 4-ply openings in both seats (640 deterministic games, zero truncations). Figure~\ref{fig:ablation} reports win rates and effect sizes. \textbf{Only the hop exhibits a statistically supported effect}: it reduces Minimax win rate by 0.175 (95\% CI $[-0.259, -0.088]$), lowers draws by 0.122, and shortens games by 15.4 plies. Effects for A ($-0.081$) and C ($-0.037$) do not survive Holm correction (smallest effect detectable at 80\% power is $\approx 0.16$). Sensitivity runs with 2-ply and 6-ply openings confirm hop sign consistency ($-0.40$ and $-0.41$).
+The $2^3$ ablation evaluates Minimax (d2) vs.\ Greedy across 8 cells on $5\times5$ from 40 distinct 4-ply openings in both seats (640 deterministic games, zero truncations). Figure~\ref{fig:ablation} reports win rates and effect sizes. \textbf{Only the hop exhibits a statistically supported effect}: it reduces Minimax win rate by 0.175 (95\% CI $[-0.259, -0.088]$), lowers draws by 0.122, and shortens games by 15.4 plies. Effects for A ($-0.081$) and C ($-0.037$) do not survive Holm correction (smallest effect detectable at 80\% power is $\approx 0.16$). With 2-ply (9 distinct) and 6-ply (40 distinct) openings the hop effect keeps its sign but is more than twice as large ($-0.40$ and $-0.41$), and with 6-ply openings C ($-0.088$) and the BC interaction ($+0.056$) also survive Holm correction. The size of the hop effect, and whether C is significant, therefore depend on the opening set; we did not establish why the 4-ply estimate is the smallest.
 
-The hop dominates because default leaf evaluators overlook bypass opportunities: Greedy achieved 30 of 60 wins via hops. The hop-aware evaluator boosts Minimax win rate vs.\ Greedy by 11 points (39\% to 50\%, 95\% CI $[+1, +21]$) and wins 54\% head-to-head vs.\ default evaluation.
+The hop dominates because default leaf evaluators overlook bypass opportunities: in the untimed Minimax d2 vs.\ Greedy match (Table~\ref{tab:matches}), 30 of Greedy's 60 wins used the hop. The hop-aware evaluator boosts Minimax win rate vs.\ Greedy by 11 points (39\% to 50\%, 95\% CI $[+1, +21]$) and wins 54\% head-to-head vs.\ default evaluation.
 
 \begin{figure}[!tb]
 \centering
@@ -221,11 +221,11 @@ The hop dominates because default leaf evaluators overlook bypass opportunities:
 \end{figure}
 
 \subsection{Baselines on larger boards}
-Table~\ref{tab:matches} presents match outcomes with all mechanics active ($K=3, M=10$). Greedy beats Random decisively (99.6\%), validating shortest-path heuristics. Untimed Minimax d2 wins only 39\% vs.\ Greedy on $5\times5$ due to unmodeled hops. Under a 2.0\,s budget, depth 4 reaches 54\% wins; depths 6 and 8 hit timeouts at ply 4 (48\% wins), showing time budget governs practical strength. The proposal tie order (maximizing opponent distance) prioritized walls, winning fewer games vs.\ Random (488 vs.\ 498) and Minimax (47\% vs.\ 60\%), with 48\% truncated self-play on $9\times9$. We thus retain category priority as default.
+Table~\ref{tab:matches} presents match outcomes with all mechanics active ($K=3, M=10$). Greedy beats Random decisively (99.6\%), validating shortest-path heuristics. Untimed Minimax d2 wins only 39\% vs.\ Greedy on $5\times5$ due to unmodeled hops. Under a 2.0\,s budget, depth 4 reaches 54\% wins; depths 6 and 8 complete only about 4 plies on average (4.07 and 4.15) and play identical games (48\% wins each), so the time budget, not the nominal depth, sets practical strength. The proposal tie order (maximizing opponent distance) prioritized walls, winning fewer games vs.\ Random (488 vs.\ 498) and Minimax (47\% vs.\ 60\%), with 48\% truncated self-play on $9\times9$. We thus retain category priority as default.
 
 \begin{table}[!tb]
 \centering\small
-\caption{Matches with all mechanics, $K=3$, $M=10$, both seats, distinct games only. W/D/T/L = win, rule draw, truncated, loss for the first-named agent.}
+\caption{Matches with all mechanics, $K=3$, $M=10$, both seats, distinct games only. W/D/T/L = win, rule draw, truncated, loss for the first-named agent. Openings: 50 distinct 4-ply openings on $5\times5$ and for the $9\times9$ DQN rows; 10 distinct 3-ply openings for $9\times9$ Greedy vs.\ Random. Games against Random repeat each opening and seat with several Random seeds.}
 \label{tab:matches}
 \begin{tabular}{llrcc}
 \toprule
@@ -262,38 +262,38 @@ Figure~\ref{fig:dqn} summarizes DQN performance. On $3\times3$ (5 seeds), DQN wi
 \includegraphics[width=\linewidth]{convergence.pdf}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.56\textwidth}
-\caption{H3: value error $|\max_a Q(s,a)-V^*_\gamma(s)|$ of every saved checkpoint over all non-terminal states of the exact solve. $4\times4$ ($M=0$, seed 42) falls below the 0.15 threshold from 100k steps and ends at 0.083; the five $3\times3$ ($M=1$) seeds end at 0.164--0.190 after 200k steps.}
+\caption{H3: value error $|\max_a Q(s,a)-V^*_\gamma(s)|$ of every saved checkpoint over all non-terminal states of the exact solve. $4\times4$ ($M=0$, seed 42) falls below the 0.15 threshold from 100k steps and ends at 0.083; the five $3\times3$ ($M=1$) 200k-step seeds end at 0.164--0.190. The $3\times3$ 500k-step runs (text) are not plotted.}
 \label{fig:h3}
 \end{minipage}
 \end{figure}
 
-\textbf{H3.} Evaluating checkpoints against exact ground truth (Figure~\ref{fig:h3}), $4\times4$ error drops to 0.149 at 50k steps, briefly reaches 0.158 at 75k, stays below 0.15 from 100k, and ends at 0.083 ($<0.15$). On $3\times3$, errors finish at 0.164--0.190 at 200k steps. Hence, \textbf{H3 holds on $4\times4$ but is refuted on $3\times3$} within budget (the 150{,}710-state $3\times3$ game requires longer training than the 4{,}512-state $4\times4$ game).
+\textbf{H3.} Evaluating checkpoints against exact ground truth (Figure~\ref{fig:h3}), $4\times4$ error drops to 0.149 at 50k steps, briefly reaches 0.158 at 75k, stays below 0.15 from 100k, and ends at 0.083 ($<0.15$). On $3\times3$, errors finish at 0.164--0.190 at 200k steps, still falling on four of five seeds. Because 200k is below the proposal's $5\times10^5$-step budget, the five seeds were retrained from scratch to 500k steps (new trajectories, same configuration): all five end below 0.15 (0.114--0.145, mean 0.124), first crossing it at 311k--401k steps and staying below from 341k--481k. Hence, \textbf{H3 holds on $4\times4$ and, at the full budget, on $3\times3$}; it fails on $3\times3$ at 200k steps. The 150{,}710-state $3\times3$ game needs more training than the 4{,}512-state $4\times4$ game. All other $3\times3$ results use the 200k models.
 
-\textbf{H2.} Across opponent schedules on $3\times3$ (seed 42, 200k steps, Table~\ref{tab:h2rq1}, top), all arms achieve 64.0\% wins [57.1, 70.3] vs.\ deterministic Greedy. Warm-up fails to reach 75\% and yields the highest value error (0.225 vs.\ 0.164--0.168). \textbf{H2 is refuted.}
+\textbf{H2.} H2 compares opponent schedules on $3\times3$ (seed 42, 200k steps, Table~\ref{tab:h2rq1}, top). The match test cannot separate the arms: Greedy and the DQN are deterministic and the 200 evaluation games contain only 16 distinct games (8 distinct 2-ply openings $\times$ 2 seats), and all three arms score the same on them (10 wins, 4 draws, 2 losses; 62.5\% [38.6, 81.5]). The warm-up arm therefore does not reach 75\%, and pure self-play is not held to $\leq 55\%$. The value error separates the arms, against the hypothesis: warm-up has the highest (0.225 vs.\ 0.164--0.168). \textbf{H2 is refuted.}
 
-\textbf{RQ1 for learning.} Across $3\times3$ cells (Table~\ref{tab:h2rq1}, bottom), reusable walls reduce value error across all 4 matched pairs (by 0.04--0.14), while cell blocks increase error (by 0.05--0.10), both exceeding multi-seed variance (0.026).
+\textbf{RQ1 for learning.} Across $3\times3$ cells (Table~\ref{tab:h2rq1}, bottom), reusable walls reduce value error across all 4 matched pairs (by 0.04--0.14), while cell blocks increase error (by 0.05--0.10), both exceeding the spread across five seeds (0.026).
 
 \begin{table}[!tb]
 \centering\small
-\caption{DQN on $3\times3$, $K=1$, $M=1$, seed 42, 200k steps. Top: H2 opponent schedules. Bottom: one model per mechanics cell (RQ1). Value error is $|\max_a Q-V^*_\gamma|$ over all non-terminal states; W/D/T/L over 200 games vs.\ Greedy.}
+\caption{DQN on $3\times3$, $K=1$, $M=1$, seed 42, 200k steps. Top: H2 opponent schedules. Bottom: one model per mechanics cell (RQ1). Value error is $|\max_a Q-V^*_\gamma|$ over all non-terminal states. W/D/T/L vs.\ Greedy over the 16 distinct games among 200 played (8 distinct openings $\times$ 2 seats), recovered from the stored per-seat counts and the known repeat count of each opening; for ``none'' two splits fit.}
 \label{tab:h2rq1}
 \setlength{\tabcolsep}{4pt}
 \begin{tabularx}{\textwidth}{l>{\raggedright\arraybackslash}Xrrc}
 \toprule
 Run & Setting & Value-optimal & Value error & vs.\ Greedy W/D/T/L\\
 \midrule
-H2 warm-up & first $10^4$ learner moves from Greedy & 95.2\% & 0.225 & 128/43/0/29\\
-H2 default & 50\% self, 40\% snapshots, 10\% Greedy & 95.8\% & 0.164 & 128/43/0/29\\
-H2 pure self-play & 50\% self, 50\% snapshots & 96.4\% & 0.168 & 128/43/0/29\\
+H2 warm-up & first $10^4$ learner moves from Greedy & 95.2\% & 0.225 & 10/4/0/2\\
+H2 default & 50\% self, 40\% snapshots, 10\% Greedy & 95.8\% & 0.164 & 10/4/0/2\\
+H2 pure self-play & 50\% self, 50\% snapshots & 96.4\% & 0.168 & 10/4/0/2\\
 \midrule
-RQ1 none & 1{,}341 states & 98.7\% & 0.183 & 143/28/0/29\\
-RQ1 C & 16{,}696 states & 95.8\% & 0.236 & 119/0/0/81\\
-RQ1 B & 4{,}893 states & 99.3\% & 0.130 & 147/0/0/53\\
-RQ1 B+C & 59{,}240 states & 96.9\% & 0.234 & 128/19/0/53\\
-RQ1 A & 3{,}861 states & 99.3\% & 0.049 & 72/99/0/29\\
-RQ1 A+C & 46{,}886 states & 98.4\% & 0.097 & 72/99/0/29\\
-RQ1 A+B & 12{,}821 states & 98.2\% & 0.088 & 152/19/0/29\\
-RQ1 A+B+C (seeds 42--46) & 150{,}710 states & 95.8--96.7\% & 0.164--0.190 & 64.0--71.5\% wins\\
+RQ1 none & 1{,}341 states & 98.7\% & 0.183 & 11--12/2--3/0/2\\
+RQ1 C & 16{,}696 states & 95.8\% & 0.236 & 10/0/0/6\\
+RQ1 B & 4{,}893 states & 99.3\% & 0.130 & 12/0/0/4\\
+RQ1 B+C & 59{,}240 states & 96.9\% & 0.234 & 10/2/0/4\\
+RQ1 A & 3{,}861 states & 99.3\% & 0.049 & 6/8/0/2\\
+RQ1 A+C & 46{,}886 states & 98.4\% & 0.097 & 6/8/0/2\\
+RQ1 A+B & 12{,}821 states & 98.2\% & 0.088 & 12/2/0/2\\
+RQ1 A+B+C (seeds 42--46) & 150{,}710 states & 95.8--96.7\% & 0.164--0.190 & 10--11/3--4/0/2\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -301,15 +301,15 @@ RQ1 A+B+C (seeds 42--46) & 150{,}710 states & 95.8--96.7\% & 0.164--0.190 & 64.0
 \section{Discussion and Limitations}
 \textbf{The three mechanics act on different things (RQ1, RQ2).} Reusable walls and blocks increase search complexity, doubling branching and costing Minimax up to two plies under fixed compute. On small boards, reusable walls turn every one-wall $3\times3$ game into a draw. The hop governs outcomes: it is the sole mechanic with a statistically supported effect on win rates, alters exact values once walls are plentiful, and yields an 11-point boost when incorporated into leaf evaluation. Together, mechanics shorten games rather than lengthening them as hops bypass walls.
 
-\textbf{Learned versus exact values (RQ3).} With sparse terminal rewards and no transition model, self-play DQN selects value-optimal actions in 96\% of states across games up to 150{,}710 states, with error falling below 0.15 on $4\times4$. Reusable walls make values easier to learn whereas blocks hinder learning. Heuristic warm-up provides no benefit. Small-board optimality does not scale directly: DQN dominates baselines on $5\times5$ but performs on par with Greedy on $9\times9$.
+\textbf{Learned versus exact values (RQ3).} With sparse terminal rewards and no transition model, self-play DQN selects value-optimal actions in 96\% of states across games up to 150{,}710 states, with error falling below 0.15 on $4\times4$ and, given the full 500k-step budget, on $3\times3$. Reusable walls make values easier to learn whereas blocks hinder learning. Heuristic warm-up provides no benefit. Small-board optimality does not scale directly: DQN dominates baselines on $5\times5$ but performs on par with Greedy on $9\times9$.
 
-\textbf{Limitations.} (i)~Only $3\times3$ default configurations include five seeds; larger boards have one. (ii)~Ground truth is absent above $4\times4$. (iii)~Deterministic policies constrain sample diversity to distinct openings. (iv)~Timed search depends on compute load. (v)~Ablation focuses on Minimax d2 vs.\ Greedy. (vi)~DQN inputs omit older wall owners, impacting $5\times5$ and $9\times9$. (vii)~Solving larger miniature cells exceeds 3\,GB host RAM limits.
+\textbf{Limitations.} (i)~Only $3\times3$ default configurations include five seeds; larger boards have one. (ii)~Ground truth is absent above $4\times4$. (iii)~Deterministic policies constrain sample diversity to distinct openings. (iv)~Timed search depends on compute load. (v)~Ablation focuses on Minimax d2 vs.\ Greedy. (vi)~DQN inputs omit older wall owners, impacting $5\times5$ and $9\times9$. (vii)~Solving larger miniature cells exceeds 3\,GB host RAM limits. (viii)~The block duration $K$ is never varied: all solves and DQN runs use $K=1$ and all matches $K=3$, so the temporal constraint is studied only as block on/off. (ix)~On $3\times3$, match tests against deterministic opponents rest on 16 distinct games, too few to separate training variants; value metrics over all states carry those comparisons.
 
 \section{Conclusion}
 We developed a verified engine for \Wallz{} and evaluated four agent paradigms: heuristic lookahead, Alpha-Beta Minimax, exact retrograde analysis, and self-play Double-DQN under a paired factorial design. Reusable walls and temporary blocks primarily increase search branching; one-time hops determine match outcomes; and their interaction contracts game lengths. Model-free DQN masters near-optimal play on solvable boards and outperforms baselines on $5\times5$, though scaling limits emerge on $9\times9$. Future work includes owner-aware observations, expanded seed evaluations, and hop-aware evaluation inside neural policies.
 
 \section{Repository and Reproducibility}\label{sec:repo}
-Code, results, and documentation are hosted at \url{https://github.com/vedantb7/FAI_project.git}. The \texttt{README.md} outlines environment setup, test suites, match execution, training pipelines, and the interactive web demo (Flask backend, React frontend). All reported values are extracted directly from committed logs in \path{experiments/results/}, each recording commit hash, command flags, seeds, and Python environment. Visual figures are generated via \path{scripts/make_report_figures.py}. Results from outdated rules are quarantined in \path{experiments/results/STALE.md} and excluded.
+Code, results, and documentation are hosted at \url{https://github.com/vedantb7/FAI_project.git}. The \texttt{README.md} outlines environment setup, test suites, match execution, training pipelines, and the interactive web demo (Flask backend, React frontend). All reported values are extracted directly from committed logs in \path{experiments/results/}, each recording commit hash, command flags, seeds, and Python environment; the figures plot values from these files. Results from outdated rules are quarantined in \path{experiments/results/STALE.md} and excluded.
 
 \section{Contribution}\label{sec:contribution}
 Following the proposal idea review, the team reassigned modular responsibilities. Table~\ref{tab:contrib} details individual task assignments and fulfillment status.
