@@ -58,7 +58,7 @@ Confirm that the environment is correctly set up by running the comprehensive te
 ```bash
 .venv/bin/python -m pytest -q
 ```
-*Expected Result*: no failures. Counted on 2026-11-11, one file at a time: 405 tests passed in 49 of the 52 files; the other 3 files need `hypothesis` (in `requirements.txt`) and were not run on that machine. Per-file counts: `docs/implementation_status.md` Section 2.
+*Expected Result*: no failures; 461 tests are collected (2026-11-22, Linux, Python 3.14, torch 2.15.0+cpu). An older per-file count (2026-11-11, without `hypothesis`) is in `docs/implementation_status.md` Section 2.
 
 torch is required: without it `tests/conftest.py` stops the run, because every DQN test would skip and a green run would not cover the DQN agent. To run without DQN coverage on purpose, set `WALLZ_SKIP_DQN=1`; the summary then prints a red "DQN tests were NOT run" line.
 
@@ -135,21 +135,26 @@ python3 scripts/run_experiments.py --config configs/experiments/agreement_3x3.ya
 ```
 
 ### 5. Factorial Mechanic Ablation (Gate X-10 & Gate X-17)
-Run paired 160-game tournament ablation on a $5 \times 5$ board ($K=3, M=10$):
+Primary result: a paired $2^3$ ablation, 640 games, on a $5 \times 5$ board ($K=3, M=10$), with 40 distinct 4-ply openings in both seats. This is the command recorded in `experiments/results/final_eval/ablation_N5_K3_M10_open4/summary.json`. A rerun reproduces every outcome statistic exactly; only the decision-time fields change between machines:
 ```bash
-python3 scripts/run_experiments.py --config configs/experiments/ablation_5x5_k3.yaml
+python3 scripts/run_experiments.py ablation --x minimax:depth=2 --y greedy -N 5 -K 3 -M 10 \
+    --distinct-openings 40 --opening-plies 4 --max-plies 200 --n-boot 10000 \
+    --out-dir experiments/results/repro/ablation_N5_K3_M10_open4 --log-dir experiments/results/repro/logs
 ```
+`configs/experiments/ablation_5x5_k3.yaml` is the earlier pilot design (100 seeds, 2-ply openings). It is not the reported result.
 
 ### 6. MARL DQN Training & Validation (Gate X-16)
 Train a Double-DQN self-play policy on a $3 \times 3$ board:
 ```bash
-python3 scripts/train_dqn.py --config configs/training.yaml --board-size 3 --seed 42
+python3 -m scripts.train_dqn --config configs/training.yaml --board-size 3 --seed 42
 ```
 Validate the released $3 \times 3$ checkpoint against ground-truth retrograde values (Gate X-16):
 ```bash
-python3 scripts/validate_dqn.py --checkpoint checkpoints/release/dqn_3x3/model.pt --seed 42
+python3 -m scripts.validate_dqn --checkpoint checkpoints/release/dqn_3x3/model.pt --seed 42
 ```
 *Gate X-16 Criterion*: Value sign agreement on decided non-terminal states must exceed 90.0%.
+
+Hardware, training times and latency for each release model: [`docs/dqn_provenance.md`](dqn_provenance.md).
 
 ---
 

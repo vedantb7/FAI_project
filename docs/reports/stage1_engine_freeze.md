@@ -177,7 +177,7 @@ No separate copy of the game rules was found.
 
 ## Open conventions and decisions for the team
 
-1. **Expiring block in path checks: settled.** `docs/decisions.md` Decision 9 already fixes it as conservative (a timer-1 block still blocks path checks on the ply it expires). `docs/person3_evaluation.md:46-50` still calls it "open for the team"; that line is now out of date. Covered by `test_expiring_block_still_counts_in_path_checks`.
+1. **Expiring block in path checks: settled.** `docs/decisions.md` Decision 9 already fixes it as conservative (a timer-1 block still blocks path checks on the ply it expires). `docs/evaluation.md:46-50` still calls it "open for the team"; that line is now out of date. Covered by `test_expiring_block_still_counts_in_path_checks`.
 2. **Truncation is two different things.** Engine `max_plies` (off by default) sets `is_draw = True` and `is_truncated = True`. The match runner and `WallzEnv` keep their own 200-ply cap and call it "not a rule draw". If anyone passes `max_plies` inside `rules` to the runner, the outcome would read `draw_truncated` instead of `truncated`. Team decision: keep the cap only in the runner (current practice) or make the engine report truncation with `is_draw = False`.
 3. **HOP rule change (4e346a8)** is the fifth change not in the team plan. Results made under the old 2-cell jump (DQN checkpoints, ablation pilots) are stale, as `docs/game_rules.md` says. Whoever owns those results must rerun them later; this change does not.
 4. **pytest-only rule tests.** Four of the main rule files need pytest. Either install `requirements-dev.txt` on every team machine or keep the unittest file added here as the shared check.

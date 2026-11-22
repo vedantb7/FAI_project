@@ -211,10 +211,14 @@ drawn positions" (`opening_values_vs_exact.json`), counted repeated openings and
 | Board | Timing run | Measured | Estimate | Status |
 |---|---|---|---|---|
 | 5x5 (K3 M10, `board_5`) | 10,052 steps | 74.6 s | 2M steps: about 4.1 h per seed (lower bound; games lengthen as play improves) | trained to 500k steps, seed 42 (Section 6.1) |
-| 9x9 | 2,056-step smoke (batch 32, buffer 5000) | 34.4 s | 5M steps: at least 23 h | skipped: the plan trains 9x9 only if compute permits |
+| 9x9 | 2,056-step smoke (batch 32, buffer 5000) | 34.4 s | 5M steps: at least 23 h | skipped here; trained later to 5M steps on a CUDA machine (update below) |
 
 Source: `training_timing_5x5_9x9.json` (built from the timing runs'
 `checkpoints/final/timing5|timing9/train_log.jsonl`).
+
+> **Update (2026-11-22).** 5x5 later reached 2M steps (Section 12). 9x9 seed 42 was trained to
+> 5,000,015 steps on a separate machine (RTX 4060 Laptop GPU, CUDA 12.4, about 19.9 h). It is
+> released as `checkpoints/release/dqn_9x9/`. Details: `docs/dqn_provenance.md`.
 
 ### 6.1 Larger board: 5x5, seed 42 (no exact ground truth)
 
@@ -379,7 +383,8 @@ at 500k).
 (i7-1355U, 16 GB), `--threads 4`, one run at a time through `scripts/train_dqn_all.sh`
 (60-minute chunks with `resume.pt`, so a crash or reboot loses at most one chunk; status in
 `checkpoints/runs/status.log`). All five 3x3 seeds (42-46), 4x4 s42 and 5x5 s42 finished.
-9x9 (5M steps, about 35 h or more on this machine) was started and then stopped; it is not trained.
+9x9 (5M steps, about 35 h or more on this machine) was started and then stopped here. It was later
+trained on a separate CUDA machine; see the update after the training-times table.
 Weights and logs are in `checkpoints/runs/<N>x<N>_s<seed>/` and are git-ignored except the
 three release copies.
 
@@ -406,6 +411,17 @@ The earlier column gives the same config's wall time on the shared team machine
 about 66 plies long) and sped up to about 4,500-5,000 steps/min as games got shorter. Scaling
 the 9x9 timing run (Section 6, at least 23 h on the team machine) gives an estimate of 35 h or
 more for a full 9x9 run (5M steps) on this machine; this was not measured.
+
+> **Update (2026-11-22): 9x9 trained elsewhere.** The released 9x9 model
+> (`checkpoints/release/dqn_9x9/`, 5,000,015 steps, seed 42) was trained on a Windows 11 laptop
+> with an RTX 4060 Laptop GPU (`device: cuda`, torch 2.6.0+cu124, Python 3.11.9). It took
+> 71,744.5 s (about 19.9 h, about 69.7 steps/s). Its 100-game evaluation
+> (`final_dqn/overnight/dqn_9x9_s42_5M_eval.json`):
+> - vs Random: 92 / 0 / 8 / 0
+> - vs Greedy: 50 / 41 / 0 / 9
+> - vs Minimax d2: 56 / 5 / 7 / 32
+>
+> (win / rule draw / truncated / loss, %). Hardware and provenance: `docs/dqn_provenance.md`.
 
 **Evaluation.** Same protocol and script as Sections 4-6 (`scripts/eval_dqn_final.py`, unchanged
 commands; 5x5 with `--skip-truth --exact-seeds 0 --distinct-openings 50`). Files:

@@ -2,7 +2,7 @@
 
 ## 1. Files to open
 
-1. `report/final_report.md` (the report; `report/final_report.tex` is the same content, not compiled)
+1. `docs/final_report.md` (the report draft; the submitted report is `report/final_report/final_report.tex`)
 2. `experiments/results/final_eval/tables/` (all tables; `manifest.json` lists each table's inputs)
 3. `experiments/results/STALE.md` (which older results are not used, and why)
 4. Member sections: `docs/report_sections/member1_minimax.md`, `member3_eval.md`, `member4_dqn.md`

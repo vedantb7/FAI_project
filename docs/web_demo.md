@@ -39,61 +39,46 @@ Open **`http://localhost:5173`**. Vite automatically proxies API requests to `ht
 
 ---
 
-## 3. Web Views & Feature Guide
+## 3. Pages
 
-The navigation follows the study: **Overview** (`/`), **Rules**, **Play**, **How it works** (`/method`) and **Results** (`/results`), then a **Lab** group with Arena, Replays and Training.
+The navigation has five pages: **Overview** (`/`), **Rules** (`/rules`), **Play** (`/play`), **How it works** (`/method`) and **Results** (`/results`). The screenshots are in `docs/assets/screenshots/` (`home_view.png`, `rules_view.png`, `play_view.png`, `method_view.png`, `results_view.png`). They were taken from the running production build.
 
-### Overview, How it works, Results (the showcase)
-- **No hand-typed numbers.** Every figure and number on these pages comes from `web/frontend/src/data/findings.json`, which `scripts/export_web_findings.py` generates from `experiments/results/`. Each card shows its source file and commit. `tests/web/test_web_findings.py` fails if the JSON is stale: rerun the script after any result changes.
-- **Results** has one card per hypothesis (H1–H4) and research question (RQ1–RQ3): verdict, chart, numbers, sources and a "Try it" link. **How it works** explains the model, the agents, the exact solver (with the solve-coverage grid) and the evaluation method. Neither page calls the API, so both render without a backend.
-- **Try-it presets.** Play and Arena accept a URL preset: `/play?n=3&k=1&m=1&abc=111&p0=human&p1=exact`. A player may be a full spec (`minimax:depth=2`) or a family name (`dqn`, `exact`), which resolves to the first available agent of that family for the chosen board (`web/frontend/src/lib/presets.ts`).
+### Overview (`/`)
+- Explains the three rule changes (A reusable walls, B one-time hop, C temporary block), each drawn on a small board.
+- **Play against an agent** form: pick a board (3×3, 4×4, 5×5 or 9×9, all three rules on) and an opponent. The opponent list only offers agents available for that board. **Start a game** opens Play.
 
-### 1. Play (`/play`)
-Interactive human vs AI or AI vs AI match environment:
-- **Game Configuration**: Customize board dimensions $N \in \{3, 4, 5, 7, 9\}$, wall inventory $M \in [0, 20]$, block duration $K \in [1, 9]$, and toggle mechanics A (Reusable Walls), B (One-Time Hop), and C (Temporary Blocks). Presets are available for trained DQN configurations.
-- **Agent Picker**: Select Player 0 and Player 1 independently from available agents: Human, Random, Greedy (unseeded or seeded), Minimax (depths 1–3), Exact Solver, or DQN.
-- **Interactive SVG Board**:
-  - Pawns for Player 0 (Blue) and Player 1 (Red).
-  - Placed walls colored by owner, with a gold glow highlighting the **latest wall** (repositionable under Rule A).
-  - Blocked cells hatched with an active countdown badge showing remaining plies ($K \to 0$).
-  - Target cell highlights for legal actions matching the selected mode (`MOVE`, `HOP`, `WALL_H`, `WALL_V`, `REPLACE`, `BLOCK`).
-  - Clickable wall slots with hover ghosts.
-  - Arrow key keyboard shortcuts for orthogonal `MOVE` actions.
-- **Side Panels**:
-  - **Player Cards**: Display remaining wall inventory, hop/block availability, and shortest-path distance to goal row.
-  - **Action Bar**: Filter buttons dynamically enabled based on legal move categories.
-  - **Timeline**: Scrollable ply history with formatted action names and decision timestamps.
-  - **Undo**: Transactionally rolls back plies (replaying history through a fresh engine to prevent state divergence).
-  - **Think Panel**: Real-time explanation panel showing how the selected agent evaluated candidate actions on its turn.
-  - **Ask AI (Human Hints)**: When a human player is to move, click "Ask AI" with any agent spec to analyze the current position and receive recommended candidate moves.
-  - **Exact solver's view**: on boards the solver has solved (3×3 and small 4×4), the panel shows the position's value under best play and judges each move against the analysis of the position it was played from ("kept the value" or "threw away value: WIN became DRAW").
+### Rules (`/rules`)
+- Nine lessons in three groups:
+  - **The basic game**: moving, winning, wall supply, no trapping.
+  - **The three rule changes**: A, B, C.
+  - **How a game can be drawn**: no legal move, repetition.
+- Each lesson steps through a scenario from `tests/scenarios/*.json`. These are the same files `tests/test_scenarios.py` runs (`GET /api/scenarios/<name>`). Each step shows "Confirmed by the game engine (n checks)" when its expectations hold.
+- Back/Next buttons and the ← / → keys move between steps. **Play on from the end of this lesson** starts a game from the scenario's final position (`POST /api/games/from-scenario/<name>`).
+- **Show full rules** opens `docs/game_rules.md` (served by `GET /api/rules`) in a dialog.
 
-### 2. Arena (`/arena`)
-Head-to-head automated testing and benchmarking suite:
-- **Match Controls**: Configure P0 and P1 AI agents, speed slider (0.1 s to 1.5 s per ply), Play/Pause, Step, and Reset.
-- **Dual Think Panels**: Side-by-side inspection of both players' internal decision processes simultaneously.
-- **Batch Tournaments**: Run synchronous batches ($n \in \{6, 10, 20, 50\}$ games) through `evaluation.match_runner.run_match`, alternating colors, opening seeds `seed + i // 2` with 2 opening plies. Shows wins, draws, losses and, separately, truncated games (200-ply runner cap), with the Wilson 95% interval of the win rate. Each batch game can be fetched as a verified replay (`/api/arena/batch/<bid>/<idx>`). The Arena is a demo, not the study's evidence: the study's match numbers are in `experiments/results/final_*`.
+### Play (`/play`)
+- **New game** panel:
+  - Presets for the trained DQN boards.
+  - Board size N ∈ {3, 4, 5, 9}, wall inventory M ∈ [0, 20], block duration K ∈ [1, 9], and the A / B / C toggles.
+  - Player 0 and Player 1 chosen independently: human, Random, Greedy, Minimax, the exact solver (on solved boards) or a DQN model (on its own rule set).
+- **Board** (SVG):
+  - Pawns: P0 blue, P1 crimson. Walls are coloured by owner, and the latest wall is marked as movable under Rule A.
+  - Blocked cells are hatched, with a countdown of the plies left.
+  - Shortest-path overlays show each player's distance to goal.
+- **Action buttons**: Move, Horizontal wall, Vertical wall, Move wall, Hop, Block. Keys 1–6 pick a button on a human turn. Only actions the engine reports as legal are enabled.
+- **Worked step** panel: explains the last agent move. For example, the DQN shows Q(chosen), max Q and the number of legal actions; Minimax shows its search result. On a human turn, **Ask for a hint** asks any explainable agent for its move without playing it (`POST /api/games/<id>/analyze`).
+- **Exact solver's view**: on boards the solver has solved (3×3 and small 4×4), it shows the position's value under best play. It also says whether each move kept the value or threw some away (e.g. "WIN became DRAW").
+- **Plies** list with **Undo**. Undo replays the history through a fresh engine. A notice appears when a rule becomes available (for example "Temporary block (Rule C) is now available").
+- **Agent vs agent**: when neither player is human, the agents play on their own until the game ends.
+- **URL presets** start a game directly, for example `/play?n=5&k=3&m=10&abc=111&p0=dqn&p1=greedy`. A player can be a full spec (`minimax:depth=2`) or a family name (`dqn`, `exact`). A family name resolves to the first available agent of that family for the board (`web/frontend/src/lib/presets.ts`). The Results and How it works pages link to games this way.
 
-### 3. Training (`/training`)
-Visual dashboard for reinforcement learning and model evaluation:
-- **Decision Paradigm Cards**: Side-by-side comparison explaining how Greedy (1-ply heuristic), Minimax (tree search + leaf eval), Exact Solver (retrograde induction), and DQN (self-play learning) make choices.
-- **Interactive Training Loop Diagram**: SVG visualization of the Double-DQN training architecture (transitions, replay buffer, target network updates, and opponent pool sampling). Ratios and hyperparameters are queried directly from the backend rather than hardcoded.
-- **Interactive Learning Curves**: Multi-seed Recharts line graphs showing rolling win rate (100-episode window), episode length, exploration epsilon ($\varepsilon$), and TD-loss curves over environment steps.
-- **Benchmark & Gate Tables**: Summary metrics from Gate X-16 (solver sign agreement), Gate X-5 (minimax feature AUC), and Greedy match campaigns.
+### How it works (`/method`)
+- The game as a model: the state (pawns, walls with owners and the latest wall, walls left, hop/block flags, block timers, side to move) and the six action types.
+- How each agent gets the value of a position: Greedy and Minimax estimate it, the DQN learns it, and the exact solver computes it. This includes the solve-coverage grid and the evaluation method.
 
-### 4. Replays (`/replays`)
-Inspection and verification tool for recorded matches:
-- **Experiment Replay Browser**: Discovers and indexes match logs stored under `experiments/results/`, with a filename/ID filter. Older folders may hold games played under earlier rules; `experiments/results/STALE.md` says which.
-- **Replay Scrubber**: Timeline slider, play/pause and step forward/backward.
-- **Engine Verification Badge**: Every replay is verified by executing each action through a fresh `WallzEngine` and comparing logged state ids. If any action is illegal (or a different legal action was swapped in), the replay is flagged with the failing ply.
-- **JSON Replay Upload**: Upload a `run_match` JSON result for verification and playback.
-
-### 5. Rules (`/rules`)
-Interactive rulebook and verification showcase:
-- **Live Rule Scenarios (9 Scenarios)**: Step through the scenarios in `tests/scenarios/*.json` (the same files `tests/test_scenarios.py` runs): basic moves, wall placement and budget exhaustion, latest-wall repositioning, the one-time hop across an opponent's wall, $K$-ply block expiry, path preservation rejections, no-legal-move draws, five-fold repetition, and goal wins.
-- **Rule Invariant Badges**: Each scenario expectation is checked against the engine at its ply and shown as ✓/✗ with its message.
-- **Play From This State**: Launch an interactive game session starting immediately from any scenario frame.
-- **Official Specification Viewer**: Embedded markdown view querying `/api/rules` directly from `docs/game_rules.md`, ensuring zero documentation drift.
+### Results (`/results`)
+- Headline numbers, then one card per hypothesis (H1–H4) and research question (RQ1–RQ3). Each card has a verdict, a chart, the numbers, the source file with its commit, and a "Try it" game link.
+- **No hand-typed numbers.** Every number on Overview, How it works and Results comes from `web/frontend/src/data/findings.json`. That file is generated by `scripts/export_web_findings.py` from `experiments/results/`. `tests/web/test_web_findings.py` fails if the JSON is stale, so rerun the script after any result changes. How it works and Results do not call the API, so they render without a backend.
 
 ---
 
@@ -115,6 +100,8 @@ Interactive rulebook and verification showcase:
 
 ### Data & Tournament Endpoints (`web/backend/routes_data.py`)
 
+The current frontend uses only the scenario, from-scenario and rules endpoints below. The arena, replay and training endpoints are API-only: no page calls them. They remain for scripts and for the backend tests in `tests/web/`.
+
 | Method | Endpoint | Request Body | Response Body | Description |
 |---|---|---|---|---|
 | `POST` | `/api/arena/batch` | `{config, p0, p1, n, seed}` | `{games, by_spec, mean_length, categories, replays}` | Run synchronous AI tournament with Wilson CIs |
@@ -131,6 +118,10 @@ Interactive rulebook and verification showcase:
 | `GET` | `/api/training/summary` | — | Aggregated benchmark metrics | Summary of gates and experimental ladders |
 | `GET` | `/api/training/config` | — | `DQNConfig` dict | Live hyperparameters from `agents.dqn.trainer` |
 | `GET` | `/api/rules` | — | `{"rules": markdown_text}` | Raw markdown text of `docs/game_rules.md` |
+| `POST` | `/api/training/live` | Training settings | Run status | Start a short live DQN training run (API only) |
+| `GET` | `/api/training/live/status` | — | Run status | Status of the live training run |
+| `POST` | `/api/training/live/stop` | — | Run status | Stop the live training run |
+| `GET` | `/api/training/live/stream` | — | Server-sent events | Progress stream of the live training run |
 
 ---
 
@@ -158,8 +149,8 @@ When `/step` or `/analyze` is called, the backend generates an explanation envel
    - Before 2026-11-09 the warm-up ran on a thread inside the server. Its pure-Python search held the GIL and made the first page load take about 47 s.
 3. **DQN Compatibility Gate**:
    - Checkpoints are strictly validated against board size and rules (`meta.N == config.N` and `meta.rules == config.rules`). Incompatible models are disabled with a message indicating the configuration they were trained for.
-   - The demo discovers `checkpoints/release/*` and `checkpoints/dqn_*`. The three release models (3x3, 4x4, 5x5) were trained under the final rules on 2026-11-20; each is offered only for the rule set it was trained on, and a matching "DQN N×N" preset is added. Their evaluation is in `experiments/results/final_dqn/overnight/` and `docs/reports/stage2_dqn.md` Section 12.
-4. **Arena Batch Caps**:
+   - The demo discovers `checkpoints/release/*` and `checkpoints/dqn_*`. There are four release models. The 3x3, 4x4 and 5x5 models were trained under the final rules on 2026-11-20; the 9x9 model (5M steps) was trained later on a CUDA machine. Each is offered only for the rule set it was trained on, and a matching "DQN N×N" preset is added. Their evaluation is in `experiments/results/final_dqn/overnight/` and `docs/reports/stage2_dqn.md` Section 12. Hardware and training provenance: `docs/dqn_provenance.md`.
+4. **Arena Batch Caps** (API only):
    - Batch tournaments are capped at $n \le 50$ games synchronously to prevent server worker timeouts.
 
 ---

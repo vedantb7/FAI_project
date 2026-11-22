@@ -210,7 +210,7 @@ settings with all 8 cells complete get effects; **N = 4, M = 1 gets none** (4 ce
 
 With M = 0, A (nothing to move) and B (nothing to hop) are exactly zero, as they must be. With
 M = 1 on 3x3 only A changes the root value (first-player WIN -> DRAW). The pilot's reading
-"without A, B flips the root" (`docs/person3_evaluation.md` 6.1) came from the old jump. State counts stay almost multiplicative (log-scale interactions
+"without A, B flips the root" (`docs/evaluation.md` 6.1) came from the old jump. State counts stay almost multiplicative (log-scale interactions
 within 0.021 of zero).
 
 ## 3. Task 3: multi-seed experiments: **prepared, not run (pending Dhruv checkpoints)**
@@ -369,7 +369,7 @@ Win-rate effects, estimate (95% CI). Bold = survives Holm.
 | BC | -0.06 (-0.15, 0.03) | +0.014 (-0.028, +0.056) | -0.006 (-0.047, +0.034) | **+0.056 (+0.016, +0.109)** |
 | ABC | -0.04 (-0.21, 0.11) | +0.042 (+0.000, +0.083) | -0.006 (-0.031, +0.019) | +0.013 (-0.012, +0.037) |
 
-Sources: `person3_pilot/ablation_N5_minimax2_vs_greedy/summary.json` (no Holm there),
+Sources: `pilot/ablation_N5_minimax2_vs_greedy/summary.json` (no Holm there; removed 2026-11-22, recover with `git show ca301f6:experiments/results/person3_pilot/ablation_N5_minimax2_vs_greedy/summary.json`),
 `final_eval/ablation_N5_K3_M10_open2_pilot_comparison/`, `.../ablation_N5_K3_M10_open4/`,
 `.../ablation_N5_K3_M10_open6/`, all `summary.json` `effects.x_goal_win`.
 
@@ -407,9 +407,9 @@ bootstrap-based MDEs are estimated from the same data, so treat them as rough.
 > `docs/reports/stage3_member3_multiseed_tables.md` Section 3. The list below is how it was.
 
 `scripts/make_tables.py` `generate_all_tables()` reads, first match wins where noted:
-- ablation (first existing): `experiments/results/person3_pilot/ablation_N5_minimax2_vs_greedy/summary.json`
+- ablation (first existing): `experiments/results/pilot/ablation_N5_minimax2_vs_greedy/summary.json`
   (**stale**), then `experiments/results/ablation_5x5_k3/summary.json` (does not exist);
-- agreement (each existing): `person3_pilot/agreement_N3_K1_M1.json` (stale),
+- agreement (each existing): `pilot/agreement_N3_K1_M1.json` (stale),
   `agreement/agreement_3x3.json` (stale), `dqn/agreement_N4.json` (stale, Dhruv);
 - benchmark: `dqn/benchmark_N3.json`, `dqn/benchmark_N4.json` (stale, Dhruv);
 - solves: every `experiments/results/solves/solve_*.json` (M = 0, still valid; not `final_eval/`);

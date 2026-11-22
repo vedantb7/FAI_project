@@ -9,7 +9,7 @@ rules dict (A, B, C, K, M) are stored once as graph metadata.
 Every transition is produced by the shared engine (``restore_state_key`` +
 ``apply_action(update_clock=False)``), so the graph never re-implements the rules.
 Positions are history-free and clock-free: repetition counts, turn counters and chess
-clocks are not part of a node. See docs/person3_evaluation.md for the exact game model.
+clocks are not part of a node. See docs/evaluation.md for the exact game model.
 """
 import hashlib
 import time

@@ -2,7 +2,9 @@
 
 Final rules: `main` = `22842de` (Stage 1 engine freeze, `docs/reports/stage1_engine_freeze.md`).
 New results for Member 3 are in `experiments/results/final_eval/`. Nothing listed here was
-changed or deleted.
+changed or deleted, except six
+`pilot/` files removed on 2026-11-22 (marked **removed** below; still in git history at `ca301f6`, where
+the folder was named `person3_pilot/`).
 
 Rule and agent changes that make older numbers stale:
 
@@ -18,16 +20,16 @@ uncommitted changes, so the exact code cannot be recovered from git.
 
 | File | Commit | Status | Why |
 |---|---|---|---|
-| `person3_pilot/solve_N3_K1_M0.json` | `7e2d6da` | B-off cells valid; B-on cells stale | old HOP. B-off cells (000, 001, 100, 101) match `final_eval/solve_N3_K1_M0.json` exactly |
-| `person3_pilot/solve_N3_K1_M1.json` | `7e2d6da` | B-off cells valid; B-on cells stale | old HOP. B-off cells match `final_eval/solve_N3_K1_M1.json` exactly |
-| `person3_pilot/solve_N4_K1_M0.json` | `7e2d6da` | B-off cells valid; B-on cells stale | old HOP; B-off cells match `final_eval/solve_N4_K1_M0.json` |
-| `person3_pilot/solve_N4_K1_M1_capped.json` | `7e2d6da` | B-off cells valid (complete ones); B-on cells stale | old HOP; 5 of 8 cells were capped (UNKNOWN) |
-| `person3_pilot/agreement_N3_K1_M0.json` | `7e2d6da` | stale | Greedy change, Minimax fix, old HOP. Replaced by `final_eval/agreement_N3_K1.json` |
-| `person3_pilot/agreement_N3_K1_M1.json` | `7e2d6da` | stale | Greedy change, Minimax fix, old HOP. Replaced by `final_eval/agreement_N3_K1.json` |
-| `person3_pilot/ablation_N5_minimax2_vs_greedy/summary.json` | `7e2d6da` | stale | Greedy change, Minimax fix, old HOP. Also: its 10 seeds (0-9, 2 opening plies) held only **8 distinct openings** (seed 3 = seed 1, seed 8 = seed 4), and both agents are deterministic, so its effective sample was 8 openings, not 10 seeds. N comes from the seed -> opening map (`final_eval/analysis.json` `opening_counts_N5`); the pilot's own `matches.jsonl` was git-ignored and is not available. Direct rerun: `final_eval/ablation_N5_K3_M10_open2_pilot_comparison/` |
-| `person3_pilot/sample_match_N5_ABC_minimax2_greedy.json` | `7e2d6da` | stale | its replay is illegal under the final rules (`verify-replay`: 0/1) |
-| `person3_pilot/sample_match_N9_C_greedy.json` | `7e2d6da` | stale (agent) | replay still legal (`verify-replay`: 1/1, B off), but Greedy changed since |
-| `person3_pilot/sample_match_N9_C_greedy.demo.json` | `7e2d6da` | stale (agent) | demo export of the file above |
+| `pilot/solve_N3_K1_M0.json` | `7e2d6da` | B-off cells valid; B-on cells stale | old HOP. B-off cells (000, 001, 100, 101) match `final_eval/solve_N3_K1_M0.json` exactly |
+| `pilot/solve_N3_K1_M1.json` | `7e2d6da` | B-off cells valid; B-on cells stale | old HOP. B-off cells match `final_eval/solve_N3_K1_M1.json` exactly |
+| `pilot/solve_N4_K1_M0.json` | `7e2d6da` | B-off cells valid; B-on cells stale | old HOP; B-off cells match `final_eval/solve_N4_K1_M0.json` |
+| `pilot/solve_N4_K1_M1_capped.json` | `7e2d6da` | B-off cells valid (complete ones); B-on cells stale | old HOP; 5 of 8 cells were capped (UNKNOWN) |
+| `pilot/agreement_N3_K1_M0.json` | `7e2d6da` | **removed** (2026-11-22) | Greedy change, Minimax fix, old HOP. Replaced by `final_eval/agreement_N3_K1.json`; recover with `git show ca301f6:experiments/results/person3_pilot/agreement_N3_K1_M0.json` |
+| `pilot/agreement_N3_K1_M1.json` | `7e2d6da` | **removed** (2026-11-22) | Greedy change, Minimax fix, old HOP. Replaced by `final_eval/agreement_N3_K1.json`; recover with `git show ca301f6:experiments/results/person3_pilot/agreement_N3_K1_M1.json` |
+| `pilot/ablation_N5_minimax2_vs_greedy/summary.json` | `7e2d6da` | **removed** (2026-11-22) | Greedy change, Minimax fix, old HOP. Also: its 10 seeds (0-9, 2 opening plies) held only **8 distinct openings** (seed 3 = seed 1, seed 8 = seed 4), and both agents are deterministic, so its effective sample was 8 openings, not 10 seeds. N comes from the seed -> opening map (`final_eval/analysis.json` `opening_counts_N5`); the pilot's own `matches.jsonl` was git-ignored and is not available. Direct rerun: `final_eval/ablation_N5_K3_M10_open2_pilot_comparison/`; recover with `git show ca301f6:experiments/results/person3_pilot/ablation_N5_minimax2_vs_greedy/summary.json` |
+| `pilot/sample_match_N5_ABC_minimax2_greedy.json` | `7e2d6da` | **removed** (2026-11-22) | its replay is illegal under the final rules (`verify-replay`: 0/1); recover with `git show ca301f6:experiments/results/person3_pilot/sample_match_N5_ABC_minimax2_greedy.json` |
+| `pilot/sample_match_N9_C_greedy.json` | `7e2d6da` | **removed** (2026-11-22) | replay still legal (`verify-replay`: 1/1, B off), but Greedy changed since; recover with `git show ca301f6:experiments/results/person3_pilot/sample_match_N9_C_greedy.json` |
+| `pilot/sample_match_N9_C_greedy.demo.json` | `7e2d6da` | **removed** (2026-11-22) | demo export of the file above; recover with `git show ca301f6:experiments/results/person3_pilot/sample_match_N9_C_greedy.demo.json` |
 | `solves/solve_N3_K1_M0.json` | `b4eb0a9`, dirty; committed in `4e346a8` | valid, unverified provenance | all 8 cells equal `final_eval/solve_N3_K1_M0.json` (with M = 0 there is no wall, so HOP is never legal) |
 | `solves/solve_N4_K1_M0.json` | `b4eb0a9`, dirty; committed in `4e346a8` | valid, unverified provenance | all 8 cells equal `final_eval/solve_N4_K1_M0.json` |
 | `solves/solve_N3_K2_M0.json`, `solve_N3_K3_M0.json`, `solve_N4_K2_M0.json`, `solve_N4_K3_M0.json` | `b4eb0a9`, dirty; committed in `4e346a8` | probably valid, not rerun | M = 0, so HOP cannot change them; B-on and B-off cells are already equal inside each file. Dirty tree |

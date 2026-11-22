@@ -1,0 +1,83 @@
+{
+  "run": {
+    "source": {
+      "commit": "ca301f6687902f7a7a126effa04d9afb2e305bc4",
+      "dirty": true
+    },
+    "command": "python scripts/benchmark_latency.py --model checkpoints/release/dqn_4x4 --out experiments/results/benchmarks/latency_4x4.json",
+    "python": "3.14.3",
+    "platform": "Linux-6.19.10-300.fc44.x86_64-x86_64-with-glibc2.43",
+    "date_utc": "2026-11-22T17:29:36+00:00"
+  },
+  "hardware": {
+    "cpu": "13th Gen Intel(R) Core(TM) i7-1355U",
+    "logical_cpus": 12,
+    "ram_gb": 15.2
+  },
+  "torch": {
+    "version": "2.15.0+cpu",
+    "threads": 10,
+    "device": "cpu",
+    "cuda_available": false
+  },
+  "model": {
+    "dir": "checkpoints/release/dqn_4x4",
+    "N": 4,
+    "rules": {
+      "A": true,
+      "B": true,
+      "C": true,
+      "K": 1,
+      "M": 0
+    },
+    "seed": 42,
+    "step": 500001,
+    "commit": "6519e63"
+  },
+  "protocol": {
+    "positions_per_series": 1000,
+    "repeats": 5,
+    "warmup": 100,
+    "seed": 42,
+    "batch_size": 1,
+    "position_source": "positions along seeded uniform-random games (200-ply cap), shuffled"
+  },
+  "agents": {
+    "dqn": {
+      "decisions": 5000,
+      "series": 5,
+      "mean_ms": 0.3665147244348191,
+      "std_ms": 0.028448687095101285,
+      "median_ms": 0.33895799424499273,
+      "p95_ms": 0.43462000030558556,
+      "max_ms": 14.552954991813749
+    },
+    "greedy": {
+      "decisions": 5000,
+      "series": 5,
+      "mean_ms": 0.17010706940782255,
+      "std_ms": 0.010652205242676144,
+      "median_ms": 0.1145015048678033,
+      "p95_ms": 0.7973659958224744,
+      "max_ms": 1.0193270136369392
+    },
+    "minimax:depth=1": {
+      "decisions": 5000,
+      "series": 5,
+      "mean_ms": 0.21262659706699197,
+      "std_ms": 0.014162893404420552,
+      "median_ms": 0.1409760006936267,
+      "p95_ms": 0.8873180049704388,
+      "max_ms": 1.1837460042443126
+    },
+    "minimax:depth=2": {
+      "decisions": 5000,
+      "series": 5,
+      "mean_ms": 0.5510415684781037,
+      "std_ms": 0.03655642511617723,
+      "median_ms": 0.34863449400290847,
+      "p95_ms": 2.0452429889701307,
+      "max_ms": 3.835169001831673
+    }
+  }
+}

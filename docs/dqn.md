@@ -136,6 +136,11 @@ Q-probe statistics and the elapsed time, and saves `step_<n>.pt`.
   SHA-256 and evaluation (3x3: 96.72% value-optimal, 98.09% sign agreement; 4x4: 96.14% /
   97.56%; 5x5: 78% wins vs greedy) are in `docs/reports/stage2_dqn.md` Section 12. The
   earlier release models (old HOP rule, about 50k steps, commit a665b58) are in the git history.
+- `checkpoints/release/dqn_9x9/` (seed 42, 5,000,015 steps) was trained on a separate Windows
+  machine with an RTX 4060 Laptop GPU (CUDA). Its checkpoint `meta.json` records commit c05483a. It
+  was published in commit cf5fe30.
+- Hardware, software, training time, in-training evaluation and latency for all four release
+  models: [`docs/dqn_provenance.md`](dqn_provenance.md).
 - Models retrained under the frozen rules are listed, with SHA-256 and evaluation
   files, in `docs/reports/stage2_dqn.md`.
 

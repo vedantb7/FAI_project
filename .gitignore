@@ -51,3 +51,6 @@ skills-lock.json
 # Local-only docs
 /plans/
 Multi_Agent_Systems_Project_Guidelines.pdf
+
+# Local reproductions (README commands write here)
+experiments/results/repro/

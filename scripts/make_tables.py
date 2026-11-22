@@ -367,8 +367,8 @@ ABLATIONS = [
      "sens_open6"),
 ]
 STALE_INPUTS = {
-    "ablation": R / "person3_pilot" / "ablation_N5_minimax2_vs_greedy" / "summary.json",
-    "agreement": R / "person3_pilot" / "agreement_N3_K1_M1.json",
+    "ablation": R / "pilot" / "ablation_N5_minimax2_vs_greedy" / "summary.json",
+    "agreement": R / "pilot" / "agreement_N3_K1_M1.json",
     "greedy": R / "greedy" / "summary.json",
 }
 

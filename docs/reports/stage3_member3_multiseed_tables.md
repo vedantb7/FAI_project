@@ -48,7 +48,7 @@ training default (`no_train` is true); the checkpoints were trained for about 20
 
 ## 1. Multi-seed study (`final_eval/multi_seed_3x3.json`)
 
-Full per-seed table and reading: `docs/report_sections/member3_eval.md` Section 6.
+Full per-seed table: `experiments/results/final_eval/tables/multi_seed_3x3.md`.
 
 | Measure | Mean | SD | 95% t-interval | Min | Max | Largest leave-one-out shift |
 |---|---:|---:|---|---:|---:|---:|
@@ -77,7 +77,7 @@ sample size. Its s42 numbers (win 64.0%, draw 21.5%) differ from the 16 distinct
 
 ## 2. Agreement rerun (`final_eval/agreement_N3_K1.json`)
 
-Table and reading: `docs/report_sections/member3_eval.md` Section 6. Every agent in a cell is
+Table: `experiments/results/final_eval/tables/agreement_N3_K1.md`. Every agent in a cell is
 scored on the same sampled positions (`cells[*].sampled_keys_sha256`): 300 per cell, or all 33
 non-terminal positions in the 45-state cells. DQN is scored only in N3 A1B1C1 K1 M1, the only
 cell its checkpoints were trained for (other rows: `applicable: false`).

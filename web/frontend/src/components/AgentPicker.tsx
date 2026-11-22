@@ -18,6 +18,7 @@ export const AgentPicker: React.FC<AgentPickerProps> = ({
   onSelectP1,
   disabled = false,
 }) => {
+  const available = agents.filter((ag) => ag.available);
   return (
     <div className="card" style={{ marginTop: '1rem' }} data-testid="agent-picker">
       <div className="card-title">Players & Agents</div>
@@ -32,14 +33,9 @@ export const AgentPicker: React.FC<AgentPickerProps> = ({
           onChange={(e) => onSelectP0(e.target.value)}
           disabled={disabled}
         >
-          {agents.map((ag) => (
-            <option
-              key={`p0-${ag.spec}`}
-              value={ag.spec}
-              disabled={!ag.available}
-              title={ag.reason || undefined}
-            >
-              {ag.label} {!ag.available ? `(${ag.reason})` : ''}
+          {available.map((ag) => (
+            <option key={`p0-${ag.spec}`} value={ag.spec}>
+              {ag.label}
             </option>
           ))}
         </select>
@@ -55,14 +51,9 @@ export const AgentPicker: React.FC<AgentPickerProps> = ({
           onChange={(e) => onSelectP1(e.target.value)}
           disabled={disabled}
         >
-          {agents.map((ag) => (
-            <option
-              key={`p1-${ag.spec}`}
-              value={ag.spec}
-              disabled={!ag.available}
-              title={ag.reason || undefined}
-            >
-              {ag.label} {!ag.available ? `(${ag.reason})` : ''}
+          {available.map((ag) => (
+            <option key={`p1-${ag.spec}`} value={ag.spec}>
+              {ag.label}
             </option>
           ))}
         </select>

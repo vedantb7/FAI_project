@@ -3,7 +3,7 @@ Convert Markdown report to LaTeX. Handles only what the report uses:
 #/##/### headings, paragraphs, '-' lists, pipe tables, **bold**, `code`.
 
 Default src and out:
-  report/project_proposal_report/final_report.md -> report/project_proposal_report/final_report.tex
+  docs/final_report.md -> report/project_proposal_report/final_report.tex
 
 Usage:
   python scripts/report_md_to_tex.py [--src SRC] [--out OUT]
@@ -13,7 +13,7 @@ import re
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_SRC = REPO_ROOT / "report" / "project_proposal_report" / "final_report.md"
+DEFAULT_SRC = REPO_ROOT / "docs" / "final_report.md"
 DEFAULT_OUT = REPO_ROOT / "report" / "project_proposal_report" / "final_report.tex"
 
 SRC, OUT = DEFAULT_SRC, DEFAULT_OUT

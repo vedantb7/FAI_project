@@ -56,7 +56,7 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({
           onChange={(e) => onChange({ ...config, board_size: Number(e.target.value) })}
           disabled={disabled}
         >
-          {[3, 4, 5, 7, 9].map((size) => (
+          {[3, 4, 5, 9].map((size) => (
             <option key={size} value={size}>
               {size} × {size}
             </option>

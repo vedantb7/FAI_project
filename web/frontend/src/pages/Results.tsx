@@ -678,7 +678,7 @@ export const ResultsPage: React.FC = () => {
           <li><b>Ablation scope:</b> the factorial ablation pairs depth-2 Minimax with Greedy on one board; the DQN ablation is 3×3 only.</li>
         </ul>
         <p className="muted">
-          Full list and every departure from the proposal: <code>report/final_report.md</code> Sections 11 and 12. The rules and
+          Full list and every departure from the proposal: <code>docs/final_report.md</code> Sections 11 and 12. The rules and
           the engine are explained on <Link to="/method">How it works</Link>.
         </p>
       </section>

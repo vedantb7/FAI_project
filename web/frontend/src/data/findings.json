@@ -536,112 +536,112 @@
    "abc": "000",
    "root": "WIN",
    "rank": 3,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 3,
    "abc": "001",
    "root": "WIN",
    "rank": 5,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 3,
    "abc": "010",
    "root": "LOSS",
    "rank": 2,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 3,
    "abc": "011",
    "root": "LOSS",
    "rank": 4,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 3,
    "abc": "100",
    "root": "WIN",
    "rank": 3,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 3,
    "abc": "101",
    "root": "WIN",
    "rank": 5,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 3,
    "abc": "110",
    "root": "LOSS",
    "rank": 2,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 3,
    "abc": "111",
    "root": "LOSS",
    "rank": 4,
-   "source": "person3_pilot/solve_N3_K1_M0.json"
+   "source": "pilot/solve_N3_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "000",
    "root": "LOSS",
    "rank": 6,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "001",
    "root": "LOSS",
    "rank": 8,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "010",
    "root": "WIN",
    "rank": 3,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "011",
    "root": "WIN",
    "rank": 5,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "100",
    "root": "LOSS",
    "rank": 6,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "101",
    "root": "LOSS",
    "rank": 8,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "110",
    "root": "WIN",
    "rank": 3,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   },
   {
    "n": 4,
    "abc": "111",
    "root": "WIN",
    "rank": 5,
-   "source": "person3_pilot/solve_N4_K1_M0.json"
+   "source": "pilot/solve_N4_K1_M0.json"
   }
  ],
  "ablation": {
@@ -3042,13 +3042,13 @@
    "commit": "753c604",
    "dirty": false
   },
-  "person3_pilot/solve_N3_K1_M0.json": {
-   "path": "experiments/results/person3_pilot/solve_N3_K1_M0.json",
+  "pilot/solve_N3_K1_M0.json": {
+   "path": "experiments/results/pilot/solve_N3_K1_M0.json",
    "commit": "7e2d6da",
    "dirty": false
   },
-  "person3_pilot/solve_N4_K1_M0.json": {
-   "path": "experiments/results/person3_pilot/solve_N4_K1_M0.json",
+  "pilot/solve_N4_K1_M0.json": {
+   "path": "experiments/results/pilot/solve_N4_K1_M0.json",
    "commit": "7e2d6da",
    "dirty": false
   }

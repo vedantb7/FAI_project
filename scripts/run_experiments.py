@@ -1,5 +1,5 @@
 """
-Person 3 evaluation CLI: matches, A/B/C ablations, exact solving, agreement, replays.
+Evaluation CLI: matches, A/B/C ablations, exact solving, agreement, replays.
 
 Examples (run from the repository root):
   python scripts/run_experiments.py match --p0 minimax:depth=2 --p1 greedy -N 5 --abc 111 --out m.json

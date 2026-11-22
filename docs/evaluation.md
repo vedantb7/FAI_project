@@ -1,9 +1,9 @@
-# Person 3 — Match Runner, Exact Solver and Evaluation
+# Match Runner, Exact Solver and Evaluation
 
-**Owner**: Chaitanya Chaudhary (Person 3) · **Branch**: `chaitanya/person3-evaluation`
+**Owner**: Chaitanya Chaudhary
 **Scope**: reproducible match runner and logs, reachable-state graph, exact tiny-board
-solver, evaluation/ablation tools, replay export. Minimax (Person 1), the shared engine and
-greedy baseline (Person 2) and DQN self-play (Person 4) are used through their existing
+solver, evaluation/ablation tools, replay export. Minimax (Vedant Bondekar), the shared engine and
+greedy baseline (Abhishek Tagalpallewar) and DQN self-play (Dhruv Meshram) are used through their existing
 interfaces, not re-implemented.
 
 ---
@@ -20,7 +20,7 @@ interfaces, not re-implemented.
 | `evaluation/replay_export.py` | Converts a logged match into the browser demo's action objects, with a compatibility verdict. |
 | `scripts/run_experiments.py` | CLI: `match`, `ablation`, `solve`, `agreement`, `verify-replay`, `export-demo`. |
 | `tests/test_engine_prerequisites.py`, `tests/test_retrograde.py`, `tests/test_match_runner.py` | 55 tests for the engine fixes, solver and runner. |
-| `experiments/results/person3_pilot/` | Small JSON outputs of the pilots in §6 (full per-ply logs stay in the git-ignored `experiments/logs/`). |
+| `experiments/results/pilot/` | Small JSON outputs of the pilots in §6 (full per-ply logs stay in the git-ignored `experiments/logs/`). Only the four `solve_*.json` files remain; the agreement, ablation and sample-match files were removed on 2026-11-22 (`experiments/results/STALE.md`). |
 
 Existing tools are kept: `run_match.py` (console runner) and `agents/exact_solver.py` +
 `scripts/solve_tiny_board.py` (the earlier solver; `tests/test_retrograde.py` checks that both
@@ -198,19 +198,19 @@ python scripts/run_experiments.py verify-replay m.json
 python scripts/run_experiments.py export-demo m.json --out m_demo.json
 
 # exact solves (all 8 A/B/C cells) and agent agreement
-python scripts/run_experiments.py solve -N 3 -K 1 -M 0 --abc all --out experiments/results/person3_pilot/solve_N3_K1_M0.json
-python scripts/run_experiments.py solve -N 3 -K 1 -M 1 --abc all --out experiments/results/person3_pilot/solve_N3_K1_M1.json
-python scripts/run_experiments.py solve -N 4 -K 1 -M 0 --abc all --out experiments/results/person3_pilot/solve_N4_K1_M0.json
-python scripts/run_experiments.py solve -N 4 -K 1 -M 1 --abc all --max-states 400000 --max-seconds 900 --out experiments/results/person3_pilot/solve_N4_K1_M1_capped.json
+python scripts/run_experiments.py solve -N 3 -K 1 -M 0 --abc all --out experiments/results/pilot/solve_N3_K1_M0.json
+python scripts/run_experiments.py solve -N 3 -K 1 -M 1 --abc all --out experiments/results/pilot/solve_N3_K1_M1.json
+python scripts/run_experiments.py solve -N 4 -K 1 -M 0 --abc all --out experiments/results/pilot/solve_N4_K1_M0.json
+python scripts/run_experiments.py solve -N 4 -K 1 -M 1 --abc all --max-states 400000 --max-seconds 900 --out experiments/results/pilot/solve_N4_K1_M1_capped.json
 python scripts/run_experiments.py agreement -N 3 -K 1 -M 0 --agents greedy minimax:depth=2 \
-       --out experiments/results/person3_pilot/agreement_N3_K1_M0.json
+       --out experiments/results/pilot/agreement_N3_K1_M0.json
 python scripts/run_experiments.py agreement -N 3 -K 1 -M 1 --agents greedy minimax:depth=2 \
-       --out experiments/results/person3_pilot/agreement_N3_K1_M1.json
+       --out experiments/results/pilot/agreement_N3_K1_M1.json
 
 # paired 2^3 match ablation (writes experiments/logs/<name>/matches.jsonl + <out-dir>/summary.json)
 python scripts/run_experiments.py ablation --x minimax:depth=2 --y greedy -N 5 -K 3 -M 10 \
        --seeds 10 --opening-plies 2 --max-plies 200 \
-       --out-dir experiments/results/person3_pilot/ablation_N5_minimax2_vs_greedy
+       --out-dir experiments/results/pilot/ablation_N5_minimax2_vs_greedy
 python scripts/run_experiments.py verify-replay experiments/logs/ablation_N5_minimax2_vs_greedy/matches.jsonl
 ```
 
@@ -223,7 +223,7 @@ python scripts/run_experiments.py verify-replay experiments/logs/ablation_N5_min
 > describe the final rules. Final numbers: `docs/reports/stage2_solver_stats.md` and
 > `experiments/results/final_eval/`; per-file status: `experiments/results/STALE.md`.
 
-All files in `experiments/results/person3_pilot/` were produced from commit `7e2d6da` with a clean tree (recorded in each file's `source`), by the commands in §5. Exact solves use K = 1. "Value" is from the side to move at the root (player 0).
+All files in `experiments/results/pilot/` (the agreement, ablation and sample-match files are no longer in the tree; recover them with `git show ca301f6:experiments/results/person3_pilot/<file>`, the folder's name at that commit) were produced from commit `7e2d6da` with a clean tree (recorded in each file's `source`), by the commands in §5. Exact solves use K = 1. "Value" is from the side to move at the root (player 0).
 
 ### 6.1 Exact solves (reachable canonical positions)
 

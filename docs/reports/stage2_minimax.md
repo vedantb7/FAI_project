@@ -18,7 +18,8 @@
   | `b4287cc` | `opening_maps.json` (read from the match logs; plays nothing) |
 - **Added:** `tests/test_minimax_final_compat.py` (14 tests), `scripts/final_minimax.py`
   (experiment driver), results in `experiments/results/final_minimax/`, this report,
-  `docs/report_sections/member1_minimax.md`.
+  `docs/report_sections/member1_minimax.md` (draft section, removed 2026-11-22; the final text is in
+  `report/final_report/final_report.tex`).
 - **Bugs fixed:** none. No bug was found that needed a code change (see the audit table).
 - **Machine:** Windows, Python 3.12.5, numpy; pytest 9.2.0 became available during the run.
   Two teammates were running jobs on the same machine, so every timing number carries load noise.

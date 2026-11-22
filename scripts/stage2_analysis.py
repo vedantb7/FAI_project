@@ -7,7 +7,7 @@ heavy: every number comes from files that already exist.
 
 Sections of the output:
   solve_tables       per cell: complete/capped, states, edges, root value and rank, seconds
-  pilot_comparison   per cell: same/different vs person3_pilot, and whether B is on
+  pilot_comparison   per cell: same/different vs pilot, and whether B is on
   exact_effects      2^3 effects on exact measures (only when all 8 cells are complete)
   ablations          per ablation summary: units, Holm table, power (minimum detectable effect)
 """
@@ -23,7 +23,7 @@ from evaluation.match_runner import run_metadata  # noqa: E402
 from evaluation.metrics import factorial_effects, cell_label_factors  # noqa: E402
 
 FINAL = 'experiments/results/final_eval'
-PILOT = 'experiments/results/person3_pilot'
+PILOT = 'experiments/results/pilot'
 SOLVES = {  # final file -> pilot file
     'solve_N3_K1_M0.json': 'solve_N3_K1_M0.json',
     'solve_N3_K1_M1.json': 'solve_N3_K1_M1.json',

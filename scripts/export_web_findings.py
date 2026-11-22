@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Export the study's final-rule results for the web showcase.
 
-Reads the result files cited by report/final_report.md and writes
+Reads the result files cited by docs/final_report.md and writes
 web/frontend/src/data/findings.json. Every section names its source file and commit, so the site
 never shows a hand-typed number. The output is deterministic (no timestamps), so
 tests/test_web_findings.py can regenerate it and compare.
@@ -79,7 +79,7 @@ def hop_rule_change(src):
     """Root values before the HOP rule change (2-cell jump), B off vs B on, M = 0."""
     out = []
     for n in (3, 4):
-        doc, sid = src.read(f'person3_pilot/solve_N{n}_K1_M0.json')
+        doc, sid = src.read(f'pilot/solve_N{n}_K1_M0.json')
         for c in doc['cells']:
             out.append({'n': n, 'abc': abc_of(c['rules']), 'root': c['root_status'], 'rank': c['root_rank'],
                         'source': sid})
