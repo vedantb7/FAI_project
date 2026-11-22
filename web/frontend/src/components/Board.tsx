@@ -240,6 +240,17 @@ export const Board: React.FC<BoardProps> = ({
         height={n * cellSize + (n - 1) * wallGap + 16}
       />
 
+      {/* Coordinates, chess style: files A.. along the bottom, ranks 1.. up the left (row 0 at the bottom) */}
+      {Array.from({ length: n }).map((_, i) => {
+        const cell = cellRect(i, i, n);
+        return (
+          <g key={`coord-${i}`} className="bd-coord" aria-hidden="true" style={{ fontSize: px(11, 0.26) }}>
+            <text x={cell.x + cellSize / 2} y={height - 4} textAnchor="middle">{cellName(0, i).replace(/\d+$/, '')}</text>
+            <text x={(padding - 8) / 2} y={cell.y + cellSize / 2} textAnchor="middle" dominantBaseline="central">{i + 1}</text>
+          </g>
+        );
+      })}
+
       {/* Cells */}
       {Array.from({ length: n }).map((_, r) =>
         Array.from({ length: n }).map((__, c) => {
@@ -336,10 +347,15 @@ export const Board: React.FC<BoardProps> = ({
       {(state.walls || []).map((w, idx) => {
         const slot = wallSlotRect(w.r, w.c, w.o, n);
         const replaceable = w.latest && state.rules.A;
+        // In REPLACE mode, the mover's latest wall is the one that will leave its slot
+        const moving = interactive && mode === 'REPLACE' && replaceable && w.owner === state.to_move;
         const inset = 4;
         const vertical = w.o === 'V';
         return (
-          <g key={`wall-${idx}`} aria-label={replaceable ? 'Replaceable Wall' : undefined} pointerEvents="none">
+          <g key={`wall-${idx}`} aria-label={moving ? 'This wall will move' : replaceable ? 'Replaceable Wall' : undefined} pointerEvents="none">
+            {moving && (
+              <rect className="bd-wall-moving" x={slot.x - 5} y={slot.y - 5} width={slot.width + 10} height={slot.height + 10} rx={4} />
+            )}
             <rect
               className={`bd-wall p${w.owner}${replaceable ? ' latest' : ''}`}
               x={slot.x + (vertical ? 2 : 0)}
@@ -356,7 +372,7 @@ export const Board: React.FC<BoardProps> = ({
                 y2={vertical ? slot.y + slot.height - inset : slot.y + slot.height / 2}
               />
             )}
-            <title>{`${w.owner === 0 ? 'Player 0' : 'Player 1'} wall${replaceable ? ', latest: can be moved (Rule A)' : ''}`}</title>
+            <title>{moving ? 'This wall will move to the slot you pick' : `${w.owner === 0 ? 'Player 0' : 'Player 1'} wall${replaceable ? ', latest: can be moved (Rule A)' : ''}`}</title>
           </g>
         );
       })}

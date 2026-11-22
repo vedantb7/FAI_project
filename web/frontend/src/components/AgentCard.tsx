@@ -28,8 +28,6 @@ const ABOUT: Record<string, { how: string; results: string | null }> = {
 export const AgentCard: React.FC<{ spec: string; player: 0 | 1 }> = ({ spec, player }) => {
   const family = agentFamily(spec);
   const about = ABOUT[family];
-  // Release DQN checkpoints predate the final HOP rule (README "Status and results")
-  const staleDqn = family === 'dqn' && spec.includes('release');
   return (
     <div className="agent-card">
       <span className="dot" style={{ background: player === 0 ? 'var(--ink)' : 'var(--crimson)' }} aria-hidden="true" />
@@ -38,9 +36,6 @@ export const AgentCard: React.FC<{ spec: string; player: 0 | 1 }> = ({ spec, pla
           P{player} · {agentName(spec)}
         </h3>
         <p>{about ? about.how : 'An agent from the project registry.'}</p>
-        {staleDqn && (
-          <p className="warn">This release model was trained before the final HOP rule, so it is not a final-rule result.</p>
-        )}
         {about?.results && (
           <p className="src">
             Final-rule results: <code>{about.results}</code>

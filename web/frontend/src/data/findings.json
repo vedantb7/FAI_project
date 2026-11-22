@@ -1,0 +1,3056 @@
+{
+ "generated_by": "scripts/export_web_findings.py",
+ "solve": [
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "000",
+   "complete": true,
+   "states": 45,
+   "root": "WIN",
+   "rank": 3,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "001",
+   "complete": true,
+   "states": 642,
+   "root": "WIN",
+   "rank": 5,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "010",
+   "complete": true,
+   "states": 45,
+   "root": "WIN",
+   "rank": 3,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "011",
+   "complete": true,
+   "states": 642,
+   "root": "WIN",
+   "rank": 5,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "100",
+   "complete": true,
+   "states": 45,
+   "root": "WIN",
+   "rank": 3,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "101",
+   "complete": true,
+   "states": 642,
+   "root": "WIN",
+   "rank": 5,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "110",
+   "complete": true,
+   "states": 45,
+   "root": "WIN",
+   "rank": 3,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 0,
+   "abc": "111",
+   "complete": true,
+   "states": 642,
+   "root": "WIN",
+   "rank": 5,
+   "source": "final_eval/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "000",
+   "complete": true,
+   "states": 1341,
+   "root": "WIN",
+   "rank": 7,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "001",
+   "complete": true,
+   "states": 16696,
+   "root": "WIN",
+   "rank": 9,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "010",
+   "complete": true,
+   "states": 4893,
+   "root": "WIN",
+   "rank": 5,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "011",
+   "complete": true,
+   "states": 59240,
+   "root": "WIN",
+   "rank": 7,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "100",
+   "complete": true,
+   "states": 3861,
+   "root": "DRAW",
+   "rank": null,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "101",
+   "complete": true,
+   "states": 46886,
+   "root": "DRAW",
+   "rank": null,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "110",
+   "complete": true,
+   "states": 12821,
+   "root": "DRAW",
+   "rank": null,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 1,
+   "abc": "111",
+   "complete": true,
+   "states": 150710,
+   "root": "DRAW",
+   "rank": null,
+   "source": "final_eval/solve_N3_K1_M1.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "000",
+   "complete": true,
+   "states": 2902,
+   "root": "DRAW",
+   "rank": null,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "001",
+   "complete": true,
+   "states": 34672,
+   "root": "DRAW",
+   "rank": null,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "010",
+   "complete": true,
+   "states": 10784,
+   "root": "WIN",
+   "rank": 7,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "011",
+   "complete": true,
+   "states": 125464,
+   "root": "WIN",
+   "rank": 7,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "100",
+   "complete": true,
+   "states": 13089,
+   "root": "DRAW",
+   "rank": null,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "101",
+   "complete": true,
+   "states": 151830,
+   "root": "DRAW",
+   "rank": null,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "110",
+   "complete": true,
+   "states": 40745,
+   "root": "DRAW",
+   "rank": null,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 3,
+   "k": 1,
+   "m": 2,
+   "abc": "111",
+   "complete": true,
+   "states": 462606,
+   "root": "DRAW",
+   "rank": null,
+   "source": "drift_fixes/solve_N3_K1_M2.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "000",
+   "complete": true,
+   "states": 176,
+   "root": "LOSS",
+   "rank": 6,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "001",
+   "complete": true,
+   "states": 4512,
+   "root": "LOSS",
+   "rank": 8,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "010",
+   "complete": true,
+   "states": 176,
+   "root": "LOSS",
+   "rank": 6,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "011",
+   "complete": true,
+   "states": 4512,
+   "root": "LOSS",
+   "rank": 8,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "100",
+   "complete": true,
+   "states": 176,
+   "root": "LOSS",
+   "rank": 6,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "101",
+   "complete": true,
+   "states": 4512,
+   "root": "LOSS",
+   "rank": 8,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "110",
+   "complete": true,
+   "states": 176,
+   "root": "LOSS",
+   "rank": 6,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 0,
+   "abc": "111",
+   "complete": true,
+   "states": 4512,
+   "root": "LOSS",
+   "rank": 8,
+   "source": "final_eval/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "000",
+   "complete": true,
+   "states": 27860,
+   "root": "LOSS",
+   "rank": 10,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "001",
+   "complete": false,
+   "states": 400004,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "010",
+   "complete": true,
+   "states": 149360,
+   "root": "LOSS",
+   "rank": 8,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "011",
+   "complete": false,
+   "states": 400010,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "100",
+   "complete": true,
+   "states": 98504,
+   "root": "DRAW",
+   "rank": null,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "101",
+   "complete": false,
+   "states": 400005,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "110",
+   "complete": true,
+   "states": 372160,
+   "root": "DRAW",
+   "rank": null,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 1,
+   "abc": "111",
+   "complete": false,
+   "states": 400003,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "final_eval/solve_N4_K1_M1.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "000",
+   "complete": true,
+   "states": 335572,
+   "root": "LOSS",
+   "rank": 20,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_000.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "001",
+   "complete": false,
+   "states": 1000002,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_001.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "010",
+   "complete": false,
+   "states": 1000000,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_010.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "011",
+   "complete": false,
+   "states": 1000009,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_011.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "100",
+   "complete": false,
+   "states": 1000002,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_100.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "101",
+   "complete": false,
+   "states": 1000012,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_101.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "110",
+   "complete": false,
+   "states": 1000008,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_110.json"
+  },
+  {
+   "n": 4,
+   "k": 1,
+   "m": 2,
+   "abc": "111",
+   "complete": false,
+   "states": 1000022,
+   "root": "UNKNOWN",
+   "rank": null,
+   "source": "drift_fixes/solve_N4_K1_M2/cell_111.json"
+  }
+ ],
+ "hop_rule_change": [
+  {
+   "n": 3,
+   "abc": "000",
+   "root": "WIN",
+   "rank": 3,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "abc": "001",
+   "root": "WIN",
+   "rank": 5,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "abc": "010",
+   "root": "LOSS",
+   "rank": 2,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "abc": "011",
+   "root": "LOSS",
+   "rank": 4,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "abc": "100",
+   "root": "WIN",
+   "rank": 3,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "abc": "101",
+   "root": "WIN",
+   "rank": 5,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "abc": "110",
+   "root": "LOSS",
+   "rank": 2,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 3,
+   "abc": "111",
+   "root": "LOSS",
+   "rank": 4,
+   "source": "person3_pilot/solve_N3_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "000",
+   "root": "LOSS",
+   "rank": 6,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "001",
+   "root": "LOSS",
+   "rank": 8,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "010",
+   "root": "WIN",
+   "rank": 3,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "011",
+   "root": "WIN",
+   "rank": 5,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "100",
+   "root": "LOSS",
+   "rank": 6,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "101",
+   "root": "LOSS",
+   "rank": 8,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "110",
+   "root": "WIN",
+   "rank": 3,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  },
+  {
+   "n": 4,
+   "abc": "111",
+   "root": "WIN",
+   "rank": 5,
+   "source": "person3_pilot/solve_N4_K1_M0.json"
+  }
+ ],
+ "ablation": {
+  "board": "N5 K3 M10",
+  "agents": [
+   "minimax:depth=2",
+   "greedy"
+  ],
+  "distinct_openings": 40,
+  "matches": 640,
+  "win_rate_effects": [
+   {
+    "name": "A",
+    "estimate": -0.0812,
+    "ci95": [
+     -0.1469,
+     -0.0188
+    ],
+    "holm": false
+   },
+   {
+    "name": "B",
+    "estimate": -0.175,
+    "ci95": [
+     -0.2594,
+     -0.0875
+    ],
+    "holm": true
+   },
+   {
+    "name": "C",
+    "estimate": -0.0375,
+    "ci95": [
+     -0.0719,
+     -0.0062
+    ],
+    "holm": false
+   },
+   {
+    "name": "AB",
+    "estimate": -0.0375,
+    "ci95": [
+     -0.0781,
+     0.0031
+    ],
+    "holm": false
+   },
+   {
+    "name": "AC",
+    "estimate": 0.0375,
+    "ci95": [
+     0.0,
+     0.075
+    ],
+    "holm": false
+   },
+   {
+    "name": "BC",
+    "estimate": -0.0062,
+    "ci95": [
+     -0.0469,
+     0.0344
+    ],
+    "holm": false
+   },
+   {
+    "name": "ABC",
+    "estimate": -0.0062,
+    "ci95": [
+     -0.0312,
+     0.0188
+    ],
+    "holm": false
+   }
+  ],
+  "length_cell_means": {
+   "000": 24.125,
+   "001": 26.2,
+   "010": 15.25,
+   "011": 16.275,
+   "100": 41.85,
+   "101": 34.375,
+   "110": 15.3125,
+   "111": 18.1875
+  },
+  "length_additive_prediction": 35.05,
+  "length_measured_all_on": 18.1875,
+  "length_ab_interaction": -5.9812,
+  "length_ab_holm": true,
+  "b_draw_effect": -0.1219,
+  "b_length_effect": -15.3812,
+  "source": "final_eval/ablation_N5_K3_M10_open4/summary.json"
+ },
+ "hop_scorer": {
+  "board": "N5 K3 M10",
+  "games": 100,
+  "win_rate_default": 0.39,
+  "win_rate_hop": 0.5,
+  "difference": 0.11,
+  "ci95": [
+   0.01,
+   0.21
+  ],
+  "source": "final_minimax_hop/paired_d2_default_vs_hop.json"
+ },
+ "h1": {
+  "board": "N5 K3 M10",
+  "positions": 40,
+  "time_limit_s": 2.0,
+  "threshold_pct": 40,
+  "cells": [
+   {
+    "abc": "000",
+    "mean_legal": 14.65,
+    "mean_depth": 6.35,
+    "branching_pct": 0.0,
+    "depth_change": 0.0
+   },
+   {
+    "abc": "001",
+    "mean_legal": 21.325,
+    "mean_depth": 5.75,
+    "branching_pct": 45.6,
+    "depth_change": -0.6
+   },
+   {
+    "abc": "010",
+    "mean_legal": 15.1,
+    "mean_depth": 6.175,
+    "branching_pct": 3.1,
+    "depth_change": -0.17
+   },
+   {
+    "abc": "011",
+    "mean_legal": 23.55,
+    "mean_depth": 5.625,
+    "branching_pct": 60.8,
+    "depth_change": -0.72
+   },
+   {
+    "abc": "100",
+    "mean_legal": 34.5,
+    "mean_depth": 4.275,
+    "branching_pct": 135.5,
+    "depth_change": -2.07
+   },
+   {
+    "abc": "101",
+    "mean_legal": 47.825,
+    "mean_depth": 3.675,
+    "branching_pct": 226.5,
+    "depth_change": -2.67
+   },
+   {
+    "abc": "110",
+    "mean_legal": 34.575,
+    "mean_depth": 4.325,
+    "branching_pct": 136.0,
+    "depth_change": -2.02
+   },
+   {
+    "abc": "111",
+    "mean_legal": 47.175,
+    "mean_depth": 3.725,
+    "branching_pct": 222.0,
+    "depth_change": -2.62
+   }
+  ],
+  "source": "drift_fixes/h1_branching_depth_N5.json"
+ },
+ "h2": {
+  "threshold_warmup": 0.75,
+  "threshold_pure": 0.55,
+  "arms": [
+   {
+    "arm": "Warm-up",
+    "board": 3,
+    "steps": 200029,
+    "value_optimal": 0.9517,
+    "mae": 0.2253,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 128,
+     "draw": 43,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.64,
+     "ci95": [
+      0.5714,
+      0.7033
+     ]
+    },
+    "source": "final_dqn/drift_runs/h2_warmup10k.json"
+   },
+   {
+    "arm": "Default",
+    "board": 3,
+    "steps": 200086,
+    "value_optimal": 0.9583,
+    "mae": 0.164,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 128,
+     "draw": 43,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.64,
+     "ci95": [
+      0.5714,
+      0.7033
+     ]
+    },
+    "source": "final_dqn/overnight/dqn_3x3_s42_eval.json"
+   },
+   {
+    "arm": "Pure self-play",
+    "board": 3,
+    "steps": 200005,
+    "value_optimal": 0.9637,
+    "mae": 0.1682,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 128,
+     "draw": 43,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.64,
+     "ci95": [
+      0.5714,
+      0.7033
+     ]
+    },
+    "source": "final_dqn/drift_runs/h2_pure_selfplay.json"
+   }
+  ]
+ },
+ "h3": {
+  "threshold": 0.15,
+  "runs": [
+   {
+    "run": "3x3_s42",
+    "board": 3,
+    "seed": 42,
+    "budget": 200000,
+    "final": 0.164,
+    "first_below": null,
+    "stays_below_from": null,
+    "curve": [
+     [
+      10004,
+      0.2982
+     ],
+     [
+      20023,
+      0.2309
+     ],
+     [
+      30095,
+      0.2167
+     ],
+     [
+      40100,
+      0.2089
+     ],
+     [
+      50106,
+      0.2275
+     ],
+     [
+      60138,
+      0.2018
+     ],
+     [
+      70155,
+      0.2053
+     ],
+     [
+      80169,
+      0.1981
+     ],
+     [
+      90188,
+      0.1948
+     ],
+     [
+      100253,
+      0.1917
+     ],
+     [
+      110263,
+      0.1966
+     ],
+     [
+      120292,
+      0.1918
+     ],
+     [
+      130311,
+      0.1779
+     ],
+     [
+      140321,
+      0.1786
+     ],
+     [
+      150337,
+      0.1734
+     ],
+     [
+      160376,
+      0.1706
+     ],
+     [
+      170416,
+      0.1661
+     ],
+     [
+      180442,
+      0.1681
+     ],
+     [
+      190448,
+      0.1646
+     ],
+     [
+      200086,
+      0.164
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence.json"
+   },
+   {
+    "run": "3x3_s43",
+    "board": 3,
+    "seed": 43,
+    "budget": 200000,
+    "final": 0.1879,
+    "first_below": null,
+    "stays_below_from": null,
+    "curve": [
+     [
+      10024,
+      0.2953
+     ],
+     [
+      20057,
+      0.2221
+     ],
+     [
+      30094,
+      0.2101
+     ],
+     [
+      40105,
+      0.2113
+     ],
+     [
+      50138,
+      0.2092
+     ],
+     [
+      60160,
+      0.2133
+     ],
+     [
+      70186,
+      0.2205
+     ],
+     [
+      80195,
+      0.2158
+     ],
+     [
+      90306,
+      0.2173
+     ],
+     [
+      100324,
+      0.204
+     ],
+     [
+      110328,
+      0.2052
+     ],
+     [
+      120338,
+      0.2032
+     ],
+     [
+      130355,
+      0.2052
+     ],
+     [
+      140376,
+      0.2013
+     ],
+     [
+      150393,
+      0.2147
+     ],
+     [
+      160428,
+      0.195
+     ],
+     [
+      170455,
+      0.1887
+     ],
+     [
+      180478,
+      0.1762
+     ],
+     [
+      190520,
+      0.1826
+     ],
+     [
+      200023,
+      0.1879
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence.json"
+   },
+   {
+    "run": "3x3_s44",
+    "board": 3,
+    "seed": 44,
+    "budget": 200000,
+    "final": 0.19,
+    "first_below": null,
+    "stays_below_from": null,
+    "curve": [
+     [
+      10022,
+      0.2931
+     ],
+     [
+      20057,
+      0.2518
+     ],
+     [
+      30068,
+      0.2595
+     ],
+     [
+      40072,
+      0.2547
+     ],
+     [
+      50072,
+      0.2339
+     ],
+     [
+      60081,
+      0.2332
+     ],
+     [
+      70102,
+      0.2448
+     ],
+     [
+      80129,
+      0.2427
+     ],
+     [
+      90148,
+      0.2347
+     ],
+     [
+      100160,
+      0.2276
+     ],
+     [
+      110171,
+      0.2292
+     ],
+     [
+      120175,
+      0.2284
+     ],
+     [
+      130183,
+      0.2176
+     ],
+     [
+      140204,
+      0.2139
+     ],
+     [
+      150287,
+      0.2101
+     ],
+     [
+      160323,
+      0.21
+     ],
+     [
+      170329,
+      0.1997
+     ],
+     [
+      180334,
+      0.1954
+     ],
+     [
+      190348,
+      0.1942
+     ],
+     [
+      200015,
+      0.19
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence.json"
+   },
+   {
+    "run": "3x3_s45",
+    "board": 3,
+    "seed": 45,
+    "budget": 200000,
+    "final": 0.1902,
+    "first_below": null,
+    "stays_below_from": null,
+    "curve": [
+     [
+      10004,
+      0.306
+     ],
+     [
+      20112,
+      0.2329
+     ],
+     [
+      30127,
+      0.2256
+     ],
+     [
+      40157,
+      0.2233
+     ],
+     [
+      50180,
+      0.2229
+     ],
+     [
+      60206,
+      0.2418
+     ],
+     [
+      70209,
+      0.235
+     ],
+     [
+      80230,
+      0.2231
+     ],
+     [
+      90235,
+      0.216
+     ],
+     [
+      100244,
+      0.2139
+     ],
+     [
+      110325,
+      0.207
+     ],
+     [
+      120333,
+      0.2113
+     ],
+     [
+      130355,
+      0.2034
+     ],
+     [
+      140371,
+      0.1987
+     ],
+     [
+      150409,
+      0.196
+     ],
+     [
+      160446,
+      0.1948
+     ],
+     [
+      170527,
+      0.1986
+     ],
+     [
+      180548,
+      0.1945
+     ],
+     [
+      190578,
+      0.1937
+     ],
+     [
+      200020,
+      0.1902
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence.json"
+   },
+   {
+    "run": "3x3_s46",
+    "board": 3,
+    "seed": 46,
+    "budget": 200000,
+    "final": 0.165,
+    "first_below": null,
+    "stays_below_from": null,
+    "curve": [
+     [
+      10024,
+      0.3072
+     ],
+     [
+      20026,
+      0.2274
+     ],
+     [
+      30041,
+      0.22
+     ],
+     [
+      40049,
+      0.2121
+     ],
+     [
+      50050,
+      0.2112
+     ],
+     [
+      60054,
+      0.213
+     ],
+     [
+      70082,
+      0.2321
+     ],
+     [
+      80173,
+      0.2324
+     ],
+     [
+      90207,
+      0.2156
+     ],
+     [
+      100217,
+      0.2105
+     ],
+     [
+      110245,
+      0.2025
+     ],
+     [
+      120305,
+      0.2014
+     ],
+     [
+      130311,
+      0.1853
+     ],
+     [
+      140338,
+      0.1852
+     ],
+     [
+      150351,
+      0.1895
+     ],
+     [
+      160372,
+      0.1881
+     ],
+     [
+      170384,
+      0.1754
+     ],
+     [
+      180390,
+      0.1732
+     ],
+     [
+      190394,
+      0.1652
+     ],
+     [
+      200069,
+      0.165
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence.json"
+   },
+   {
+    "run": "3x3_500k_s42",
+    "board": 3,
+    "seed": 42,
+    "budget": 500000,
+    "final": 0.1179,
+    "first_below": 330758,
+    "stays_below_from": 350779,
+    "curve": [
+     [
+      10009,
+      0.294
+     ],
+     [
+      20013,
+      0.2375
+     ],
+     [
+      30054,
+      0.2441
+     ],
+     [
+      40055,
+      0.228
+     ],
+     [
+      50112,
+      0.2306
+     ],
+     [
+      60128,
+      0.2277
+     ],
+     [
+      70128,
+      0.2404
+     ],
+     [
+      80149,
+      0.2332
+     ],
+     [
+      90153,
+      0.2352
+     ],
+     [
+      100249,
+      0.2312
+     ],
+     [
+      110286,
+      0.2357
+     ],
+     [
+      120331,
+      0.2185
+     ],
+     [
+      130344,
+      0.2111
+     ],
+     [
+      140400,
+      0.2021
+     ],
+     [
+      150405,
+      0.1935
+     ],
+     [
+      160439,
+      0.1923
+     ],
+     [
+      170461,
+      0.1841
+     ],
+     [
+      180504,
+      0.1838
+     ],
+     [
+      190525,
+      0.1778
+     ],
+     [
+      200536,
+      0.1747
+     ],
+     [
+      210570,
+      0.1678
+     ],
+     [
+      220585,
+      0.171
+     ],
+     [
+      230599,
+      0.164
+     ],
+     [
+      240628,
+      0.1626
+     ],
+     [
+      250650,
+      0.1544
+     ],
+     [
+      260651,
+      0.1594
+     ],
+     [
+      270698,
+      0.1519
+     ],
+     [
+      280711,
+      0.15
+     ],
+     [
+      290728,
+      0.1523
+     ],
+     [
+      300733,
+      0.1574
+     ],
+     [
+      310744,
+      0.1537
+     ],
+     [
+      320754,
+      0.1559
+     ],
+     [
+      330758,
+      0.1486
+     ],
+     [
+      340760,
+      0.1501
+     ],
+     [
+      350779,
+      0.1423
+     ],
+     [
+      360806,
+      0.1398
+     ],
+     [
+      370816,
+      0.1397
+     ],
+     [
+      380861,
+      0.1386
+     ],
+     [
+      390862,
+      0.1406
+     ],
+     [
+      400866,
+      0.1374
+     ],
+     [
+      410879,
+      0.1365
+     ],
+     [
+      420910,
+      0.1341
+     ],
+     [
+      430918,
+      0.1328
+     ],
+     [
+      440962,
+      0.1388
+     ],
+     [
+      450999,
+      0.1364
+     ],
+     [
+      461037,
+      0.1328
+     ],
+     [
+      471055,
+      0.1275
+     ],
+     [
+      481069,
+      0.1271
+     ],
+     [
+      491077,
+      0.1254
+     ],
+     [
+      500015,
+      0.1179
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence_3x3_500k.json"
+   },
+   {
+    "run": "3x3_500k_s43",
+    "board": 3,
+    "seed": 43,
+    "budget": 500000,
+    "final": 0.1452,
+    "first_below": 400822,
+    "stays_below_from": 481057,
+    "curve": [
+     [
+      10001,
+      0.3077
+     ],
+     [
+      20023,
+      0.2444
+     ],
+     [
+      30027,
+      0.2553
+     ],
+     [
+      40072,
+      0.2421
+     ],
+     [
+      50102,
+      0.2231
+     ],
+     [
+      60109,
+      0.2268
+     ],
+     [
+      70110,
+      0.2394
+     ],
+     [
+      80120,
+      0.2335
+     ],
+     [
+      90158,
+      0.2249
+     ],
+     [
+      100180,
+      0.2177
+     ],
+     [
+      110182,
+      0.2155
+     ],
+     [
+      120189,
+      0.2135
+     ],
+     [
+      130256,
+      0.1997
+     ],
+     [
+      140268,
+      0.1952
+     ],
+     [
+      150286,
+      0.1902
+     ],
+     [
+      160290,
+      0.1914
+     ],
+     [
+      170308,
+      0.1789
+     ],
+     [
+      180309,
+      0.1772
+     ],
+     [
+      190339,
+      0.1727
+     ],
+     [
+      200344,
+      0.1735
+     ],
+     [
+      210366,
+      0.1741
+     ],
+     [
+      220386,
+      0.1755
+     ],
+     [
+      230449,
+      0.1761
+     ],
+     [
+      240452,
+      0.1773
+     ],
+     [
+      250473,
+      0.1739
+     ],
+     [
+      260483,
+      0.1846
+     ],
+     [
+      270488,
+      0.185
+     ],
+     [
+      280501,
+      0.1811
+     ],
+     [
+      290519,
+      0.1719
+     ],
+     [
+      300529,
+      0.168
+     ],
+     [
+      310647,
+      0.1653
+     ],
+     [
+      320651,
+      0.1705
+     ],
+     [
+      330657,
+      0.1705
+     ],
+     [
+      340709,
+      0.1709
+     ],
+     [
+      350714,
+      0.1735
+     ],
+     [
+      360732,
+      0.1662
+     ],
+     [
+      370735,
+      0.1529
+     ],
+     [
+      380790,
+      0.1539
+     ],
+     [
+      390817,
+      0.1516
+     ],
+     [
+      400822,
+      0.1496
+     ],
+     [
+      410868,
+      0.1475
+     ],
+     [
+      420892,
+      0.16
+     ],
+     [
+      430892,
+      0.1511
+     ],
+     [
+      440901,
+      0.1517
+     ],
+     [
+      450933,
+      0.1475
+     ],
+     [
+      460977,
+      0.1525
+     ],
+     [
+      471036,
+      0.1525
+     ],
+     [
+      481057,
+      0.1491
+     ],
+     [
+      491088,
+      0.145
+     ],
+     [
+      500027,
+      0.1452
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence_3x3_500k.json"
+   },
+   {
+    "run": "3x3_500k_s44",
+    "board": 3,
+    "seed": 44,
+    "budget": 500000,
+    "final": 0.1137,
+    "first_below": 310727,
+    "stays_below_from": 410884,
+    "curve": [
+     [
+      10001,
+      0.3023
+     ],
+     [
+      20017,
+      0.2523
+     ],
+     [
+      30017,
+      0.2593
+     ],
+     [
+      40023,
+      0.2453
+     ],
+     [
+      50068,
+      0.222
+     ],
+     [
+      60113,
+      0.2295
+     ],
+     [
+      70156,
+      0.2438
+     ],
+     [
+      80161,
+      0.2458
+     ],
+     [
+      90192,
+      0.2339
+     ],
+     [
+      100224,
+      0.2268
+     ],
+     [
+      110268,
+      0.232
+     ],
+     [
+      120276,
+      0.2326
+     ],
+     [
+      130301,
+      0.2254
+     ],
+     [
+      140347,
+      0.2159
+     ],
+     [
+      150356,
+      0.2189
+     ],
+     [
+      160374,
+      0.2172
+     ],
+     [
+      170376,
+      0.2207
+     ],
+     [
+      180419,
+      0.2021
+     ],
+     [
+      190529,
+      0.1928
+     ],
+     [
+      200548,
+      0.1851
+     ],
+     [
+      210550,
+      0.1919
+     ],
+     [
+      220582,
+      0.1853
+     ],
+     [
+      230599,
+      0.1747
+     ],
+     [
+      240607,
+      0.1728
+     ],
+     [
+      250611,
+      0.1688
+     ],
+     [
+      260624,
+      0.159
+     ],
+     [
+      270641,
+      0.1621
+     ],
+     [
+      280655,
+      0.1601
+     ],
+     [
+      290683,
+      0.1588
+     ],
+     [
+      300694,
+      0.15
+     ],
+     [
+      310727,
+      0.1475
+     ],
+     [
+      320739,
+      0.1674
+     ],
+     [
+      330740,
+      0.1543
+     ],
+     [
+      340754,
+      0.1528
+     ],
+     [
+      350767,
+      0.1415
+     ],
+     [
+      360793,
+      0.1417
+     ],
+     [
+      370807,
+      0.1444
+     ],
+     [
+      380827,
+      0.1406
+     ],
+     [
+      390828,
+      0.1383
+     ],
+     [
+      400831,
+      0.1513
+     ],
+     [
+      410884,
+      0.135
+     ],
+     [
+      420919,
+      0.1337
+     ],
+     [
+      430923,
+      0.1327
+     ],
+     [
+      440930,
+      0.131
+     ],
+     [
+      450946,
+      0.1306
+     ],
+     [
+      460949,
+      0.125
+     ],
+     [
+      470950,
+      0.1275
+     ],
+     [
+      480956,
+      0.1256
+     ],
+     [
+      490980,
+      0.1202
+     ],
+     [
+      500004,
+      0.1137
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence_3x3_500k.json"
+   },
+   {
+    "run": "3x3_500k_s45",
+    "board": 3,
+    "seed": 45,
+    "budget": 500000,
+    "final": 0.1247,
+    "first_below": 320718,
+    "stays_below_from": 340764,
+    "curve": [
+     [
+      10006,
+      0.3051
+     ],
+     [
+      20039,
+      0.2426
+     ],
+     [
+      30057,
+      0.2272
+     ],
+     [
+      40085,
+      0.221
+     ],
+     [
+      50092,
+      0.2295
+     ],
+     [
+      60138,
+      0.2365
+     ],
+     [
+      70160,
+      0.2382
+     ],
+     [
+      80161,
+      0.2333
+     ],
+     [
+      90174,
+      0.2298
+     ],
+     [
+      100188,
+      0.2175
+     ],
+     [
+      110198,
+      0.2161
+     ],
+     [
+      120242,
+      0.2101
+     ],
+     [
+      130252,
+      0.1996
+     ],
+     [
+      140258,
+      0.1933
+     ],
+     [
+      150360,
+      0.1934
+     ],
+     [
+      160411,
+      0.1987
+     ],
+     [
+      170413,
+      0.1808
+     ],
+     [
+      180469,
+      0.1816
+     ],
+     [
+      190494,
+      0.1768
+     ],
+     [
+      200513,
+      0.18
+     ],
+     [
+      210523,
+      0.1836
+     ],
+     [
+      220558,
+      0.1755
+     ],
+     [
+      230562,
+      0.1785
+     ],
+     [
+      240568,
+      0.175
+     ],
+     [
+      250628,
+      0.1607
+     ],
+     [
+      260664,
+      0.1582
+     ],
+     [
+      270666,
+      0.1587
+     ],
+     [
+      280667,
+      0.1609
+     ],
+     [
+      290682,
+      0.1517
+     ],
+     [
+      300692,
+      0.1505
+     ],
+     [
+      310692,
+      0.1531
+     ],
+     [
+      320718,
+      0.1494
+     ],
+     [
+      330739,
+      0.1519
+     ],
+     [
+      340764,
+      0.1479
+     ],
+     [
+      350774,
+      0.1482
+     ],
+     [
+      360795,
+      0.142
+     ],
+     [
+      370853,
+      0.1398
+     ],
+     [
+      380867,
+      0.1408
+     ],
+     [
+      390883,
+      0.1412
+     ],
+     [
+      400935,
+      0.1409
+     ],
+     [
+      410939,
+      0.135
+     ],
+     [
+      421008,
+      0.129
+     ],
+     [
+      431010,
+      0.1338
+     ],
+     [
+      441021,
+      0.1198
+     ],
+     [
+      451059,
+      0.1254
+     ],
+     [
+      461121,
+      0.125
+     ],
+     [
+      471131,
+      0.1198
+     ],
+     [
+      481141,
+      0.1202
+     ],
+     [
+      491157,
+      0.1219
+     ],
+     [
+      500048,
+      0.1247
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence_3x3_500k.json"
+   },
+   {
+    "run": "3x3_500k_s46",
+    "board": 3,
+    "seed": 46,
+    "budget": 500000,
+    "final": 0.1198,
+    "first_below": 310813,
+    "stays_below_from": 350918,
+    "curve": [
+     [
+      10035,
+      0.2942
+     ],
+     [
+      20048,
+      0.2317
+     ],
+     [
+      30072,
+      0.218
+     ],
+     [
+      40083,
+      0.2142
+     ],
+     [
+      50095,
+      0.2122
+     ],
+     [
+      60150,
+      0.2185
+     ],
+     [
+      70194,
+      0.2322
+     ],
+     [
+      80206,
+      0.2176
+     ],
+     [
+      90257,
+      0.2167
+     ],
+     [
+      100259,
+      0.2142
+     ],
+     [
+      110299,
+      0.2099
+     ],
+     [
+      120322,
+      0.2063
+     ],
+     [
+      130423,
+      0.2043
+     ],
+     [
+      140429,
+      0.1841
+     ],
+     [
+      150446,
+      0.1797
+     ],
+     [
+      160468,
+      0.1699
+     ],
+     [
+      170468,
+      0.174
+     ],
+     [
+      180486,
+      0.1742
+     ],
+     [
+      190515,
+      0.1805
+     ],
+     [
+      200536,
+      0.1759
+     ],
+     [
+      210556,
+      0.1697
+     ],
+     [
+      220571,
+      0.1745
+     ],
+     [
+      230605,
+      0.162
+     ],
+     [
+      240662,
+      0.1574
+     ],
+     [
+      250665,
+      0.1706
+     ],
+     [
+      260698,
+      0.1613
+     ],
+     [
+      270731,
+      0.157
+     ],
+     [
+      280732,
+      0.15
+     ],
+     [
+      290757,
+      0.1569
+     ],
+     [
+      300765,
+      0.1537
+     ],
+     [
+      310813,
+      0.1459
+     ],
+     [
+      320835,
+      0.1509
+     ],
+     [
+      330867,
+      0.1467
+     ],
+     [
+      340877,
+      0.155
+     ],
+     [
+      350918,
+      0.1379
+     ],
+     [
+      360958,
+      0.1292
+     ],
+     [
+      370971,
+      0.1282
+     ],
+     [
+      380989,
+      0.1276
+     ],
+     [
+      391005,
+      0.134
+     ],
+     [
+      401008,
+      0.1321
+     ],
+     [
+      411046,
+      0.1409
+     ],
+     [
+      421054,
+      0.1403
+     ],
+     [
+      431059,
+      0.1404
+     ],
+     [
+      441069,
+      0.1387
+     ],
+     [
+      451092,
+      0.1267
+     ],
+     [
+      461128,
+      0.1335
+     ],
+     [
+      471221,
+      0.1225
+     ],
+     [
+      481225,
+      0.1184
+     ],
+     [
+      491227,
+      0.1163
+     ],
+     [
+      500055,
+      0.1198
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence_3x3_500k.json"
+   },
+   {
+    "run": "4x4_s42",
+    "board": 4,
+    "seed": 42,
+    "budget": 500000,
+    "final": 0.0833,
+    "first_below": 50016,
+    "stays_below_from": 100027,
+    "curve": [
+     [
+      25009,
+      0.2803
+     ],
+     [
+      50016,
+      0.1493
+     ],
+     [
+      75018,
+      0.1578
+     ],
+     [
+      100027,
+      0.1496
+     ],
+     [
+      125033,
+      0.1335
+     ],
+     [
+      150037,
+      0.1202
+     ],
+     [
+      175038,
+      0.1212
+     ],
+     [
+      200056,
+      0.1252
+     ],
+     [
+      225061,
+      0.129
+     ],
+     [
+      250064,
+      0.1125
+     ],
+     [
+      275066,
+      0.1153
+     ],
+     [
+      300070,
+      0.1137
+     ],
+     [
+      325073,
+      0.1099
+     ],
+     [
+      350073,
+      0.1031
+     ],
+     [
+      375079,
+      0.0915
+     ],
+     [
+      400079,
+      0.0955
+     ],
+     [
+      425109,
+      0.106
+     ],
+     [
+      450111,
+      0.0972
+     ],
+     [
+      475116,
+      0.0941
+     ],
+     [
+      500001,
+      0.0833
+     ]
+    ],
+    "source": "drift_fixes/h3_convergence.json"
+   }
+  ]
+ },
+ "rq1": {
+  "cells": [
+   {
+    "abc": "000",
+    "board": 3,
+    "steps": 200004,
+    "value_optimal": 0.9873,
+    "mae": 0.1833,
+    "states": 1024,
+    "vs_greedy": {
+     "games": 200,
+     "win": 143,
+     "draw": 28,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.715,
+     "ci95": [
+      0.6488,
+      0.7731
+     ]
+    },
+    "source": "final_dqn/drift_runs/rq1_abc000.json"
+   },
+   {
+    "abc": "001",
+    "board": 3,
+    "steps": 200007,
+    "value_optimal": 0.9578,
+    "mae": 0.2364,
+    "states": 15317,
+    "vs_greedy": {
+     "games": 200,
+     "win": 119,
+     "draw": 0,
+     "truncated": 0,
+     "loss": 81,
+     "win_rate": 0.595,
+     "ci95": [
+      0.5258,
+      0.6606
+     ]
+    },
+    "source": "final_dqn/drift_runs/rq1_abc001.json"
+   },
+   {
+    "abc": "010",
+    "board": 3,
+    "steps": 200003,
+    "value_optimal": 0.9926,
+    "mae": 0.1304,
+    "states": 3656,
+    "vs_greedy": {
+     "games": 200,
+     "win": 147,
+     "draw": 0,
+     "truncated": 0,
+     "loss": 53,
+     "win_rate": 0.735,
+     "ci95": [
+      0.6698,
+      0.7913
+     ]
+    },
+    "source": "final_dqn/drift_runs/rq1_abc010.json"
+   },
+   {
+    "abc": "011",
+    "board": 3,
+    "steps": 200001,
+    "value_optimal": 0.9692,
+    "mae": 0.2338,
+    "states": 53711,
+    "vs_greedy": {
+     "games": 200,
+     "win": 128,
+     "draw": 19,
+     "truncated": 0,
+     "loss": 53,
+     "win_rate": 0.64,
+     "ci95": [
+      0.5714,
+      0.7033
+     ]
+    },
+    "source": "final_dqn/drift_runs/rq1_abc011.json"
+   },
+   {
+    "abc": "100",
+    "board": 3,
+    "steps": 200047,
+    "value_optimal": 0.9927,
+    "mae": 0.0494,
+    "states": 3001,
+    "vs_greedy": {
+     "games": 200,
+     "win": 72,
+     "draw": 99,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.36,
+     "ci95": [
+      0.2967,
+      0.4286
+     ]
+    },
+    "source": "final_dqn/drift_runs/rq1_abc100.json"
+   },
+   {
+    "abc": "101",
+    "board": 3,
+    "steps": 200010,
+    "value_optimal": 0.9843,
+    "mae": 0.0973,
+    "states": 43434,
+    "vs_greedy": {
+     "games": 200,
+     "win": 72,
+     "draw": 99,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.36,
+     "ci95": [
+      0.2967,
+      0.4286
+     ]
+    },
+    "source": "final_dqn/drift_runs/rq1_abc101.json"
+   },
+   {
+    "abc": "110",
+    "board": 3,
+    "steps": 200025,
+    "value_optimal": 0.9821,
+    "mae": 0.0882,
+    "states": 9817,
+    "vs_greedy": {
+     "games": 200,
+     "win": 152,
+     "draw": 19,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.76,
+     "ci95": [
+      0.6963,
+      0.8139
+     ]
+    },
+    "source": "final_dqn/drift_runs/rq1_abc110.json"
+   }
+  ],
+  "default_111_seeds": [
+   {
+    "seed": 42,
+    "board": 3,
+    "steps": 200086,
+    "value_optimal": 0.9583,
+    "mae": 0.164,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 128,
+     "draw": 43,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.64,
+     "ci95": [
+      0.5714,
+      0.7033
+     ]
+    },
+    "source": "final_dqn/overnight/dqn_3x3_s42_eval.json"
+   },
+   {
+    "seed": 43,
+    "board": 3,
+    "steps": 200023,
+    "value_optimal": 0.9608,
+    "mae": 0.1879,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 143,
+     "draw": 28,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.715,
+     "ci95": [
+      0.6488,
+      0.7731
+     ]
+    },
+    "source": "final_dqn/overnight/dqn_3x3_s43_eval.json"
+   },
+   {
+    "seed": 44,
+    "board": 3,
+    "steps": 200015,
+    "value_optimal": 0.9589,
+    "mae": 0.19,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 137,
+     "draw": 34,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.685,
+     "ci95": [
+      0.6176,
+      0.7454
+     ]
+    },
+    "source": "final_dqn/overnight/dqn_3x3_s44_eval.json"
+   },
+   {
+    "seed": 45,
+    "board": 3,
+    "steps": 200020,
+    "value_optimal": 0.9662,
+    "mae": 0.1902,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 128,
+     "draw": 43,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.64,
+     "ci95": [
+      0.5714,
+      0.7033
+     ]
+    },
+    "source": "final_dqn/overnight/dqn_3x3_s45_eval.json"
+   },
+   {
+    "seed": 46,
+    "board": 3,
+    "steps": 200069,
+    "value_optimal": 0.9672,
+    "mae": 0.165,
+    "states": 138646,
+    "vs_greedy": {
+     "games": 200,
+     "win": 128,
+     "draw": 43,
+     "truncated": 0,
+     "loss": 29,
+     "win_rate": 0.64,
+     "ci95": [
+      0.5714,
+      0.7033
+     ]
+    },
+    "source": "final_dqn/overnight/dqn_3x3_s46_eval.json"
+   }
+  ]
+ },
+ "dqn_by_board": [
+  {
+   "board": 3,
+   "steps": 200086,
+   "value_optimal": 0.9583,
+   "mae": 0.164,
+   "states": 138646,
+   "vs_greedy": {
+    "games": 200,
+    "win": 128,
+    "draw": 43,
+    "truncated": 0,
+    "loss": 29,
+    "win_rate": 0.64,
+    "ci95": [
+     0.5714,
+     0.7033
+    ]
+   },
+   "source": "final_dqn/overnight/dqn_3x3_s42_eval.json",
+   "rules": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "K": 1,
+    "M": 1
+   }
+  },
+  {
+   "board": 4,
+   "steps": 500001,
+   "value_optimal": 0.9614,
+   "mae": 0.0833,
+   "states": 4350,
+   "vs_greedy": {
+    "games": 200,
+    "win": 100,
+    "draw": 44,
+    "truncated": 0,
+    "loss": 56,
+    "win_rate": 0.5,
+    "ci95": [
+     0.4314,
+     0.5686
+    ]
+   },
+   "source": "final_dqn/overnight/dqn_4x4_s42_eval.json",
+   "rules": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "K": 1,
+    "M": 0
+   }
+  },
+  {
+   "board": 5,
+   "steps": 2000035,
+   "value_optimal": null,
+   "mae": null,
+   "states": null,
+   "vs_greedy": {
+    "games": 100,
+    "win": 78,
+    "draw": 16,
+    "truncated": 0,
+    "loss": 6,
+    "win_rate": 0.78,
+    "ci95": [
+     0.6893,
+     0.85
+    ]
+   },
+   "source": "final_dqn/overnight/dqn_5x5_s42_2M_eval.json",
+   "rules": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "K": 3,
+    "M": 10
+   }
+  },
+  {
+   "board": 9,
+   "steps": 5000015,
+   "value_optimal": null,
+   "mae": null,
+   "states": null,
+   "vs_greedy": {
+    "games": 100,
+    "win": 50,
+    "draw": 41,
+    "truncated": 0,
+    "loss": 9,
+    "win_rate": 0.5,
+    "ci95": [
+     0.4038,
+     0.5962
+    ]
+   },
+   "source": "final_dqn/overnight/dqn_9x9_s42_5M_eval.json",
+   "rules": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "K": 3,
+    "M": 10
+   }
+  }
+ ],
+ "sources": {
+  "drift_fixes/h1_branching_depth_N5.json": {
+   "path": "experiments/results/drift_fixes/h1_branching_depth_N5.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/h3_convergence.json": {
+   "path": "experiments/results/drift_fixes/h3_convergence.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/h3_convergence_3x3_500k.json": {
+   "path": "experiments/results/drift_fixes/h3_convergence_3x3_500k.json",
+   "commit": "c688c48",
+   "dirty": false
+  },
+  "drift_fixes/solve_N3_K1_M2.json": {
+   "path": "experiments/results/drift_fixes/solve_N3_K1_M2.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_000.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_000.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_001.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_001.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_010.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_010.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_011.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_011.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_100.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_100.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_101.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_101.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_110.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_110.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "drift_fixes/solve_N4_K1_M2/cell_111.json": {
+   "path": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_111.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/h2_pure_selfplay.json": {
+   "path": "experiments/results/final_dqn/drift_runs/h2_pure_selfplay.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/h2_warmup10k.json": {
+   "path": "experiments/results/final_dqn/drift_runs/h2_warmup10k.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/rq1_abc000.json": {
+   "path": "experiments/results/final_dqn/drift_runs/rq1_abc000.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/rq1_abc001.json": {
+   "path": "experiments/results/final_dqn/drift_runs/rq1_abc001.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/rq1_abc010.json": {
+   "path": "experiments/results/final_dqn/drift_runs/rq1_abc010.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/rq1_abc011.json": {
+   "path": "experiments/results/final_dqn/drift_runs/rq1_abc011.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/rq1_abc100.json": {
+   "path": "experiments/results/final_dqn/drift_runs/rq1_abc100.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/rq1_abc101.json": {
+   "path": "experiments/results/final_dqn/drift_runs/rq1_abc101.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/drift_runs/rq1_abc110.json": {
+   "path": "experiments/results/final_dqn/drift_runs/rq1_abc110.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_dqn/overnight/dqn_3x3_s42_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_3x3_s42_eval.json",
+   "commit": "6519e63",
+   "dirty": false
+  },
+  "final_dqn/overnight/dqn_3x3_s43_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_3x3_s43_eval.json",
+   "commit": "6519e63",
+   "dirty": false
+  },
+  "final_dqn/overnight/dqn_3x3_s44_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_3x3_s44_eval.json",
+   "commit": "6519e63",
+   "dirty": false
+  },
+  "final_dqn/overnight/dqn_3x3_s45_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_3x3_s45_eval.json",
+   "commit": "6519e63",
+   "dirty": false
+  },
+  "final_dqn/overnight/dqn_3x3_s46_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_3x3_s46_eval.json",
+   "commit": "6519e63",
+   "dirty": false
+  },
+  "final_dqn/overnight/dqn_4x4_s42_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_4x4_s42_eval.json",
+   "commit": "6519e63",
+   "dirty": false
+  },
+  "final_dqn/overnight/dqn_5x5_s42_2M_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_5x5_s42_2M_eval.json",
+   "commit": "6519e63",
+   "dirty": false
+  },
+  "final_dqn/overnight/dqn_9x9_s42_5M_eval.json": {
+   "path": "experiments/results/final_dqn/overnight/dqn_9x9_s42_5M_eval.json",
+   "commit": "cf5fe30",
+   "dirty": true
+  },
+  "final_eval/ablation_N5_K3_M10_open4/summary.json": {
+   "path": "experiments/results/final_eval/ablation_N5_K3_M10_open4/summary.json",
+   "commit": "753c604",
+   "dirty": false
+  },
+  "final_eval/solve_N3_K1_M0.json": {
+   "path": "experiments/results/final_eval/solve_N3_K1_M0.json",
+   "commit": "c801b5e",
+   "dirty": false
+  },
+  "final_eval/solve_N3_K1_M1.json": {
+   "path": "experiments/results/final_eval/solve_N3_K1_M1.json",
+   "commit": "c801b5e",
+   "dirty": false
+  },
+  "final_eval/solve_N4_K1_M0.json": {
+   "path": "experiments/results/final_eval/solve_N4_K1_M0.json",
+   "commit": "c801b5e",
+   "dirty": false
+  },
+  "final_eval/solve_N4_K1_M1.json": {
+   "path": "experiments/results/final_eval/solve_N4_K1_M1.json",
+   "commit": "c801b5e",
+   "dirty": false
+  },
+  "final_minimax_hop/paired_d2_default_vs_hop.json": {
+   "path": "experiments/results/final_minimax_hop/paired_d2_default_vs_hop.json",
+   "commit": "753c604",
+   "dirty": false
+  },
+  "person3_pilot/solve_N3_K1_M0.json": {
+   "path": "experiments/results/person3_pilot/solve_N3_K1_M0.json",
+   "commit": "7e2d6da",
+   "dirty": false
+  },
+  "person3_pilot/solve_N4_K1_M0.json": {
+   "path": "experiments/results/person3_pilot/solve_N4_K1_M0.json",
+   "commit": "7e2d6da",
+   "dirty": false
+  }
+ }
+}

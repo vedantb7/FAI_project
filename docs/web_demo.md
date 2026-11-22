@@ -41,9 +41,14 @@ Open **`http://localhost:5173`**. Vite automatically proxies API requests to `ht
 
 ## 3. Web Views & Feature Guide
 
-The application features five primary views accessible via the top navigation bar:
+The navigation follows the study: **Overview** (`/`), **Rules**, **Play**, **How it works** (`/method`) and **Results** (`/results`), then a **Lab** group with Arena, Replays and Training.
 
-### 1. Play (`/`)
+### Overview, How it works, Results (the showcase)
+- **No hand-typed numbers.** Every figure and number on these pages comes from `web/frontend/src/data/findings.json`, which `scripts/export_web_findings.py` generates from `experiments/results/`. Each card shows its source file and commit. `tests/web/test_web_findings.py` fails if the JSON is stale: rerun the script after any result changes.
+- **Results** has one card per hypothesis (H1–H4) and research question (RQ1–RQ3): verdict, chart, numbers, sources and a "Try it" link. **How it works** explains the model, the agents, the exact solver (with the solve-coverage grid) and the evaluation method. Neither page calls the API, so both render without a backend.
+- **Try-it presets.** Play and Arena accept a URL preset: `/play?n=3&k=1&m=1&abc=111&p0=human&p1=exact`. A player may be a full spec (`minimax:depth=2`) or a family name (`dqn`, `exact`), which resolves to the first available agent of that family for the chosen board (`web/frontend/src/lib/presets.ts`).
+
+### 1. Play (`/play`)
 Interactive human vs AI or AI vs AI match environment:
 - **Game Configuration**: Customize board dimensions $N \in \{3, 4, 5, 7, 9\}$, wall inventory $M \in [0, 20]$, block duration $K \in [1, 9]$, and toggle mechanics A (Reusable Walls), B (One-Time Hop), and C (Temporary Blocks). Presets are available for trained DQN configurations.
 - **Agent Picker**: Select Player 0 and Player 1 independently from available agents: Human, Random, Greedy (unseeded or seeded), Minimax (depths 1–3), Exact Solver, or DQN.
@@ -61,6 +66,7 @@ Interactive human vs AI or AI vs AI match environment:
   - **Undo**: Transactionally rolls back plies (replaying history through a fresh engine to prevent state divergence).
   - **Think Panel**: Real-time explanation panel showing how the selected agent evaluated candidate actions on its turn.
   - **Ask AI (Human Hints)**: When a human player is to move, click "Ask AI" with any agent spec to analyze the current position and receive recommended candidate moves.
+  - **Exact solver's view**: on boards the solver has solved (3×3 and small 4×4), the panel shows the position's value under best play and judges each move against the analysis of the position it was played from ("kept the value" or "threw away value: WIN became DRAW").
 
 ### 2. Arena (`/arena`)
 Head-to-head automated testing and benchmarking suite:
@@ -185,4 +191,27 @@ docker build -t wallz-demo .
 docker run --rm -p 5000:5000 wallz-demo
 ```
 
-Inside the container the server binds `0.0.0.0` (`Dockerfile` CMD passes `--host 0.0.0.0`), so the published port is reachable. Run outside Docker, `python -m web.backend.app` keeps its default `--host 127.0.0.1`.
+Inside the container the server binds `0.0.0.0` on `$PORT` (5000 by default; 7860 on Hugging Face), so the published port is reachable. Run outside Docker, `python -m web.backend.app` keeps its default `--host 127.0.0.1`.
+
+## 9. Public deployment (GitHub Pages + Hugging Face Space)
+
+The site is static and goes to GitHub Pages; the game API (engine and agents) needs Python and runs as a Hugging Face Docker Space built from the same `Dockerfile`.
+
+1. **Space.** Create a Docker Space and push this repository to it. The Space's `README.md` must start with:
+   ```yaml
+   ---
+   title: Modified Wallz
+   sdk: docker
+   app_port: 7860
+   ---
+   ```
+   In the Space settings add the variables `PORT=7860`, `WALLZ_PUBLIC=1` (disables live training and replay uploads) and `WALLZ_ALLOWED_ORIGIN=https://<user>.github.io` (CORS for the Pages site only; no trailing path).
+2. **Pages.** In the GitHub repository, set Pages to "GitHub Actions" and add the Actions variable `API_BASE=https://<user>-<space>.hf.space`. `.github/workflows/pages.yml` builds with `VITE_BASE=/<repo>/` and `VITE_API_BASE=$API_BASE` and copies `index.html` to `404.html` so deep links like `/results` work.
+3. **Cold starts.** A sleeping Space answers 502/503 while it boots; the client retries remote calls for about a minute (`web/frontend/src/api/client.ts`). Overview, How it works and Results need no API at all.
+
+Local check of the split setup:
+```bash
+WALLZ_ALLOWED_ORIGIN=http://localhost:4173 .venv/bin/python -m web.backend.app --port 5000
+cd web/frontend && VITE_API_BASE=http://localhost:5000 npm run build && npm run preview
+```
+

@@ -17,9 +17,11 @@ import { ConfigForm } from '../components/ConfigForm';
 import { PlayersTable } from '../components/PlayerCard';
 import { RuleKey, RuleNote } from '../components/RuleNote';
 import { TerminalBanner } from '../components/TerminalBanner';
+import { OraclePanel } from '../components/OraclePanel';
 import { Timeline } from '../components/Timeline';
 import { WorkedStep } from '../components/WorkedStep';
 import { agentName, describeAction } from '../lib/notation';
+import { parsePreset, resolveAgent } from '../lib/presets';
 
 const RULE_FLAG: Record<RuleKey, 'A' | 'B' | 'C'> = { REPLACE: 'A', HOP: 'B', BLOCK: 'C' };
 
@@ -70,7 +72,8 @@ export const PlayPage: React.FC = () => {
   useEffect(() => {
     api.fetchConfigDefaults().then((res) => {
       setDefaults(res);
-      if (res.defaults) {
+      // A preset game sets its own config; don't let late-arriving defaults overwrite it
+      if (res.defaults && !parsePreset(location.search)) {
         setConfig((prev) => ({ ...prev, ...res.defaults }));
       }
     }).catch(console.error);
@@ -111,6 +114,23 @@ export const PlayPage: React.FC = () => {
     if (startedRef.current) return;
     startedRef.current = true;
     const handedOver = (location.state as { sessionId?: string } | null)?.sessionId;
+    const preset = handedOver ? null : parsePreset(location.search);
+    if (preset) {
+      // A "Try it" link: start the preset game directly (agents resolved for that board)
+      const cfg = { ...config, ...preset.config };
+      api.fetchAgents(cfg).then(async (list) => {
+        const a0 = resolveAgent(preset.p0, list) ?? 'human';
+        const a1 = resolveAgent(preset.p1, list) ?? 'greedy';
+        setConfig(cfg);
+        setP0(a0);
+        setP1(a1);
+        setSession(await api.createGame(cfg, a0, a1));
+      }).catch((err: any) => {
+        setStartFailed(true);
+        setErrorMessage(err?.data?.error || err.message || 'The server could not start the preset game.');
+      });
+      return;
+    }
     if (!handedOver) {
       handleStartGame();
       return;
@@ -310,6 +330,8 @@ export const PlayPage: React.FC = () => {
       : `${names[state.to_move]} to move`
     : `${names[state.to_move]} to move`;
   const note = notes[0];
+  // Solved small boards only: the solver's verdict is shown beside the worked step
+  const exactAvailable = agents.some((a) => a.family === 'exact' && a.available);
   const agentPlayers = ([0, 1] as const).filter((p) => specs[String(p)] && specs[String(p)] !== 'human');
 
   return (
@@ -400,6 +422,12 @@ export const PlayPage: React.FC = () => {
               </div>
             )}
           </div>
+
+          {exactAvailable && (
+            <div className="work-section">
+              <OraclePanel session={session} names={names} busy={aiThinking} />
+            </div>
+          )}
 
           {note && (
             <div className="work-section">

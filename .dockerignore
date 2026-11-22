@@ -8,3 +8,5 @@ web/frontend/node_modules
 web/frontend/dist
 experiments/cache
 .hypothesis
+checkpoints/runs
+checkpoints/overnight*

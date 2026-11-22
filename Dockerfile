@@ -23,9 +23,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install Python dependencies (CPU-only torch: the demo runs inference on CPU, and the
+# default CUDA wheels would add gigabytes to the image)
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir -r requirements.txt
 
 # Copy repository code
 COPY . .
@@ -33,9 +35,15 @@ COPY . .
 # Copy compiled frontend distribution from Stage 1
 COPY --from=frontend-builder /app/frontend/dist /app/web/frontend/dist
 
-EXPOSE 5000
+# Run as uid 1000 (required by Hugging Face Spaces); the exact-solver cache must be writable
+RUN useradd -m -u 1000 wallz && mkdir -p experiments/cache && chown -R wallz /app
+USER wallz
+
+# PORT: 5000 by default, 7860 on Hugging Face Spaces
+ENV PORT=5000
+EXPOSE 5000 7860
 
 # Start unified Flask server
 # Bind to all interfaces inside the container only, so `docker run -p 5000:5000` is reachable.
 # Outside Docker the server keeps its 127.0.0.1 default.
-CMD ["python", "-m", "web.backend.app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["sh", "-c", "exec python -m web.backend.app --host 0.0.0.0 --port ${PORT}"]

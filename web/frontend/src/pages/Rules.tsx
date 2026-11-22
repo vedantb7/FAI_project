@@ -1,189 +1,161 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { ScenarioDetail } from '../api/types';
 import { Board } from '../components/Board';
+import { RulesDialog } from '../components/RulesDialog';
 import { TerminalBanner } from '../components/TerminalBanner';
+import { LESSON_GROUPS, LESSONS } from '../lib/lessons';
+import { describeAction } from '../lib/notation';
+
+const NAMES = ['Blue', 'Red'];
 
 export const RulesPage: React.FC = () => {
-  const [scenarios, setScenarios] = useState<any[]>([]);
-  const [selectedName, setSelectedName] = useState<string>('move_basics');
+  const [lessonIdx, setLessonIdx] = useState(0);
   const [detail, setDetail] = useState<ScenarioDetail | null>(null);
-  const [currentPly, setCurrentPly] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [rulesDoc, setRulesDoc] = useState<string>('');
-  const [showDoc, setShowDoc] = useState<boolean>(false);
+  const [ply, setPly] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [showDoc, setShowDoc] = useState(false);
   const navigate = useNavigate();
+  const lesson = LESSONS[lessonIdx];
 
   useEffect(() => {
-    api.fetchScenarios().then((list) => {
-      setScenarios(list);
-    }).catch(console.error);
+    let live = true;
+    setDetail(null);
+    setPly(0);
+    setError(null);
+    api
+      .fetchScenario(lesson.name)
+      .then((d) => live && setDetail(d))
+      .catch((e) => live && setError(e?.message || 'Could not load this lesson.'));
+    return () => {
+      live = false;
+    };
+  }, [lesson.name]);
 
-    api.fetchRules().then((res) => {
-      setRulesDoc(res.rules);
-    }).catch(console.error);
-  }, []);
+  const frames = detail?.frames ?? [];
+  const last = Math.max(0, frames.length - 1);
+  const frame = frames[ply];
+  const atEnd = ply >= last;
 
+  const next = useCallback(() => {
+    if (!atEnd) setPly((p) => p + 1);
+    else if (lessonIdx < LESSONS.length - 1) setLessonIdx((i) => i + 1);
+  }, [atEnd, lessonIdx]);
+  const prev = useCallback(() => setPly((p) => Math.max(0, p - 1)), []);
+
+  // Arrow keys step through the lesson (ignored while typing or with the rules open)
   useEffect(() => {
-    if (!selectedName) return;
-    setLoading(true);
-    setCurrentPly(0);
-    api.fetchScenario(selectedName)
-      .then((data) => setDetail(data))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [selectedName]);
+    const onKey = (e: KeyboardEvent) => {
+      if (showDoc || (e.target as HTMLElement)?.closest('input, select, textarea')) return;
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [next, prev, showDoc]);
 
-  const handlePlayFromHere = async () => {
-    if (!selectedName) return;
+  const playFromHere = async () => {
     try {
-      const created = await api.createGameFromScenario(selectedName, 'human', 'greedy');
-      // Hand the scenario game to the Play page; without this it started a fresh default game
+      const created = await api.createGameFromScenario(lesson.name, 'human', 'greedy');
       navigate('/play', { state: { sessionId: created.id } });
     } catch (err: any) {
-      alert(err.message || 'Failed to initialize playable game');
+      setError(err?.data?.error || err.message || 'Could not start a game from this position.');
     }
   };
 
-  const frames = detail?.frames || [];
-  const maxPly = frames.length > 0 ? frames.length - 1 : 0;
-  const currentFrame = frames[currentPly];
+  // Who moved into frame i: the player to move in the frame before it
+  const mover = ply > 0 ? frames[ply - 1]?.state.to_move : null;
+  const moveLine = frame?.action && mover !== null && mover !== undefined ? `${NAMES[mover]} ${describeAction(frame.action)}.` : 'Starting position.';
+  const story = lesson.steps[ply] || '';
+  const checks = frame?.checks ?? [];
+  const failed = checks.filter((c) => !c.ok);
 
   return (
-    <div className="main-content" data-testid="rules-page">
-      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '1.5rem', alignItems: 'start' }}>
-        {/* Left Column: 9 Canonical Scenarios Directory */}
-        <div className="card">
-          <button
-            className="btn"
-            style={{ width: '100%', marginBottom: '1rem', fontSize: '0.8rem' }}
-            onClick={() => setShowDoc(!showDoc)}
-          >
-            {showDoc ? 'Hide full rules' : 'Show full rules'}
-          </button>
+    <div className="main-content rules-page" data-testid="rules-page">
+      <nav className="rules-lessons" aria-label="Lessons">
+        {LESSON_GROUPS.map((g) => (
+          <div key={g.title}>
+            <h2>{g.title}</h2>
+            <ol>
+              {g.lessons.map((l) => {
+                const i = LESSONS.indexOf(l);
+                return (
+                  <li key={l.name}>
+                    <button className={i === lessonIdx ? 'active' : ''} aria-current={i === lessonIdx ? 'step' : undefined} onClick={() => setLessonIdx(i)}>
+                      <span className="rules-num">{i + 1}</span>
+                      {l.short}
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        ))}
+        <button className="btn rules-doc-btn" onClick={() => setShowDoc(true)}>
+          Show full rules
+        </button>
+      </nav>
 
-          <div className="card-title">Rule scenarios ({scenarios.length})</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {scenarios.map((s) => (
-              <div
-                key={s.name}
-                onClick={() => setSelectedName(s.name)}
-                style={{
-                  padding: '0.6rem 0.8rem',
-                  borderRadius: '6px',
-                  backgroundColor: selectedName === s.name ? 'var(--primary)' : 'rgba(255,255,255,0.03)',
-                  cursor: 'pointer',
-                  fontSize: '0.85rem',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                <div style={{ fontWeight: 600 }}>{s.title}</div>
-                <div
-                  style={{
-                    fontSize: '0.75rem',
-                    color: selectedName === s.name ? '#ffffff' : 'var(--text-muted)',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {s.description}
-                </div>
-              </div>
+      <section className="rules-board" aria-label="Lesson board">
+        {frame ? (
+          <>
+            <TerminalBanner terminal={frame.state.terminal} />
+            <Board state={frame.state} showPaths={true} interactive={false} />
+          </>
+        ) : (
+          <p className="loading-figure">{error ?? 'Setting up the position…'}</p>
+        )}
+      </section>
+
+      <section className="rules-explain" aria-live="polite">
+        <p className="rules-kicker">
+          Lesson {lessonIdx + 1} of {LESSONS.length}
+        </p>
+        <h1>{lesson.short}</h1>
+        <p className="rules-rule">{lesson.rule}</p>
+
+        <div className="rules-step">
+          <p className="rules-step-head">
+            {ply === 0 ? 'Start' : `Move ${ply} of ${last}`}
+          </p>
+          <p className="rules-move">{moveLine}</p>
+          {story && <p>{story}</p>}
+          {checks.length > 0 && (
+            <p className={`rules-checks${failed.length ? ' bad' : ''}`}>
+              {failed.length
+                ? `✗ ${failed.length} engine check${failed.length > 1 ? 's' : ''} failed: ${failed.map((c) => c.message).join('; ')}`
+                : `✓ Confirmed by the game engine (${checks.length} check${checks.length > 1 ? 's' : ''})`}
+            </p>
+          )}
+        </div>
+
+        <div className="rules-controls">
+          <button className="btn" onClick={prev} disabled={ply === 0}>
+            ← Back
+          </button>
+          <div className="rules-dots" role="group" aria-label="Moves">
+            {frames.map((_, i) => (
+              <button key={i} className={i === ply ? 'on' : ''} aria-label={i === 0 ? 'Start' : `Move ${i}`} aria-current={i === ply ? 'step' : undefined} onClick={() => setPly(i)} />
             ))}
           </div>
+          <button className="btn btn-primary" onClick={next} disabled={!frame || (atEnd && lessonIdx === LESSONS.length - 1)}>
+            {atEnd && lessonIdx < LESSONS.length - 1 ? 'Next lesson →' : 'Next →'}
+          </button>
         </div>
+        <p className="rules-hint muted">Tip: use the ← and → keys.</p>
 
-        {/* Right Column: Scenario Player */}
-        <div className="board-container">
-          {showDoc && (
-            <div className="card" style={{ width: '100%', marginBottom: '1.5rem', maxHeight: '500px', overflowY: 'auto' }}>
-              <div className="card-title">Full rules (docs/game_rules.md)</div>
-              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.8rem', lineHeight: '1.4', color: 'var(--text-main)' }}>
-                {rulesDoc || 'Loading rules...'}
-              </pre>
-            </div>
-          )}
+        <button className="btn rules-play" onClick={playFromHere} disabled={!frame}>
+          Play on from the end of this lesson
+        </button>
+        {error && frame && (
+          <p className="home-error" role="alert">
+            {error}
+          </p>
+        )}
+      </section>
 
-          {detail?.scenario && (
-            <div className="card" style={{ width: '100%', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ margin: 0 }}>{detail.scenario.title}</h3>
-                <button className="btn btn-primary" onClick={handlePlayFromHere}>
-                  Play From This State →
-                </button>
-              </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.4rem' }}>
-                {detail.scenario.description}
-              </p>
-            </div>
-          )}
-
-          {loading && <p>Running this scenario through the engine…</p>}
-
-          {currentFrame && (
-            <>
-              <TerminalBanner terminal={currentFrame.state.terminal} />
-
-              <Board
-                state={currentFrame.state}
-                showPaths={true}
-                interactive={false}
-              />
-
-              {/* Scrubber Controls */}
-              <div className="card" style={{ width: '100%', maxWidth: '500px', marginTop: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                  <span>
-                    Ply: <strong>{currentPly}</strong> / {maxPly}{' '}
-                    {currentFrame.action ? `(${currentFrame.action[0]})` : '(Start)'}
-                  </span>
-                  <div style={{ display: 'flex', gap: '0.4rem' }}>
-                    <button className="btn" onClick={() => setCurrentPly(Math.max(0, currentPly - 1))} disabled={currentPly === 0}>
-                      ◀ Prev
-                    </button>
-                    <button className="btn" onClick={() => setCurrentPly(Math.min(maxPly, currentPly + 1))} disabled={currentPly >= maxPly}>
-                      Next ▶
-                    </button>
-                  </div>
-                </div>
-
-                <input
-                  type="range"
-                  min="0"
-                  max={maxPly}
-                  value={currentPly}
-                  onChange={(e) => setCurrentPly(Number(e.target.value))}
-                  style={{ width: '100%' }}
-                />
-
-                {/* Expectation Check Badges */}
-                {currentFrame.checks && currentFrame.checks.length > 0 && (
-                  <div style={{ marginTop: '0.75rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.5rem' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-                      Engine checks at this ply
-                    </div>
-                    {currentFrame.checks.map((chk, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          fontSize: '0.75rem',
-                          color: chk.ok ? '#10b981' : '#ef4444',
-                          marginTop: '0.2rem',
-                        }}
-                      >
-                        {chk.ok ? '✓' : '✗'} {chk.message}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+      <RulesDialog open={showDoc} onClose={() => setShowDoc(false)} />
     </div>
   );
 };

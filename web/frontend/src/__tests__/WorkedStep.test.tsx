@@ -22,7 +22,7 @@ describe('WorkedStep', () => {
       },
     };
     render(<WorkedStep explanation={exp as any} ply={4} names={['You', 'Greedy']} />);
-    expect(screen.getByText(/Step 4 · Greedy placed a horizontal wall at a1–b1/)).toBeInTheDocument();
+    expect(screen.getByText(/Step 4 · Greedy placed a horizontal wall at A1–B1/)).toBeInTheDocument();
     expect(screen.getByText('+3')).toBeInTheDocument();
     expect(screen.getByText(/of 59 legal actions/)).toBeInTheDocument();
   });
@@ -41,7 +41,7 @@ describe('WorkedStep', () => {
   });
 
   it('names wall slots by the two cells they span', () => {
-    expect(describeAction(['WALL', [1, 2, 'V']] as any)).toBe('placed a vertical wall at c2–c3');
-    expect(describeAction(['MOVE', [0, 0]] as any)).toBe('moved to a1');
+    expect(describeAction(['WALL', [1, 2, 'V']] as any)).toBe('placed a vertical wall at C2–C3');
+    expect(describeAction(['MOVE', [0, 0]] as any)).toBe('moved to A1');
   });
 });

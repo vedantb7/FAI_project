@@ -18,7 +18,7 @@ describe('Board Component (P11 Contract)', () => {
   it('renders placed walls, latest wall, and blocked cell countdown badge', () => {
     render(<Board state={stateMidgame as any} interactive={true} />);
     // Midgame fixture has a block at (2,2) with remaining timer 2
-    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(document.querySelector('.bd-badge-text')?.textContent).toBe('2');
 
     // Has latest replaceable wall with aria label
     expect(screen.getByLabelText('Replaceable Wall')).toBeInTheDocument();
@@ -55,5 +55,22 @@ describe('Board Component (P11 Contract)', () => {
     expect(handleAction).toHaveBeenCalledTimes(1);
     expect(handleAction.mock.calls[0][0][0]).toBe('MOVE');
     expect(handleAction.mock.calls[0][0][1]).toHaveLength(2);
+  });
+
+  it('in REPLACE mode, marks only the mover’s latest wall as the one that will move', () => {
+    const mine = { ...(stateMidgame as any), to_move: 0 };
+    const { unmount } = render(<Board state={mine} mode="REPLACE" interactive={true} />);
+    expect(screen.getByLabelText('This wall will move')).toBeInTheDocument();
+    expect(document.querySelectorAll('.bd-wall-moving')).toHaveLength(1);
+    unmount();
+    // Player 1 to move: the latest wall is Player 0's, so nothing of the mover's moves
+    render(<Board state={stateMidgame as any} mode="REPLACE" interactive={true} />);
+    expect(document.querySelectorAll('.bd-wall-moving')).toHaveLength(0);
+  });
+
+  it('labels files A.. and ranks 1.. like a chess board', () => {
+    render(<Board state={stateInitial as any} interactive={false} />);
+    const coords = Array.from(document.querySelectorAll('.bd-coord text')).map((t) => t.textContent);
+    expect(coords).toEqual(['A', '1', 'B', '2', 'C', '3', 'D', '4', 'E', '5']);
   });
 });

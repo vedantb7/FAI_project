@@ -20,14 +20,34 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
+// Empty = same origin (local Flask, Docker). Set at build time for the GitHub Pages site,
+// whose API runs on a Hugging Face Space.
+const API_BASE = (import.meta.env.VITE_API_BASE ?? '').replace(/\/$/, '');
+
+async function send(path: string, options?: RequestInit): Promise<Response> {
+  return fetch(API_BASE + path, {
     headers: {
       'Content-Type': 'application/json',
       ...options?.headers,
     },
     ...options,
   });
+}
+
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  let res: Response | null = null;
+  // A sleeping Space answers 502/503 (or not at all) while it boots: retry for about a
+  // minute, remote API only. Local servers fail fast as before.
+  for (let attempt = 0; ; attempt++) {
+    try {
+      res = await send(path, options);
+      if (!API_BASE || (res.status !== 502 && res.status !== 503) || attempt >= 11) break;
+    } catch (err) {
+      if (!API_BASE || attempt >= 11) throw err;
+    }
+    await new Promise((r) => setTimeout(r, 5000));
+  }
+  if (!res) throw new ApiError(0, 'No response from the game server');
 
   if (res.status === 204) {
     return {} as T;
@@ -89,29 +109,6 @@ export const api = {
       body: JSON.stringify({ agent: agentSpec }),
     }),
 
-  // Arena
-  runArenaBatch: (config: GameConfig, p0: string, p1: string, n: number, seed: number) =>
-    request<any>('/api/arena/batch', {
-      method: 'POST',
-      body: JSON.stringify({ config, p0, p1, n, seed }),
-    }),
-  fetchArenaBatch: (bid: string) => request<any>(`/api/arena/batch/${bid}`),
-  fetchArenaGame: (bid: string, idx: number) => request<any>(`/api/arena/batch/${bid}/${idx}`),
-
-  // Replays
-  fetchReplays: (offset: number = 0, limit: number = 50, q?: string) => {
-    const params = new URLSearchParams({ offset: String(offset), limit: String(limit) });
-    if (q) params.set('q', q);
-    return request<{ total: number; items: any[] }>(`/api/replays?${params.toString()}`);
-  },
-  fetchReplayItem: (file: string, index: number) =>
-    request<any>(`/api/replays/item?file=${encodeURIComponent(file)}&index=${index}`),
-  uploadReplay: (data: any) =>
-    request<any>('/api/replays/upload', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }),
-
   // Scenarios
   fetchScenarios: () => request<any[]>('/api/scenarios'),
   fetchScenario: (name: string) => request<ScenarioDetail>(`/api/scenarios/${name}`),
@@ -121,21 +118,7 @@ export const api = {
       body: JSON.stringify({ p0, p1 }),
     }),
 
-  // Training Data
-  fetchTrainingRuns: () => request<any[]>('/api/training/runs'),
-  fetchTrainingRun: (id: string) => request<any>(`/api/training/runs/${id}`),
-  fetchTrainingSummary: () => request<any>('/api/training/summary'),
-  fetchTrainingConfig: () => request<any>('/api/training/config'),
-
   // Rules Documentation
   fetchRules: () => request<{ rules: string }>('/api/rules'),
 
-  // Live Training (P15)
-  startLiveTraining: (steps: number = 2000, seed: number = 42) =>
-    request<any>('/api/training/live', {
-      method: 'POST',
-      body: JSON.stringify({ steps, seed }),
-    }),
-  fetchLiveStatus: () => request<any>('/api/training/live/status'),
-  stopLiveTraining: () => request<any>('/api/training/live/stop', { method: 'POST' }),
 };

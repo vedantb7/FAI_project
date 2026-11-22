@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { AgentInfo, GameConfig } from '../api/types';
+import { findings, pct, range, source } from '../lib/findings';
+import { presetQuery } from '../lib/presets';
 
 const BOARD_SIZES = [3, 4, 5, 7, 9];
 
@@ -72,12 +74,10 @@ const FigureC: React.FC = () => (
 
 /* ---------- Content ---------- */
 
-const VIEWS = [
-  { to: '/play', name: 'Play', what: 'Play a full game against any agent. After each of its moves, its reasoning is written out as a worked step.' },
-  { to: '/arena', name: 'Arena', what: 'Set two agents against each other, watch one game, or play a batch and read the win rates.' },
-  { to: '/replays', name: 'Replays', what: 'Step through the study’s recorded games. Each one is replayed through the engine and checked move by move.' },
-  { to: '/rules', name: 'Rules', what: 'Nine short scenarios that show each rule in action. Any of them can be continued as a live game.' },
-  { to: '/training', name: 'Training', what: 'The DQN training runs: network details, learning curves where logs exist, and a short live training demo.' },
+const JOURNEY = [
+  { to: '/rules', step: 'Learn', what: 'Nine short scenarios show each rule in action. Any of them can be continued as a live game.' },
+  { to: '/play', step: 'Play', what: 'Play a full game against any agent. After each of its moves, its reasoning is written out.' },
+  { to: '/results', step: 'Check', what: 'Each hypothesis with its verdict, chart and source file, and a link to try it yourself.' },
 ];
 
 const AGENTS = [
@@ -87,37 +87,82 @@ const AGENTS = [
   { name: 'DQN', how: 'A Double-DQN neural network trained by self-play that picks the action with the highest predicted value.' },
 ];
 
-// Final-rule results only (README "Status and results"; stale numbers excluded, see STALE.md)
-const RESULTS = [
+/* Headline findings, computed from data/findings.json (generated from experiments/results/). */
+const hopEffect = findings.ablation.win_rate_effects.find((e) => e.name === 'B')!;
+const holmSurvivors = findings.ablation.win_rate_effects.filter((e) => e.holm).map((e) => e.name);
+const h1Cell = (abc: string) => findings.h1.cells.find((c) => c.abc === abc)!;
+const seeds3x3 = findings.rq1.default_111_seeds;
+const h3Final500k = findings.h3.runs.filter((r) => r.board === 3 && r.budget === 500000).map((r) => r.final);
+const solved = findings.solve.filter((c) => c.complete);
+const largestCell = solved.reduce((a, c) => (c.states > a.states ? c : a));
+const largestSolved = largestCell.states;
+const pilot = (n: number, abc: string) => findings.hop_rule_change.find((c) => c.n === n && c.abc === abc)!;
+
+interface Headline {
+  id: string;
+  figure: string;
+  claim: string;
+  sourceId: string;
+  tryIt: string;
+  tryLabel: string;
+}
+
+const HEADLINES: Headline[] = [
   {
-    figure: '60 of 100',
-    claim: 'On a 5×5 board, Greedy beat depth-2 Minimax in 60 of 100 games. Minimax won 39 (39%, 95% CI 30.0–48.8%), with 1 draw.',
-    source: 'experiments/results/final_minimax/vs_greedy_N5_open4_distinct_summary.json',
-    report: 'docs/reports/stage2_minimax.md',
+    id: 'ablation',
+    figure: `${hopEffect.estimate.toFixed(3)}`,
+    claim:
+      `The hop decides results. In a 2×2×2 ablation on 5×5 (${findings.ablation.matches} matches), ` +
+      `${holmSurvivors.length === 1 ? 'only the hop (rule B) changes' : 'the hop changes'} Minimax’s win rate against Greedy after Holm correction: ` +
+      `${hopEffect.estimate.toFixed(3)} (95% CI ${hopEffect.ci95[0].toFixed(3)} to ${hopEffect.ci95[1].toFixed(3)}).`,
+    sourceId: findings.ablation.source,
+    tryIt: '/play' + presetQuery({ n: 5, k: 3, m: 10, abc: '010', p0: 'minimax:depth=2', p1: 'greedy' }),
+    tryLabel: 'Watch Minimax vs Greedy with the hop on',
   },
   {
-    figure: '+11 points',
-    claim: 'A hop-aware evaluation raised depth-2 Minimax’s win rate against Greedy from 39% to 50% on the same openings (paired 95% CI +1 to +21 points).',
-    source: 'experiments/results/final_minimax_hop/',
-    report: 'docs/reports/stage3_minimax_hop_eval.md',
+    id: 'h1',
+    figure: `+${Math.round(h1Cell('100').branching_pct)}%`,
+    claim:
+      `Reusable walls and blocks make the game harder to search. REPLACE raises the number of legal actions by ` +
+      `${Math.round(h1Cell('100').branching_pct)}% and BLOCK by ${Math.round(h1Cell('001').branching_pct)}%; in ` +
+      `${findings.h1.time_limit_s} s Minimax completes ${Math.abs(h1Cell('100').depth_change).toFixed(1)} and ` +
+      `${Math.abs(h1Cell('001').depth_change).toFixed(1)} fewer plies.`,
+    sourceId: findings.h1.source,
+    tryIt: '/play' + presetQuery({ n: 5, k: 3, m: 10, abc: '101', p1: 'minimax:depth=2' }),
+    tryLabel: 'Play Minimax with REPLACE and BLOCK on',
   },
   {
-    figure: '96.2%',
-    claim: 'Retrained 3×3 DQN models choose a value-optimal action in 96.2% of non-terminal positions (mean of 5 seeds, range 96.0–96.5%). The older release model: 78.0%.',
-    source: 'experiments/results/final_dqn/aggregate_3x3_seeds.json',
-    report: 'docs/reports/stage2_dqn.md',
+    id: 'rq3',
+    figure: pct(seeds3x3.reduce((s, x) => s + (x.value_optimal ?? 0), 0) / seeds3x3.length, 0),
+    claim:
+      `A self-play DQN that is never told what a position is worth learns it. On 3×3 it keeps the exact game value in ` +
+      `${range(seeds3x3.map((s) => 100 * (s.value_optimal ?? 0)), 1)}% of ${seeds3x3[0].states?.toLocaleString()} positions (5 seeds), ` +
+      `and at 500k steps its value error ends below ${findings.h3.threshold} on every seed (${range(h3Final500k)}).`,
+    sourceId: seeds3x3[0].source,
+    tryIt: '/play' + presetQuery({ n: 3, k: 1, m: 1, abc: '111', p1: 'dqn' }),
+    tryLabel: 'Play the 3×3 DQN',
   },
   {
-    figure: '−0.18',
-    claim: 'In a 2×2×2 ablation of the three rules on 5×5, only the hop (Rule B) survives Holm correction: it lowers Minimax’s win rate against Greedy by about 0.18.',
-    source: 'experiments/results/final_eval/ablation_N5_K3_M10_open4/summary.json',
-    report: 'docs/reports/stage2_solver_stats.md',
+    id: 'hop-rule',
+    figure: 'Forced win',
+    claim:
+      `The exact solver caught a broken rule. Under the proposal’s 2-cell hop, turning the hop on flipped the solved result ` +
+      `in every setting, even with no walls (3×3: ${pilot(3, '000').root} in ${pilot(3, '000').rank} became ` +
+      `${pilot(3, '010').root} in ${pilot(3, '010').rank}). The hop was changed to a 1-cell step.`,
+    sourceId: pilot(3, '000').source,
+    tryIt: '/play' + presetQuery({ n: 3, k: 1, m: 0, abc: '010', p1: 'exact' }),
+    tryLabel: 'Play the exact solver with today’s hop',
   },
   {
-    figure: '28 of 32',
-    claim: 'The exact solver fully solved 28 of 32 small settings: 3×3 and 4×4 boards with 0 or 1 walls, under every on/off combination of the three rules. Four 4×4 settings hit the size cap.',
-    source: 'experiments/results/final_eval/solve_N*_K1_M*.json',
-    report: 'docs/reports/stage2_solver_stats.md',
+    id: 'solve',
+    figure: `${solved.length} of ${findings.solve.length}`,
+    claim:
+      `Exact ground truth: the solver fully solved ${solved.length} of ${findings.solve.length} small settings ` +
+      `(3×3 and 4×4, up to 2 walls each, every rule combination), the largest with ${largestSolved.toLocaleString()} positions. ` +
+      `The rest exceed the size cap and are reported as unknown, never guessed.`,
+    sourceId: largestCell.source,
+    tryIt: '/play' + presetQuery({ n: 3, k: 1, m: 1, abc: '111', p1: 'exact' }),
+    tryLabel: 'Play a solved board against the solver',
   },
 ];
 
@@ -135,14 +180,24 @@ export const HomePage: React.FC = () => {
     api.fetchConfigDefaults().then((res) => res.defaults && setBaseConfig((prev) => ({ ...prev, ...res.defaults }))).catch(() => {});
   }, []);
 
+  const [loadingAgents, setLoadingAgents] = useState(true);
+
+  // The opponent list depends on the board: refetch on every board change and ignore late answers
   useEffect(() => {
+    let live = true;
+    setLoadingAgents(true);
     api.fetchAgents(baseConfig)
       .then((list) => {
+        if (!live) return;
         const usable = list.filter((a) => a.available && a.family !== 'human');
         setAgents(usable);
         if (!usable.some((a) => a.spec === opponent) && usable[0]) setOpponent(usable[0].spec);
       })
-      .catch(() => setAgents([]));
+      .catch(() => live && setAgents([]))
+      .finally(() => live && setLoadingAgents(false));
+    return () => {
+      live = false;
+    };
   }, [baseConfig]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const start = async (e: React.FormEvent) => {
@@ -164,7 +219,7 @@ export const HomePage: React.FC = () => {
         <div className="home-intro">
           <h1>Quoridor, changed three ways, and four AI agents that play it.</h1>
           <p className="home-lede">
-            A CS 329 study of how different decision-makers handle an adversarial race to the far side of the board.
+            A CS 329 (Foundations of AI: Multiagent Systems) study of how different decision-makers handle an adversarial race to the far side of the board.
             Play the agents yourself, watch them play each other, and check every result against one frozen game engine.
           </p>
         </div>
@@ -200,38 +255,46 @@ export const HomePage: React.FC = () => {
           <h2 id="start-title">Play against an agent</h2>
           <p className="muted">You are the blue pawn, racing to the far row. The agent explains every move it makes.</p>
           <div className="home-fields">
-          <div>
-          <label className="form-label" htmlFor="home-opponent">
-            Opponent
-          </label>
-          <select id="home-opponent" className="form-select" value={opponent} onChange={(e) => setOpponent(e.target.value)}>
-            {agents.length === 0 && <option value="greedy">Greedy</option>}
-            {agents.map((a) => (
-              <option key={a.spec} value={a.spec}>
-                {a.label}
-              </option>
-            ))}
-          </select>
+            <div>
+              <label className="form-label" htmlFor="home-board">
+                1 · Board <span className="muted">(all 3 rules)</span>
+              </label>
+              <select
+                id="home-board"
+                className="form-select"
+                value={baseConfig.board_size}
+                onChange={(e) => setBaseConfig({ ...baseConfig, board_size: Number(e.target.value) })}
+              >
+                {BOARD_SIZES.map((n) => (
+                  <option key={n} value={n}>
+                    {n} × {n}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="form-label" htmlFor="home-opponent">
+                2 · Opponent <span className="muted">(agents for {baseConfig.board_size} × {baseConfig.board_size})</span>
+              </label>
+              <select
+                id="home-opponent"
+                className="form-select"
+                value={opponent}
+                disabled={loadingAgents || agents.length === 0}
+                onChange={(e) => setOpponent(e.target.value)}
+              >
+                {loadingAgents && <option value={opponent}>Loading agents…</option>}
+                {!loadingAgents && agents.length === 0 && <option value="">No agents (server offline?)</option>}
+                {!loadingAgents &&
+                  agents.map((a) => (
+                    <option key={a.spec} value={a.spec}>
+                      {a.label}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
-          <div>
-          <label className="form-label" htmlFor="home-board">
-            Board <span className="muted">(all 3 rules)</span>
-          </label>
-          <select
-            id="home-board"
-            className="form-select"
-            value={baseConfig.board_size}
-            onChange={(e) => setBaseConfig({ ...baseConfig, board_size: Number(e.target.value) })}
-          >
-            {BOARD_SIZES.map((n) => (
-              <option key={n} value={n}>
-                {n} × {n}
-              </option>
-            ))}
-          </select>
-          </div>
-          </div>
-          <button className="btn btn-primary home-go" type="submit" disabled={starting}>
+          <button className="btn btn-primary home-go" type="submit" disabled={starting || loadingAgents || agents.length === 0}>
             {starting ? 'Setting up the board…' : 'Start a game'}
           </button>
           {error && (
@@ -245,13 +308,18 @@ export const HomePage: React.FC = () => {
         </form>
       </section>
 
-      <section className="home-section" aria-labelledby="use-title">
-        <h2 id="use-title">How to use this site</h2>
-        <ol className="home-views">
-          {VIEWS.map((v) => (
-            <li key={v.to}>
-              <Link to={v.to}>{v.name}</Link>
-              <p>{v.what}</p>
+      <section className="home-section" aria-labelledby="question-title">
+        <h2 id="question-title">The question</h2>
+        <p className="home-question">
+          One game, three kinds of decision-maker: a <b>search</b> agent that estimates a position’s value with a hand-made score,
+          a <b>learning</b> agent that must discover it from play, and an <b>exact solver</b> that computes it. What do reusable
+          walls, a one-time hop and a temporary block change for each of them?
+        </p>
+        <ol className="home-journey">
+          {JOURNEY.map((j) => (
+            <li key={j.to}>
+              <Link to={j.to}>{j.step}</Link>
+              <p>{j.what}</p>
             </li>
           ))}
         </ol>
@@ -273,20 +341,27 @@ export const HomePage: React.FC = () => {
       <section className="home-section" aria-labelledby="results-title">
         <h2 id="results-title">What the study found</h2>
         <p className="home-note">
-          Final-rule results only, each with the file it comes from. Older numbers made under earlier rules are listed in{' '}
+          Final-rule results only, generated from the result files by <code>scripts/export_web_findings.py</code>; each shows
+          the file and commit it comes from. Older numbers made under earlier rules are listed in{' '}
           <code>experiments/results/STALE.md</code> and are not shown here.
         </p>
         <ol className="home-results">
-          {RESULTS.map((r, i) => (
-            <li key={r.source}>
-              <span className="home-rn">Result {i + 1}</span>
-              <span className="home-rfig">{r.figure}</span>
-              <p>{r.claim}</p>
-              <p className="home-src">
-                <code>{r.source}</code> · <code>{r.report}</code>
-              </p>
-            </li>
-          ))}
+          {HEADLINES.map((r, i) => {
+            const s = source(r.sourceId);
+            return (
+              <li key={r.id}>
+                <span className="home-rn">Result {i + 1}</span>
+                <span className="home-rfig">{r.figure}</span>
+                <p>{r.claim}</p>
+                <p className="home-links">
+                  <Link to={`/results#${r.id}`}>Evidence</Link> · <Link to={r.tryIt}>{r.tryLabel}</Link>
+                </p>
+                <p className="home-src">
+                  <code>{s.path}</code> · commit <code>{s.commit}</code>
+                </p>
+              </li>
+            );
+          })}
         </ol>
       </section>
 
@@ -301,15 +376,8 @@ export const HomePage: React.FC = () => {
             <b>No rules in the browser.</b> Every legal move, timer and result on this site is sent by the engine; the page
             only draws it.
           </li>
-          <li>
-            <b>Replays are re-checked.</b> Recorded games are replayed through the engine move by move before they are shown.
-          </li>
         </ul>
       </section>
-
-      <footer className="home-foot">
-        CS 329 · Foundations of AI / Multi-Agent Systems · IIT Gandhinagar. Full rules: <code>docs/game_rules.md</code>.
-      </footer>
 
       {/* Shared arrow and hatch definitions for the figures */}
       <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute' }}>

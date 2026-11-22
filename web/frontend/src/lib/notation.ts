@@ -4,7 +4,7 @@
  */
 import { ActionJson } from '../api/types';
 
-const COLS = 'abcdefghijklmnopqrstuvwxyz';
+const COLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export const cellName = (r: number, c: number): string => `${COLS[c] ?? c}${r + 1}`;
 
