@@ -1,0 +1,255 @@
+{
+  "source": {
+    "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+    "dirty": true
+  },
+  "run": {
+    "source": {
+      "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+      "dirty": true
+    },
+    "command": "python scripts/run_experiments.py solve -N 4 -K 1 -M 2 --abc 000 --max-states 1000000 --max-seconds 1800 --out experiments/results/drift_fixes/solve_N4_K1_M2/cell_000.json",
+    "python": "3.14.3",
+    "platform": "Linux-6.19.10-300.fc44.x86_64-x86_64-with-glibc2.43",
+    "date_utc": "2026-11-21T22:51:11+00:00"
+  },
+  "config": {
+    "config": null,
+    "cmd": "solve",
+    "N": 4,
+    "K": 1,
+    "M": 2,
+    "abc": "000",
+    "max_states": 1000000,
+    "max_edges": 20000000,
+    "max_seconds": 1800.0,
+    "seed": 42,
+    "out": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_000.json"
+  },
+  "caps": {
+    "max_states": 1000000,
+    "max_edges": 20000000,
+    "max_seconds": 1800.0
+  },
+  "cells": [
+    {
+      "board_size": 4,
+      "rules": {
+        "A": false,
+        "B": false,
+        "C": false,
+        "K": 1,
+        "M": 2
+      },
+      "root_state_id": "56a18ef3223c1280",
+      "canonical_positions": true,
+      "complete": true,
+      "stop_reason": null,
+      "states": 335572,
+      "edges": 1399834,
+      "expanded_nonterminal": 269296,
+      "unexpanded": 0,
+      "terminal_win_p0": 32508,
+      "terminal_win_p1": 32564,
+      "terminal_draw_no_legal_actions": 1204,
+      "mean_branching": 5.1981239973857765,
+      "max_branching": 22,
+      "build_seconds": 79.003,
+      "model": "position game: history-free, clock-free; goal row wins; no legal action = draw; infinite play = draw; values from side-to-move perspective",
+      "exact": true,
+      "value_counts": {
+        "WIN": 154384,
+        "LOSS": 160974,
+        "DRAW": 20214,
+        "UNKNOWN": 0
+      },
+      "draw_counts": {
+        "no_legal_actions": 1204,
+        "cycle": 19010,
+        "total": 20214
+      },
+      "root_to_move": 0,
+      "root_status": "LOSS",
+      "root_draw_type": null,
+      "root_rank": 20,
+      "root_rank_is_upper_bound": false,
+      "root_rank_optimal_actions": [
+        [
+          "MOVE",
+          [
+            1,
+            2
+          ]
+        ]
+      ],
+      "root_value_optimal_actions": [
+        [
+          "MOVE",
+          [
+            1,
+            2
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            3
+          ]
+        ],
+        [
+          "WALL",
+          [
+            0,
+            0,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            0,
+            0,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            0,
+            1,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            0,
+            1,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            0,
+            2,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            0,
+            2,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            1,
+            0,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            1,
+            0,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            1,
+            1,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            1,
+            1,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            1,
+            2,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            1,
+            2,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            2,
+            0,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            2,
+            0,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            2,
+            1,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            2,
+            1,
+            "V"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            2,
+            2,
+            "H"
+          ]
+        ],
+        [
+          "WALL",
+          [
+            2,
+            2,
+            "V"
+          ]
+        ]
+      ],
+      "solve_seconds": 0.625
+    }
+  ]
+}

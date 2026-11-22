@@ -18,6 +18,7 @@ except ImportError:
     nn = None
     optim = None
 
+from agents.dqn.encoding import num_planes
 from agents.dqn.network import QNetwork, resolve_device
 from agents.dqn.replay_buffer import ReplayBuffer
 try:
@@ -49,6 +50,10 @@ class DQNConfig:
     blocks: int = 3
     hidden: int = 256
     mirror_prob: float = 0.5
+    loss: str = 'huber'             # 'huber' or 'mse'
+    conv_channels: list | None = None  # explicit conv widths, e.g. [32, 64, 64]; None = channels x (blocks+1)
+    obs_version: int = 1            # 1 = 14 planes (released models); 2 = + wall-owner planes
+    warmup_steps: int = 0           # env steps whose learner moves come from GreedyAgent (heuristic warm-up)
     seed: int = 42
     device: str = "auto"  # 'auto' = CUDA when available, else CPU
 
@@ -67,34 +72,25 @@ class DQNTrainer:
         self.set_seed(config.seed)
 
         # Networks
-        self.online_net = QNetwork(
-            board_size=self.board_size,
-            num_actions=self.num_actions,
-            channels=config.channels,
-            blocks=config.blocks,
-            hidden=config.hidden,
-            dueling=config.dueling,
-        ).to(self.device)
-
-        self.target_net = QNetwork(
-            board_size=self.board_size,
-            num_actions=self.num_actions,
-            channels=config.channels,
-            blocks=config.blocks,
-            hidden=config.hidden,
-            dueling=config.dueling,
-        ).to(self.device)
+        self.online_net = self.make_network().to(self.device)
+        self.target_net = self.make_network().to(self.device)
         self.target_net.load_state_dict(self.online_net.state_dict())
         self.target_net.eval()
 
         self.optimizer = optim.Adam(self.online_net.parameters(), lr=config.lr)
-        self.loss_fn = nn.HuberLoss(delta=config.huber_delta)
+        if config.loss == 'huber':
+            self.loss_fn = nn.HuberLoss(delta=config.huber_delta)
+        elif config.loss == 'mse':
+            self.loss_fn = nn.MSELoss()
+        else:
+            raise ValueError(f"Unknown loss {config.loss!r} (known: 'huber', 'mse')")
 
         # Replay Buffer
         self.buffer = ReplayBuffer(
             capacity=config.buffer_capacity,
             board_size=self.board_size,
             num_actions=self.num_actions,
+            planes=num_planes(config.obs_version),
         )
 
         # Mirror permutation (if board size is odd)
@@ -106,6 +102,19 @@ class DQNTrainer:
         # Tracking counters
         self.total_env_steps = 0
         self.total_grad_steps = 0
+
+    def make_network(self) -> QNetwork:
+        cfg = self.config
+        return QNetwork(
+            board_size=self.board_size,
+            num_actions=self.num_actions,
+            channels=cfg.channels,
+            blocks=cfg.blocks,
+            hidden=cfg.hidden,
+            dueling=cfg.dueling,
+            in_planes=num_planes(cfg.obs_version),
+            conv_channels=cfg.conv_channels,
+        )
 
     def set_seed(self, seed: int):
         """Sets random seeds across python, numpy and torch."""

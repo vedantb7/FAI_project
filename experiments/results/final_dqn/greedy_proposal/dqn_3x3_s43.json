@@ -1,0 +1,140 @@
+{
+  "provenance": {
+    "git": {
+      "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+      "dirty": true
+    },
+    "command": "python scripts/eval_dqn_final.py --skip-truth --exact-seeds 0 --opponents greedy:order=proposal --checkpoint checkpoints/runs/3x3_s43/final.pt --out greedy_proposal/dqn_3x3_s43.json",
+    "config": {
+      "gamma": 0.99,
+      "max_plies": 200,
+      "opening_plies": 2,
+      "distinct_openings": 0,
+      "random_greedy_seeds": 100,
+      "minimax_seeds": 50,
+      "exact_seeds": 0,
+      "value_class_threshold": 0.5,
+      "opponents": [
+        "greedy:order=proposal"
+      ],
+      "tie_break": "lowest action id among max Q (as DQNAgent)"
+    },
+    "seeds": [
+      {
+        "opening_seeds_random_greedy": [
+          0,
+          99
+        ],
+        "opening_seeds_minimax_exact": [
+          0,
+          49
+        ],
+        "legacy_sample_seed": 42
+      }
+    ],
+    "checkpoints": [
+      {
+        "path": "checkpoints/runs/3x3_s43/final.pt",
+        "sha256": "0631544e658cb89dd34c93b0455f8b80413433c9eb3a204e5eeb73cee3523266"
+      }
+    ],
+    "python": "3.14.3",
+    "torch": "2.15.0+cpu",
+    "numpy": "2.5.5",
+    "platform": "Linux-6.19.10-300.fc44.x86_64-x86_64-with-glibc2.43",
+    "date": "2026-11-22T09:45:46+05:30"
+  },
+  "checkpoint_meta": {
+    "N": 3,
+    "blocks": 3,
+    "channels": 64,
+    "codec_version": 1,
+    "commit": "6519e63",
+    "double": true,
+    "dueling": false,
+    "gamma": 0.99,
+    "hidden": 256,
+    "obs_version": 1,
+    "rules": {
+      "A": true,
+      "B": true,
+      "C": true,
+      "K": 1,
+      "M": 1
+    },
+    "seed": 43,
+    "step": 200023
+  },
+  "board_size": 3,
+  "rules": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "K": 1,
+    "M": 1
+  },
+  "matches": {
+    "greedy:order=proposal": {
+      "opponent": "greedy:order=proposal",
+      "opening_seeds": [
+        0,
+        99
+      ],
+      "overall": {
+        "matches": 200,
+        "categories": {
+          "win": 143,
+          "draw_repetition": 28,
+          "loss": 29,
+          "truncated": 0
+        },
+        "win_rate": 0.715,
+        "win_rate_ci95": [
+          0.6488,
+          0.7731
+        ],
+        "loss_rate": 0.145,
+        "draw_rate": 0.14,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.84
+      },
+      "dqn_as_p0": {
+        "matches": 100,
+        "categories": {
+          "win": 81,
+          "draw_repetition": 19
+        },
+        "win_rate": 0.81,
+        "win_rate_ci95": [
+          0.7222,
+          0.8749
+        ],
+        "loss_rate": 0.0,
+        "draw_rate": 0.19,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 8.24
+      },
+      "dqn_as_p1": {
+        "matches": 100,
+        "categories": {
+          "win": 62,
+          "loss": 29,
+          "draw_repetition": 9
+        },
+        "win_rate": 0.62,
+        "win_rate_ci95": [
+          0.5221,
+          0.709
+        ],
+        "loss_rate": 0.29,
+        "draw_rate": 0.09,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.45
+      }
+    }
+  },
+  "elapsed_seconds": 2.2
+}

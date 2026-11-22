@@ -77,7 +77,8 @@ def population_truth(sol, agent, batch=4096):
     for start in range(0, len(nodes), batch):
         chunk = nodes[start:start + batch]
         engines = [g.restore(g.keys[u]) for u in chunk]
-        obs = np.stack([encode_observation(e, mover=g.to_move[u]) for e, u in zip(engines, chunk)])
+        obs = np.stack([encode_observation(e, mover=g.to_move[u], obs_version=agent.obs_version)
+                        for e, u in zip(engines, chunk)])
         with torch.no_grad():
             dev = next(model.parameters()).device
             q = model(torch.as_tensor(obs, dtype=torch.float32, device=dev)).cpu().numpy()
@@ -197,6 +198,9 @@ def main():
     ap.add_argument('--exact-seeds', type=int, default=50)
     ap.add_argument('--skip-matches', action='store_true')
     ap.add_argument('--skip-truth', action='store_true')
+    ap.add_argument('--opponents', nargs='+', default=None,
+                    help="opponent specs to play instead of the default plan (random, greedy, "
+                         "minimax:depth=2, exact), e.g. --opponents greedy:order=proposal")
     ap.add_argument('--solve-seconds', type=float, default=1800.0)
     ap.add_argument('--distinct-openings', type=int, default=0,
                     help='K > 0: use the distinct-opening rule (K openings) for random, greedy and minimax')
@@ -242,13 +246,22 @@ def main():
                                                for s, acts in found}}
         seed_lists = {'random': distinct_seeds, 'greedy': distinct_seeds,
                       'minimax:depth=2': distinct_seeds}
+        for spec in args.opponents or []:
+            if not spec.startswith('exact'):
+                seed_lists[spec] = distinct_seeds
 
     if not args.skip_matches:
         base = {'board_size': n, 'rules': rules, 'max_plies': 200, 'opening_plies': opening_plies}
-        plan = [('random', args.random_seeds), ('greedy', args.random_seeds),
-                ('minimax:depth=2', args.minimax_seeds)]
-        if sol is not None and sol.exact and args.exact_seeds:
-            plan.append(('exact', args.exact_seeds))
+        if args.opponents:
+            def n_seeds(spec):
+                name = spec.split(':')[0]
+                return {'minimax': args.minimax_seeds, 'exact': args.exact_seeds}.get(name, args.random_seeds)
+            plan = [(spec, n_seeds(spec)) for spec in args.opponents]
+        else:
+            plan = [('random', args.random_seeds), ('greedy', args.random_seeds),
+                    ('minimax:depth=2', args.minimax_seeds)]
+            if sol is not None and sol.exact and args.exact_seeds:
+                plan.append(('exact', args.exact_seeds))
         solutions = {MatchConfig(board_size=n, rules=rules).label(): sol} if sol is not None else {}
         out['matches'] = {}
         for opp, k in plan:
@@ -260,6 +273,7 @@ def main():
            'distinct_openings': args.distinct_openings,
            'random_greedy_seeds': args.random_seeds, 'minimax_seeds': args.minimax_seeds,
            'exact_seeds': args.exact_seeds, 'value_class_threshold': 0.5,
+           'opponents': args.opponents or 'default plan',
            'tie_break': 'lowest action id among max Q (as DQNAgent)'}
     seeds = {'distinct_opening_seeds': out['openings']['seeds']} if args.distinct_openings else \
             {'opening_seeds_random_greedy': [0, args.random_seeds - 1],

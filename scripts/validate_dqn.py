@@ -70,7 +70,7 @@ def evaluate_cell_x16(
         legal_indices = [i for i, ok in enumerate(legal_mask) if ok]
 
         # Compute Q-values
-        obs = encode_observation(engine, mover=mover)
+        obs = encode_observation(engine, mover=mover, obs_version=getattr(agent, 'obs_version', 1))
         with torch.no_grad():
             x = torch.as_tensor(obs, dtype=torch.float32, device=device).unsqueeze(0)
             q_vals = model(x).squeeze(0).cpu().numpy()

@@ -13,6 +13,11 @@ Resolves ties through an explicit hierarchy (research §4.3):
 
 Immediate win: returned immediately.
 Draws (repetition or no legal actions): scored as H = 0.0, preferred over losses (H < 0).
+
+order='proposal' uses the tie order of the submitted proposal (project_idea.pdf, Sec. 4.1):
+    score(a) = (H_i(T(s, a)), d_{-i}(T(s, a)), -d_i(T(s, a)), tie_key(a))
+i.e. immediate win, max H, max opponent goal distance, min own goal distance, lower action
+index. Draw scoring is kept (the proposal assumed no draws exist).
 """
 from __future__ import annotations
 
@@ -33,9 +38,14 @@ CATEGORY_PRIORITY: Dict[str, int] = {
 class GreedyAgent:
     """Tier-1 Spatial Greedy Baseline Agent with explicit tie-breaking and draw scoring."""
 
-    def __init__(self, player_id: int, seed: Optional[int] = None):
+    ORDERS = ('default', 'proposal')
+
+    def __init__(self, player_id: int, seed: Optional[int] = None, order: str = 'default'):
+        if order not in self.ORDERS:
+            raise ValueError(f"Unknown greedy order {order!r} (known: {self.ORDERS})")
         self.player_id = player_id
         self.seed = seed
+        self.order = order
         self.rng = random.Random(seed) if seed is not None else None
 
     def score_actions(self, engine) -> List[Dict[str, Any]]:
@@ -97,7 +107,7 @@ class GreedyAgent:
                 # Scored as H = 0.0; strictly preferred over a loss (H < 0)
                 H = 0.0
                 d_self = sim_engine.shortest_path(self.player_id)
-                d_opp = None
+                d_opp = sim_engine.shortest_path(1 - self.player_id) if self.order == 'proposal' else None
                 outcome = 'draw'
             else:
                 d_self = sim_engine.shortest_path(self.player_id)
@@ -105,12 +115,20 @@ class GreedyAgent:
                 H = d_opp - d_self
                 outcome = 'ongoing'
 
-            score = (
-                H,         # 1. Distance advantage H = d_opp - d_self
-                cat_prio,  # 2. Category priority: MOVE > REPLACE > HOP > WALL > BLOCK
-                -d_self,   # 3. Prefer own spatial progress
-                tie_k,     # 4. Deterministic -idx or seeded random float
-            )
+            if self.order == 'proposal':
+                score = (
+                    H,                                                 # 1. max H
+                    d_opp if d_opp is not None else -float('inf'),     # 2. max opponent distance
+                    -d_self,                                           # 3. min own distance
+                    tie_k,                                             # 4. lower action index
+                )
+            else:
+                score = (
+                    H,         # 1. Distance advantage H = d_opp - d_self
+                    cat_prio,  # 2. Category priority: MOVE > REPLACE > HOP > WALL > BLOCK
+                    -d_self,   # 3. Prefer own spatial progress
+                    tie_k,     # 4. Deterministic -idx or seeded random float
+                )
 
             rows.append({
                 'action': action,

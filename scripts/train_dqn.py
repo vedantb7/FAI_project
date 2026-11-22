@@ -45,6 +45,7 @@ def evaluate_agent(
     rules: dict,
     num_matches: int = 10,
     device: str = "auto",
+    obs_version: int = 1,
 ) -> Dict[str, Any]:
     """Evaluates the current online network against greedy and random baselines."""
     eval_results = {}
@@ -61,6 +62,7 @@ def evaluate_agent(
                 model=model,
                 board_size=board_size,
                 rules=rules,
+                obs_version=obs_version,
                 device=device,
             )
 
@@ -118,7 +120,7 @@ def evaluate_agent(
     return eval_results
 
 
-def make_q_probe(board_size: int, rules: dict, games: int = 8, plies: int = 12):
+def make_q_probe(board_size: int, rules: dict, games: int = 8, plies: int = 12, obs_version: int = 1):
     """Fixed probe positions (start position + uniform random playouts, seeds 0..games-1)
     used to log the Q-value curve; independent of the training RNG."""
     import random as _random
@@ -137,7 +139,7 @@ def make_q_probe(board_size: int, rules: dict, games: int = 8, plies: int = 12):
         for _ in range(plies):
             if e.is_terminal():
                 break
-            obs.append(encode_observation(e))
+            obs.append(encode_observation(e, obs_version=obs_version))
             masks.append(codec.legal_mask(e))
             e.apply_action(rng.choice(e.get_legal_actions()), update_clock=False)
     return _np.stack(obs), _np.array(masks, dtype=bool)
@@ -229,6 +231,14 @@ def main():
     parser.add_argument("--resume", action="store_true", help="Continue from <output-dir>/resume.pt")
     parser.add_argument("--keep-resume", action="store_true",
                         help="At the end, keep resume.pt (full state) so the run can be extended later")
+    parser.add_argument("--abc", type=str, default=None,
+                        help="Override rules A,B,C as bits, e.g. 101 (default: from the config block)")
+    parser.add_argument("--K", type=int, default=None, help="Override block duration K")
+    parser.add_argument("--M", type=int, default=None, help="Override wall budget M")
+    parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
+                        help="Override any config key; VALUE is parsed as YAML, e.g. --set lr=3e-4 "
+                             "--set loss=mse --set double_dqn=false --set conv_channels=[32,64,64] "
+                             "--set obs_version=2 --set warmup_steps=10000 --set mixture=[0.5,0.5,0.0]")
     args = parser.parse_args()
     if args.threads:
         import torch
@@ -245,6 +255,28 @@ def main():
         cfg_dict['device'] = args.device
     if args.eval_freq is not None:
         cfg_dict['eval_freq'] = args.eval_freq
+    if args.abc is not None or args.K is not None or args.M is not None:
+        rules_over = dict(cfg_dict.get('rules', {}))
+        if args.abc is not None:
+            if len(args.abc) != 3 or set(args.abc) - {'0', '1'}:
+                parser.error("--abc needs three bits, e.g. 101")
+            rules_over.update(A=args.abc[0] == '1', B=args.abc[1] == '1', C=args.abc[2] == '1')
+        if args.K is not None:
+            rules_over['K'] = args.K
+        if args.M is not None:
+            rules_over['M'] = args.M
+        cfg_dict['rules'] = rules_over
+    for item in args.set:
+        key, sep, raw = item.partition('=')
+        if not sep or not key:
+            parser.error(f"--set needs KEY=VALUE, got {item!r}")
+        val = yaml.safe_load(raw)
+        if isinstance(val, str):
+            try:
+                val = float(val)  # PyYAML (YAML 1.1) reads 3e-4 as a string
+            except ValueError:
+                pass
+        cfg_dict[key] = val
 
     if args.smoke:
         cfg_dict['total_steps'] = 2000
@@ -294,6 +326,10 @@ def main():
         blocks=cfg_dict.get('blocks', 3),
         hidden=cfg_dict.get('hidden', 256),
         mirror_prob=cfg_dict.get('mirror_prob', 0.5 if board_size % 2 == 1 else 0.0),
+        loss=cfg_dict.get('loss', 'huber'),
+        conv_channels=cfg_dict.get('conv_channels'),
+        obs_version=cfg_dict.get('obs_version', 1),
+        warmup_steps=cfg_dict.get('warmup_steps', 0),
         seed=seed,
         device=cfg_dict.get('device', 'auto'),
     )
@@ -312,7 +348,7 @@ def main():
     eval_matches = cfg_dict.get('eval_matches', 10)
     last_eval_step = 0
     episode = 0
-    probe = make_q_probe(board_size, rules)
+    probe = make_q_probe(board_size, rules, obs_version=dqn_config.obs_version)
     t_start = time.time()
     t_session = t_start
 
@@ -375,6 +411,7 @@ def main():
                     rules=rules,
                     num_matches=eval_matches,
                     device=trainer.config.device,
+                    obs_version=dqn_config.obs_version,
                 )
                 print(f"Eval results: {eval_out}")
 
@@ -400,6 +437,10 @@ def main():
                     'channels': dqn_config.channels,
                     'blocks': dqn_config.blocks,
                     'hidden': dqn_config.hidden,
+                    'obs_version': dqn_config.obs_version,
+                    'conv_channels': dqn_config.conv_channels,
+                    'loss': dqn_config.loss,
+                    'warmup_steps': dqn_config.warmup_steps,
                     'seed': seed,
                     'step': trainer.total_env_steps,
                 }
@@ -420,6 +461,10 @@ def main():
         'channels': dqn_config.channels,
         'blocks': dqn_config.blocks,
         'hidden': dqn_config.hidden,
+        'obs_version': dqn_config.obs_version,
+        'conv_channels': dqn_config.conv_channels,
+        'loss': dqn_config.loss,
+        'warmup_steps': dqn_config.warmup_steps,
         'seed': seed,
         'step': trainer.total_env_steps,
     }

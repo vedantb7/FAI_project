@@ -83,14 +83,7 @@ class SelfPlayManager:
         # Snapshot network for opponent inference
         self.snapshot_net: Optional[QNetwork] = None
         if torch is not None:
-            self.snapshot_net = QNetwork(
-                board_size=trainer.board_size,
-                num_actions=trainer.num_actions,
-                channels=trainer.config.channels,
-                blocks=trainer.config.blocks,
-                hidden=trainer.config.hidden,
-                dueling=trainer.config.dueling,
-            ).to(trainer.device)
+            self.snapshot_net = trainer.make_network().to(trainer.device)
             self.snapshot_net.eval()
 
         self.last_snapshot_step = 0
@@ -122,6 +115,7 @@ class SelfPlayManager:
                 board_size=self.trainer.board_size,
                 rules=self.trainer.config.rules,
                 max_plies=self.max_plies,
+                obs_version=self.trainer.config.obs_version,
             )
 
         obs = env.reset()
@@ -150,8 +144,18 @@ class SelfPlayManager:
             legal_mask = env.legal_mask()
             epsilon = self.trainer.get_epsilon()
 
+            # Heuristic warm-up (proposal Sec. 4.2): for the first warmup_steps env steps the
+            # learner's moves (both seats when it plays itself) come from GreedyAgent, so the
+            # replay buffer starts with heuristic transitions; Q-learning is off-policy.
+            warm = (self.trainer.total_env_steps < self.trainer.config.warmup_steps
+                    and (mover == learner_seat or opponent_type == 'current'))
+            if warm:
+                warm_action = GreedyAgent(mover).select_action(env.engine)
+                if warm_action is None:
+                    break
+                action_id = env.codec.encode(warm_action, env.engine, mover=mover)
             # Action selection
-            if mover == learner_seat:
+            elif mover == learner_seat:
                 action_id = self.trainer.select_action(obs, legal_mask, epsilon=epsilon)
             else:
                 if opponent_type == 'current':

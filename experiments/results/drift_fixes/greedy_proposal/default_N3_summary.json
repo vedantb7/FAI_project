@@ -1,0 +1,349 @@
+{
+  "source": {
+    "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+    "dirty": true
+  },
+  "command": "python scripts/final_greedy.py run --board N3 --pairing default --greedy-order proposal",
+  "python": "3.14.3",
+  "platform": "Linux-6.19.10-300.fc44.x86_64-x86_64-with-glibc2.43",
+  "date": "2026-11-22T04:10:57+05:30",
+  "config": {
+    "board": "N3",
+    "board_size": 3,
+    "rules": {
+      "A": true,
+      "B": true,
+      "C": true,
+      "K": 1,
+      "M": 1
+    },
+    "pairing": "default",
+    "focus_vs_opponent_specs": [
+      [
+        "greedy:order=proposal",
+        "greedy"
+      ]
+    ],
+    "max_plies_runner_cap": 200,
+    "truncated": "runner cap reached; its own outcome, never a draw",
+    "opening_plies": 2,
+    "distinct_openings_wanted": 8,
+    "distinct_openings_possible_by_plies": {
+      "0": 1,
+      "1": 3,
+      "2": 8
+    },
+    "seed_selection": "first seed of each distinct opening action sequence, seeds 0..9 scanned",
+    "seed_to_opening": {
+      "0": [
+        [
+          "MOVE",
+          [
+            0,
+            2
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "1": [
+        [
+          "MOVE",
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            2,
+            2
+          ]
+        ]
+      ],
+      "2": [
+        [
+          "MOVE",
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      "4": [
+        [
+          "MOVE",
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "5": [
+        [
+          "MOVE",
+          [
+            1,
+            1
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            2,
+            2
+          ]
+        ]
+      ],
+      "6": [
+        [
+          "MOVE",
+          [
+            1,
+            1
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "7": [
+        [
+          "MOVE",
+          [
+            0,
+            2
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      "9": [
+        [
+          "MOVE",
+          [
+            0,
+            2
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            2,
+            2
+          ]
+        ]
+      ]
+    },
+    "seatings": "both per opening seed and spec pair",
+    "move_time_limit": null,
+    "counting": "statistics over distinct games: the same full action list counts once; self-play results are from Player 0, other pairings from Greedy, with the same action list in different Greedy seats counted once per seat"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    6,
+    7,
+    9
+  ],
+  "match_log": "experiments/results/drift_fixes/greedy_proposal/default_N3.jsonl",
+  "wall_seconds": 0.5,
+  "matches_run": 16,
+  "distinct_games": 16,
+  "replay_verification": {
+    "checked": 16,
+    "failed": []
+  },
+  "results": {
+    "overall": {
+      "games": 16,
+      "greedy_goal_wins": {
+        "count": 8,
+        "rate": 0.5,
+        "wilson95": [
+          0.2799923761135083,
+          0.7200076238864916
+        ]
+      },
+      "greedy_goal_losses": {
+        "count": 8,
+        "rate": 0.5,
+        "wilson95": [
+          0.2799923761135083,
+          0.7200076238864916
+        ]
+      },
+      "draws_total": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.19361341827271994
+        ]
+      },
+      "draws_by_type": {},
+      "truncated": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.19361341827271994
+        ]
+      },
+      "forfeits_won": 0,
+      "forfeits_lost": 0,
+      "categories": {
+        "goal": 16
+      },
+      "mean_length_plies_incl_opening": 5.25,
+      "mean_length_plies_after_opening": 3.25,
+      "greedy_decisions": 26,
+      "greedy_mean_decision_seconds": 0.0007442084998519232,
+      "opponent_decisions": 26,
+      "opponent_mean_decision_seconds": 0.0008126023844502365
+    },
+    "greedy_as_p0": {
+      "games": 8,
+      "greedy_goal_wins": {
+        "count": 6,
+        "rate": 0.75,
+        "wilson95": [
+          0.40926987910258916,
+          0.9285223111419724
+        ]
+      },
+      "greedy_goal_losses": {
+        "count": 2,
+        "rate": 0.25,
+        "wilson95": [
+          0.07147768885802763,
+          0.5907301208974108
+        ]
+      },
+      "draws_total": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.3244156195108769
+        ]
+      },
+      "draws_by_type": {},
+      "truncated": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.3244156195108769
+        ]
+      },
+      "forfeits_won": 0,
+      "forfeits_lost": 0,
+      "categories": {
+        "goal": 8
+      },
+      "mean_length_plies_incl_opening": 4.75,
+      "mean_length_plies_after_opening": 2.75,
+      "greedy_decisions": 14,
+      "greedy_mean_decision_seconds": 0.0007548188566163715,
+      "opponent_decisions": 8,
+      "opponent_mean_decision_seconds": 0.000772003625115758
+    },
+    "greedy_as_p1": {
+      "games": 8,
+      "greedy_goal_wins": {
+        "count": 2,
+        "rate": 0.25,
+        "wilson95": [
+          0.07147768885802763,
+          0.5907301208974108
+        ]
+      },
+      "greedy_goal_losses": {
+        "count": 6,
+        "rate": 0.75,
+        "wilson95": [
+          0.40926987910258916,
+          0.9285223111419724
+        ]
+      },
+      "draws_total": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.3244156195108769
+        ]
+      },
+      "draws_by_type": {},
+      "truncated": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.3244156195108769
+        ]
+      },
+      "forfeits_won": 0,
+      "forfeits_lost": 0,
+      "categories": {
+        "goal": 8
+      },
+      "mean_length_plies_incl_opening": 5.75,
+      "mean_length_plies_after_opening": 3.75,
+      "greedy_decisions": 12,
+      "greedy_mean_decision_seconds": 0.0007318297502934001,
+      "opponent_decisions": 18,
+      "opponent_mean_decision_seconds": 0.0008306462774877824
+    },
+    "vs_exact_solver": {
+      "solution": "experiments/cache/final_sol_N3_A1B1C1_K1_M1_08f4eb130dd8.pkl",
+      "model": "exact value under optimal play from the post-opening position, Greedy seat perspective (solver: history-free, infinite play = draw)",
+      "value_vs_outcome": {
+        "value_win": {
+          "win": 4
+        },
+        "value_loss": {
+          "loss": 4
+        },
+        "value_draw": {
+          "loss": 4,
+          "win": 4
+        }
+      },
+      "games_below_game_value": 4
+    }
+  }
+}

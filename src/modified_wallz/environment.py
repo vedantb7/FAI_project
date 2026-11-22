@@ -13,8 +13,10 @@ from agents.dqn.encoding import encode_observation
 class WallzEnv:
     """Gym-compatible turn-based environment wrapping WallzEngine."""
 
-    def __init__(self, board_size: int = 3, rules: dict | None = None, max_plies: int = 200):
+    def __init__(self, board_size: int = 3, rules: dict | None = None, max_plies: int = 200,
+                 obs_version: int = 1):
         self.board_size = board_size
+        self.obs_version = obs_version
         self.rules = dict(rules) if rules else {}
         self.max_plies = max_plies
         self.codec = ActionCodec(board_size)
@@ -35,7 +37,7 @@ class WallzEnv:
         if seed is not None:
             self.rng.seed(seed)
         self.engine = WallzEngine(board_size=self.board_size, rules=self.rules)
-        return encode_observation(self.engine, mover=self.engine.current_player)
+        return encode_observation(self.engine, mover=self.engine.current_player, obs_version=self.obs_version)
 
     def legal_mask(self) -> list[bool]:
         """Returns boolean mask of valid legal action IDs for the side to move."""
@@ -89,5 +91,5 @@ class WallzEnv:
             'action': action,
         }
 
-        next_obs = encode_observation(self.engine, mover=self.engine.current_player)
+        next_obs = encode_observation(self.engine, mover=self.engine.current_player, obs_version=self.obs_version)
         return next_obs, reward_for_mover, terminated, truncated, info

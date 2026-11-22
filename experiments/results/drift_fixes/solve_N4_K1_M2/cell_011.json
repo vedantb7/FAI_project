@@ -1,0 +1,81 @@
+{
+  "source": {
+    "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+    "dirty": true
+  },
+  "run": {
+    "source": {
+      "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+      "dirty": true
+    },
+    "command": "python scripts/run_experiments.py solve -N 4 -K 1 -M 2 --abc 011 --max-states 1000000 --max-seconds 1800 --out experiments/results/drift_fixes/solve_N4_K1_M2/cell_011.json",
+    "python": "3.14.3",
+    "platform": "Linux-6.19.10-300.fc44.x86_64-x86_64-with-glibc2.43",
+    "date_utc": "2026-11-21T23:10:16+00:00"
+  },
+  "config": {
+    "config": null,
+    "cmd": "solve",
+    "N": 4,
+    "K": 1,
+    "M": 2,
+    "abc": "011",
+    "max_states": 1000000,
+    "max_edges": 20000000,
+    "max_seconds": 1800.0,
+    "seed": 42,
+    "out": "experiments/results/drift_fixes/solve_N4_K1_M2/cell_011.json"
+  },
+  "caps": {
+    "max_states": 1000000,
+    "max_edges": 20000000,
+    "max_seconds": 1800.0
+  },
+  "cells": [
+    {
+      "board_size": 4,
+      "rules": {
+        "A": false,
+        "B": true,
+        "C": true,
+        "K": 1,
+        "M": 2
+      },
+      "root_state_id": "b4342a3ff2b99843",
+      "canonical_positions": true,
+      "complete": false,
+      "stop_reason": "max_states",
+      "states": 1000009,
+      "edges": 3520698,
+      "expanded_nonterminal": 196905,
+      "unexpanded": 803059,
+      "terminal_win_p0": 45,
+      "terminal_win_p1": 252,
+      "terminal_draw_no_legal_actions": 0,
+      "mean_branching": 17.880185876437878,
+      "max_branching": 36,
+      "build_seconds": 196.474,
+      "model": "position game: history-free, clock-free; goal row wins; no legal action = draw; infinite play = draw; values from side-to-move perspective",
+      "exact": false,
+      "value_counts": {
+        "WIN": 605,
+        "LOSS": 297,
+        "DRAW": 0,
+        "UNKNOWN": 999107
+      },
+      "draw_counts": {
+        "no_legal_actions": 0,
+        "cycle": 0,
+        "total": 0
+      },
+      "root_to_move": 0,
+      "root_status": "UNKNOWN",
+      "root_draw_type": null,
+      "root_rank": null,
+      "root_rank_is_upper_bound": false,
+      "root_rank_optimal_actions": null,
+      "root_value_optimal_actions": null,
+      "solve_seconds": 0.967
+    }
+  ]
+}

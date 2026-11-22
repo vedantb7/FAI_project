@@ -120,7 +120,7 @@ def make_agent(spec, player_id, config, solutions=None, match_seed=0):
     if name == 'greedy':
         from agents.greedy import GreedyAgent
         seed = params.get('seed')
-        return GreedyAgent(player_id, seed=seed), identity
+        return GreedyAgent(player_id, seed=seed, order=params.get('order', 'default')), identity
     if name == 'minimax':
         from agents.minimax import MinimaxAgent
         depth = params.get('depth', 2)

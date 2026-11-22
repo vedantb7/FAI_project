@@ -1,0 +1,440 @@
+{
+  "provenance": {
+    "git": {
+      "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+      "dirty": true
+    },
+    "command": "python scripts/eval_dqn_final.py --checkpoint checkpoints/runs/exp_rq1_abc001/final.pt --out drift_runs/rq1_abc001.json",
+    "config": {
+      "gamma": 0.99,
+      "max_plies": 200,
+      "opening_plies": 2,
+      "distinct_openings": 0,
+      "random_greedy_seeds": 100,
+      "minimax_seeds": 50,
+      "exact_seeds": 50,
+      "value_class_threshold": 0.5,
+      "opponents": "default plan",
+      "tie_break": "lowest action id among max Q (as DQNAgent)"
+    },
+    "seeds": [
+      {
+        "opening_seeds_random_greedy": [
+          0,
+          99
+        ],
+        "opening_seeds_minimax_exact": [
+          0,
+          49
+        ],
+        "legacy_sample_seed": 42
+      }
+    ],
+    "checkpoints": [
+      {
+        "path": "checkpoints/runs/exp_rq1_abc001/final.pt",
+        "sha256": "d1fcf174132f59bb9e438ca614a4bc8c75e5ae58e87b296e362e7fc46f6ba5ac"
+      }
+    ],
+    "python": "3.14.3",
+    "torch": "2.15.0+cpu",
+    "numpy": "2.5.5",
+    "platform": "Linux-6.19.10-300.fc44.x86_64-x86_64-with-glibc2.43",
+    "date": "2026-11-22T10:17:20+05:30"
+  },
+  "checkpoint_meta": {
+    "N": 3,
+    "blocks": 3,
+    "channels": 64,
+    "codec_version": 1,
+    "commit": "cf5fe30",
+    "conv_channels": null,
+    "double": true,
+    "dueling": false,
+    "gamma": 0.99,
+    "hidden": 256,
+    "loss": "huber",
+    "obs_version": 1,
+    "rules": {
+      "A": false,
+      "B": false,
+      "C": true,
+      "K": 1,
+      "M": 1
+    },
+    "seed": 42,
+    "step": 200007,
+    "warmup_steps": 0
+  },
+  "board_size": 3,
+  "rules": {
+    "A": false,
+    "B": false,
+    "C": true,
+    "K": 1,
+    "M": 1
+  },
+  "solve": {
+    "label": "N3_A0B0C1_K1_M1",
+    "exact": true,
+    "states": 16696,
+    "from_cache": false,
+    "engine_sha256_12": "08f4eb130dd8",
+    "stop_reason": null
+  },
+  "ground_truth_population": {
+    "WIN": {
+      "n": 9121,
+      "value_optimal_rate": 0.9497,
+      "value_optimal_ci95": [
+        0.945,
+        0.954
+      ],
+      "rank_optimal_rate": 0.9095,
+      "value_class_agreement": 0.8941,
+      "sign_agreement": 0.9637,
+      "sign_agreement_ci95": [
+        0.9597,
+        0.9674
+      ],
+      "decided_states": 9121
+    },
+    "LOSS": {
+      "n": 3726,
+      "value_optimal_rate": 1.0,
+      "value_optimal_ci95": [
+        0.999,
+        1.0
+      ],
+      "rank_optimal_rate": 0.9211,
+      "value_class_agreement": 0.7813,
+      "sign_agreement": 0.8862,
+      "sign_agreement_ci95": [
+        0.8756,
+        0.896
+      ],
+      "decided_states": 3726
+    },
+    "DRAW": {
+      "n": 2470,
+      "value_optimal_rate": 0.9239,
+      "value_optimal_ci95": [
+        0.9128,
+        0.9337
+      ],
+      "rank_optimal_rate": 0.9239,
+      "value_class_agreement": 0.6696
+    },
+    "all": {
+      "n": 15317,
+      "value_optimal_rate": 0.9578,
+      "value_optimal_ci95": [
+        0.9545,
+        0.9608
+      ],
+      "rank_optimal_rate": 0.9147,
+      "value_class_agreement": 0.8304,
+      "sign_agreement": 0.9412,
+      "sign_agreement_ci95": [
+        0.937,
+        0.9452
+      ],
+      "decided_states": 12847,
+      "mae_vs_discounted_value": 0.2364
+    },
+    "value_counts": {
+      "WIN": 9121,
+      "LOSS": 4942,
+      "DRAW": 2633,
+      "UNKNOWN": 0
+    },
+    "root_status": "WIN"
+  },
+  "ground_truth_legacy_protocol": {
+    "protocol": "scripts/validate_dqn.evaluate_cell_x16, 1000 states, seed 42 (Gate X-16)",
+    "overall_sign_agreement": 0.9476,
+    "cells": {
+      "N3_A0B0C0_K1_M0": {
+        "total_evaluated": 33,
+        "population_nonterminal": 33,
+        "decided_states": 22,
+        "sign_agreement_count": 22,
+        "sign_agreement_rate": 1.0,
+        "sign_agreement_ci95": [
+          0.8513,
+          1.0
+        ],
+        "mae_all": 0.1762,
+        "mae_win": 0.0774,
+        "mae_loss": 0.0224,
+        "mae_draw": 0.3987,
+        "value_optimal_agreement": 1.0,
+        "rank_optimal_agreement": 1.0
+      },
+      "N3_A0B0C1_K1_M1": {
+        "total_evaluated": 1000,
+        "population_nonterminal": 15317,
+        "decided_states": 836,
+        "sign_agreement_count": 791,
+        "sign_agreement_rate": 0.9462,
+        "sign_agreement_ci95": [
+          0.9287,
+          0.9595
+        ],
+        "mae_all": 0.2281,
+        "mae_win": 0.154,
+        "mae_loss": 0.3145,
+        "mae_draw": 0.3757,
+        "value_optimal_agreement": 0.969,
+        "rank_optimal_agreement": 0.936
+      }
+    },
+    "old_value_file": "experiments/results/dqn/gate_x16.json",
+    "old_value": 0.9647
+  },
+  "matches": {
+    "random": {
+      "opponent": "random",
+      "opening_seeds": [
+        0,
+        99
+      ],
+      "overall": {
+        "matches": 200,
+        "categories": {
+          "win": 182,
+          "draw_no_legal_actions": 8,
+          "loss": 8,
+          "draw_repetition": 2,
+          "truncated": 0
+        },
+        "win_rate": 0.91,
+        "win_rate_ci95": [
+          0.8622,
+          0.9423
+        ],
+        "loss_rate": 0.04,
+        "draw_rate": 0.05,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.74
+      },
+      "dqn_as_p0": {
+        "matches": 100,
+        "categories": {
+          "win": 98,
+          "draw_no_legal_actions": 2
+        },
+        "win_rate": 0.98,
+        "win_rate_ci95": [
+          0.93,
+          0.9945
+        ],
+        "loss_rate": 0.0,
+        "draw_rate": 0.02,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 6.6
+      },
+      "dqn_as_p1": {
+        "matches": 100,
+        "categories": {
+          "loss": 8,
+          "win": 84,
+          "draw_no_legal_actions": 6,
+          "draw_repetition": 2
+        },
+        "win_rate": 0.84,
+        "win_rate_ci95": [
+          0.7558,
+          0.899
+        ],
+        "loss_rate": 0.08,
+        "draw_rate": 0.08,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 8.88
+      }
+    },
+    "greedy": {
+      "opponent": "greedy",
+      "opening_seeds": [
+        0,
+        99
+      ],
+      "overall": {
+        "matches": 200,
+        "categories": {
+          "win": 119,
+          "loss": 81,
+          "truncated": 0
+        },
+        "win_rate": 0.595,
+        "win_rate_ci95": [
+          0.5258,
+          0.6606
+        ],
+        "loss_rate": 0.405,
+        "draw_rate": 0.0,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.25
+      },
+      "dqn_as_p0": {
+        "matches": 100,
+        "categories": {
+          "win": 100
+        },
+        "win_rate": 1.0,
+        "win_rate_ci95": [
+          0.963,
+          1.0
+        ],
+        "loss_rate": 0.0,
+        "draw_rate": 0.0,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 8.18
+      },
+      "dqn_as_p1": {
+        "matches": 100,
+        "categories": {
+          "loss": 81,
+          "win": 19
+        },
+        "win_rate": 0.19,
+        "win_rate_ci95": [
+          0.1251,
+          0.2778
+        ],
+        "loss_rate": 0.81,
+        "draw_rate": 0.0,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 6.31
+      }
+    },
+    "minimax:depth=2": {
+      "opponent": "minimax:depth=2",
+      "opening_seeds": [
+        0,
+        49
+      ],
+      "overall": {
+        "matches": 100,
+        "categories": {
+          "win": 48,
+          "draw_no_legal_actions": 12,
+          "loss": 40,
+          "truncated": 0
+        },
+        "win_rate": 0.48,
+        "win_rate_ci95": [
+          0.3846,
+          0.5768
+        ],
+        "loss_rate": 0.4,
+        "draw_rate": 0.12,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.7
+      },
+      "dqn_as_p0": {
+        "matches": 50,
+        "categories": {
+          "win": 38,
+          "draw_no_legal_actions": 12
+        },
+        "win_rate": 0.76,
+        "win_rate_ci95": [
+          0.6259,
+          0.857
+        ],
+        "loss_rate": 0.0,
+        "draw_rate": 0.24,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.96
+      },
+      "dqn_as_p1": {
+        "matches": 50,
+        "categories": {
+          "loss": 40,
+          "win": 10
+        },
+        "win_rate": 0.2,
+        "win_rate_ci95": [
+          0.1124,
+          0.3304
+        ],
+        "loss_rate": 0.8,
+        "draw_rate": 0.0,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.44
+      }
+    },
+    "exact": {
+      "opponent": "exact",
+      "opening_seeds": [
+        0,
+        49
+      ],
+      "overall": {
+        "matches": 100,
+        "categories": {
+          "win": 28,
+          "draw_no_legal_actions": 22,
+          "loss": 40,
+          "draw_repetition": 10,
+          "truncated": 0
+        },
+        "win_rate": 0.28,
+        "win_rate_ci95": [
+          0.2014,
+          0.3749
+        ],
+        "loss_rate": 0.4,
+        "draw_rate": 0.32,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 8.0
+      },
+      "dqn_as_p0": {
+        "matches": 50,
+        "categories": {
+          "win": 28,
+          "draw_no_legal_actions": 22
+        },
+        "win_rate": 0.56,
+        "win_rate_ci95": [
+          0.4231,
+          0.6884
+        ],
+        "loss_rate": 0.0,
+        "draw_rate": 0.44,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 7.56
+      },
+      "dqn_as_p1": {
+        "matches": 50,
+        "categories": {
+          "loss": 40,
+          "draw_repetition": 10
+        },
+        "win_rate": 0.0,
+        "win_rate_ci95": [
+          0.0,
+          0.0714
+        ],
+        "loss_rate": 0.8,
+        "draw_rate": 0.2,
+        "truncation_rate": 0.0,
+        "forfeit_by_dqn": 0,
+        "mean_plies": 8.44
+      }
+    }
+  },
+  "elapsed_seconds": 10.6
+}

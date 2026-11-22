@@ -383,6 +383,30 @@ at 500k).
 Weights and logs are in `checkpoints/runs/<N>x<N>_s<seed>/` and are git-ignored except the
 three release copies.
 
+### Training times (2026-11-20, i7-1355U laptop CPU, `--threads 4`, one run at a time)
+
+"Train min" is `elapsed_seconds` of the last eval entry in each run's `train_log.jsonl`
+(includes the in-training evals). Start and end are from `checkpoints/runs/status.log`.
+The earlier column gives the same config's wall time on the shared team machine
+(`--threads 2`, Section 5 and 6.1) for comparison.
+
+| Run | Env steps | Start | End | Train min | Steps / min | Earlier, team machine |
+|---|---:|---|---|---:|---:|---|
+| 3x3 s42 | 200,086 | 04:57 | 05:17 | 20.2 | 9,900 | 24.7 min |
+| 3x3 s43 | 200,023 | 05:17 | 05:37 | 19.6 | 10,200 | 20.2 min |
+| 3x3 s44 | 200,015 | 05:37 | 05:59 | 21.8 | 9,200 | 15.5 min |
+| 3x3 s45 | 200,020 | 05:59 | 06:19 | 20.0 | 10,000 | 15.9 min |
+| 3x3 s46 | 200,069 | 06:19 | 06:38 | 18.9 | 10,600 | 15.3 min |
+| 4x4 s42 | 500,001 | 06:38 | 07:48 | 70.7 | 7,100 | 48.1 min |
+| 5x5 s42 | 2,000,035 | 07:48 | 14:40 | 411.6 (6.9 h) | 4,900 | 87.0 min for 500k only |
+| 9x9 s42 | stopped early | 14:40 | 14:55 | — | — | not trained |
+| **Total (7 finished runs)** | | 04:57 | 14:40 | **582.8 (9.7 h)** | | |
+
+5x5 was slowest at the start (about 1,800 steps/min in the first 30 minutes, while games were
+about 66 plies long) and sped up to about 4,500-5,000 steps/min as games got shorter. Scaling
+the 9x9 timing run (Section 6, at least 23 h on the team machine) gives an estimate of 35 h or
+more for a full 9x9 run (5M steps) on this machine; this was not measured.
+
 **Evaluation.** Same protocol and script as Sections 4-6 (`scripts/eval_dqn_final.py`, unchanged
 commands; 5x5 with `--skip-truth --exact-seeds 0 --distinct-openings 50`). Files:
 `experiments/results/final_dqn/overnight/dqn_3x3_s<seed>_eval.json`, `dqn_4x4_s42_eval.json`,

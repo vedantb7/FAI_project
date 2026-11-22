@@ -137,14 +137,18 @@ def choose_openings(n, rules, want):
 # ---------------------------------------------------------------------------
 # Pairings
 # ---------------------------------------------------------------------------
-def pairing_specs(pairing):
-    """[(focus greedy spec, opponent spec)]."""
+def pairing_specs(pairing, order='default'):
+    """[(focus greedy spec, opponent spec)]. order='proposal' uses project_idea.pdf's tie order."""
+    g = 'greedy' if order == 'default' else f'greedy:order={order}'
+    sep = ':' if order == 'default' else ','
     if pairing == 'random':
-        return [('greedy', f'random:seed={r}') for r in RANDOM_SEEDS]
+        return [(g, f'random:seed={r}') for r in RANDOM_SEEDS]
     if pairing == 'minimax2':
-        return [('greedy', 'minimax:depth=2')]
+        return [(g, 'minimax:depth=2')]
     if pairing == 'self':
-        return [(f'greedy:seed={s}', f'greedy:seed={s + 100}') for s in SELF_SEEDS]
+        return [(f'{g}{sep}seed={s}', f'{g}{sep}seed={s + 100}') for s in SELF_SEEDS]
+    if pairing == 'default':  # proposal-order Greedy vs the default Greedy
+        return [(g, 'greedy')]
     raise SystemExit(f'unknown pairing {pairing}')
 
 
@@ -255,7 +259,10 @@ def cmd_run(args):
     n, rules = b['board_size'], b['rules']
     plies, seeds, scanned, tried = choose_openings(n, rules, b['want'])
     openings = {s: [[a[0], list(a[1])] for a in opening_of(n, rules, plies, s)] for s in seeds}
-    pairs = pairing_specs(args.pairing)
+    global OUT
+    if args.greedy_order != 'default':
+        OUT = ROOT / 'experiments' / 'results' / 'drift_fixes' / f'greedy_{args.greedy_order}'
+    pairs = pairing_specs(args.pairing, args.greedy_order)
     configs = []
     for s in seeds:
         for focus, opp in pairs:
@@ -357,7 +364,10 @@ def main():
     sub = ap.add_subparsers(dest='cmd', required=True)
     r = sub.add_parser('run')
     r.add_argument('--board', choices=sorted(BOARDS), required=True)
-    r.add_argument('--pairing', choices=['random', 'minimax2', 'self'], required=True)
+    r.add_argument('--pairing', choices=['random', 'minimax2', 'self', 'default'], required=True,
+                   help="'default' = proposal-order Greedy vs default Greedy (needs --greedy-order proposal)")
+    r.add_argument('--greedy-order', choices=['default', 'proposal'], default='default',
+                   help='tie order of the focus Greedy; non-default results go to experiments/results/drift_fixes/')
     r.set_defaults(fn=cmd_run)
     t = sub.add_parser('tables')
     t.set_defaults(fn=cmd_tables)

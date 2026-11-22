@@ -20,7 +20,7 @@ try:
 except ImportError:
     torch = None
 
-from agents.dqn.encoding import encode_observation, OBS_VERSION
+from agents.dqn.encoding import encode_observation, num_planes, OBS_VERSION, SUPPORTED_OBS_VERSIONS
 from agents.dqn.network import QNetwork, resolve_device
 try:
     from modified_wallz.actions import ActionCodec, CODEC_VERSION
@@ -86,7 +86,7 @@ class DQNAgent:
             return None
 
         # Encode observation canonically for self.player_id
-        obs = encode_observation(engine, mover=self.player_id)
+        obs = encode_observation(engine, mover=self.player_id, obs_version=self.obs_version)
 
         # Forward pass through Q-network
         with torch.no_grad():
@@ -209,10 +209,10 @@ def load_checkpoint(
             f"Codec version mismatch: checkpoint has {meta.get('codec_version')}, "
             f"expected {CODEC_VERSION}"
         )
-    if meta.get('obs_version') != OBS_VERSION:
+    if meta.get('obs_version') not in SUPPORTED_OBS_VERSIONS:
         raise ValueError(
             f"Observation version mismatch: checkpoint has {meta.get('obs_version')}, "
-            f"expected {OBS_VERSION}"
+            f"expected one of {SUPPORTED_OBS_VERSIONS}"
         )
 
     # 2. Validate Board Size
@@ -243,6 +243,8 @@ def load_checkpoint(
         blocks=meta.get('blocks', 3),
         hidden=meta.get('hidden', 256),
         dueling=meta.get('dueling', False),
+        in_planes=num_planes(meta.get('obs_version', OBS_VERSION)),
+        conv_channels=meta.get('conv_channels'),
     )
 
     device = resolve_device(device)

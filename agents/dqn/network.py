@@ -30,7 +30,11 @@ class QNetwork(nn.Module if nn is not None else object):
         blocks: int = 3,
         hidden: int = 256,
         dueling: bool = False,
+        in_planes: int = 14,
+        conv_channels: list | None = None,
     ):
+        """conv_channels: optional explicit conv widths, e.g. [32, 64, 64] (the proposal's CNN);
+        when given it replaces channels/blocks. in_planes: 14 (obs v1) or 16 (obs v2)."""
         if nn is None:
             raise ImportError("PyTorch is required to instantiate QNetwork.")
         super().__init__()
@@ -41,21 +45,23 @@ class QNetwork(nn.Module if nn is not None else object):
         self.channels = channels
         self.blocks = blocks
         self.hidden = hidden
+        self.in_planes = in_planes
+        self.conv_channels = list(conv_channels) if conv_channels else None
 
-        # 1. Feature extractor: 14 -> channels -> (blocks convs)
-        conv_layers = [
-            nn.Conv2d(14, channels, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-        ]
-        for _ in range(blocks):
+        # 1. Feature extractor: in_planes -> channels -> (blocks convs), or explicit widths
+        widths = self.conv_channels or [channels] * (blocks + 1)
+        conv_layers = []
+        prev = in_planes
+        for w in widths:
             conv_layers.extend([
-                nn.Conv2d(channels, channels, kernel_size=3, padding=1),
+                nn.Conv2d(prev, w, kernel_size=3, padding=1),
                 nn.ReLU(inplace=True),
             ])
+            prev = w
         self.conv = nn.Sequential(*conv_layers)
 
         # 2. Dense head
-        flat_dim = channels * board_size * board_size
+        flat_dim = prev * board_size * board_size
         self.fc = nn.Sequential(
             nn.Linear(flat_dim, hidden),
             nn.ReLU(inplace=True),

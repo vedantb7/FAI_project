@@ -5,7 +5,16 @@ All planes are encoded from the perspective of the active mover.
 """
 from __future__ import annotations
 
-OBS_VERSION = 1
+OBS_VERSION = 1  # default; every released checkpoint uses v1
+SUPPORTED_OBS_VERSIONS = (1, 2)
+_PLANES = {1: 14, 2: 16}
+
+
+def num_planes(obs_version: int = OBS_VERSION) -> int:
+    """14 planes for v1; v2 adds 14: walls owned by the mover, 15: walls owned by the opponent."""
+    if obs_version not in _PLANES:
+        raise ValueError(f"Unsupported observation version {obs_version} (known: {SUPPORTED_OBS_VERSIONS})")
+    return _PLANES[obs_version]
 
 try:
     import numpy as np
@@ -13,7 +22,7 @@ except ImportError:
     np = None
 
 
-def encode_observation(engine, mover: int | None = None):
+def encode_observation(engine, mover: int | None = None, obs_version: int = OBS_VERSION):
     """Encodes the current engine state into a canonical float32 tensor of shape (14, N, N).
 
     Channels:
@@ -31,7 +40,11 @@ def encode_observation(engine, mover: int | None = None):
         11: own block availability (constant plane: 1.0 if available else 0.0)
         12: opponent block availability (constant plane: 1.0 if available else 0.0)
         13: constant boundary indicator plane (filled with 1.0)
+    v2 only (wall ownership, needed because HOP may only cross an opponent's wall):
+        14: walls owned by the mover (1.0 at canonical wall slot, H or V)
+        15: walls owned by the opponent
     """
+    n_planes = num_planes(obs_version)
     if mover is None:
         mover = engine.current_player
 
@@ -40,9 +53,9 @@ def encode_observation(engine, mover: int | None = None):
 
     # Initialize 14xNxN array (numpy if available, else nested list)
     if np is not None:
-        planes = np.zeros((14, n, n), dtype=np.float32)
+        planes = np.zeros((n_planes, n, n), dtype=np.float32)
     else:
-        planes = [[[0.0] * n for _ in range(n)] for _ in range(14)]
+        planes = [[[0.0] * n for _ in range(n)] for _ in range(n_planes)]
 
     def set_val(ch, r, c, val):
         planes[ch][r][c] = float(val)
@@ -64,6 +77,8 @@ def encode_observation(engine, mover: int | None = None):
             wc_canon = wc
             ch = 2 if orient == 'H' else 3
             set_val(ch, wr_canon, wc_canon, 1.0)
+            if obs_version >= 2:
+                set_val(14 if p == mover else 15, wr_canon, wc_canon, 1.0)
 
     # 4 & 5: Replaceable walls
     latest_self = engine.latest_wall[mover]
@@ -130,23 +145,24 @@ def mirror_observation(obs):
     if np is not None and isinstance(obs, np.ndarray):
         m = obs.copy()
         n = obs.shape[-1]
+        wall_planes = (2, 3, 4, 5) + ((14, 15) if obs.shape[0] >= 16 else ())
         # Pawn positions & blocked cells: full horizontal flip
         for ch in (0, 1, 6):
             m[ch] = np.fliplr(m[ch])
         # Wall planes: flip columns 0..N-2, column N-1 stays zero
-        for ch in (2, 3, 4, 5):
+        for ch in wall_planes:
             m[ch, :n - 1, :n - 1] = np.fliplr(m[ch, :n - 1, :n - 1])
         return m
     else:
         n = len(obs[0])
         # Deep copy
-        m = [[[obs[ch][r][c] for c in range(n)] for r in range(n)] for ch in range(14)]
+        m = [[[obs[ch][r][c] for c in range(n)] for r in range(n)] for ch in range(len(obs))]
         # Pawn positions & blocked cells: full horizontal flip
         for ch in (0, 1, 6):
             for r in range(n):
                 m[ch][r] = list(reversed(m[ch][r]))
         # Wall planes: flip columns 0..N-2
-        for ch in (2, 3, 4, 5):
+        for ch in (2, 3, 4, 5) + ((14, 15) if len(obs) >= 16 else ()):
             for r in range(n - 1):
                 row_slice = list(reversed(m[ch][r][:n - 1]))
                 for c in range(n - 1):

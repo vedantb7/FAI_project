@@ -319,7 +319,7 @@ def _explain_dqn(agent: Any, engine: Any, mover: int, spec: Optional[str] = None
     if not legal_indices:
         return None, {}, [], "No legal moves."
 
-    obs = encode_observation(engine, mover=mover)
+    obs = encode_observation(engine, mover=mover, obs_version=getattr(agent, 'obs_version', 1))
     with torch.no_grad():
         x = torch.as_tensor(obs, dtype=torch.float32, device=agent.device).unsqueeze(0)
         q_vals = agent.model(x).squeeze(0).cpu().numpy()

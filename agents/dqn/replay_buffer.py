@@ -17,7 +17,7 @@ from agents.dqn.encoding import mirror_observation
 class ReplayBuffer:
     """Experience replay buffer storing transitions in preallocated NumPy arrays."""
 
-    def __init__(self, capacity: int, board_size: int, num_actions: int):
+    def __init__(self, capacity: int, board_size: int, num_actions: int, planes: int = 14):
         self.capacity = capacity
         self.board_size = board_size
         self.num_actions = num_actions
@@ -25,10 +25,10 @@ class ReplayBuffer:
         self.size = 0
 
         # Memory storage: float16 for observations to reduce RAM footprint
-        self.obs = np.zeros((capacity, 14, board_size, board_size), dtype=np.float16)
+        self.obs = np.zeros((capacity, planes, board_size, board_size), dtype=np.float16)
         self.actions = np.zeros(capacity, dtype=np.int64)
         self.rewards = np.zeros(capacity, dtype=np.float32)
-        self.next_obs = np.zeros((capacity, 14, board_size, board_size), dtype=np.float16)
+        self.next_obs = np.zeros((capacity, planes, board_size, board_size), dtype=np.float16)
         self.terminated = np.zeros(capacity, dtype=bool)
         self.truncated = np.zeros(capacity, dtype=bool)
         self.next_mask = np.zeros((capacity, num_actions), dtype=bool)

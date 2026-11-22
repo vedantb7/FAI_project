@@ -1,0 +1,453 @@
+{
+  "source": {
+    "commit": "cf5fe30426e8b7186c144f9734d7704b667d2098",
+    "dirty": true
+  },
+  "command": "python scripts/final_greedy.py run --board N9 --pairing random --greedy-order proposal",
+  "python": "3.14.3",
+  "platform": "Linux-6.19.10-300.fc44.x86_64-x86_64-with-glibc2.43",
+  "date": "2026-11-22T04:14:33+05:30",
+  "config": {
+    "board": "N9",
+    "board_size": 9,
+    "rules": {
+      "A": true,
+      "B": true,
+      "C": true,
+      "K": 3,
+      "M": 10
+    },
+    "pairing": "random",
+    "focus_vs_opponent_specs": [
+      [
+        "greedy:order=proposal",
+        "random:seed=0"
+      ],
+      [
+        "greedy:order=proposal",
+        "random:seed=1"
+      ],
+      [
+        "greedy:order=proposal",
+        "random:seed=2"
+      ],
+      [
+        "greedy:order=proposal",
+        "random:seed=3"
+      ],
+      [
+        "greedy:order=proposal",
+        "random:seed=4"
+      ]
+    ],
+    "max_plies_runner_cap": 200,
+    "truncated": "runner cap reached; its own outcome, never a draw",
+    "opening_plies": 3,
+    "distinct_openings_wanted": 10,
+    "distinct_openings_possible_by_plies": {
+      "0": 1,
+      "1": 3,
+      "2": 9,
+      "3": 30
+    },
+    "seed_selection": "first seed of each distinct opening action sequence, seeds 0..9 scanned",
+    "seed_to_opening": {
+      "0": [
+        [
+          "MOVE",
+          [
+            0,
+            5
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            8,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            4
+          ]
+        ]
+      ],
+      "1": [
+        [
+          "MOVE",
+          [
+            0,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            8,
+            5
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "2": [
+        [
+          "MOVE",
+          [
+            0,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            7,
+            4
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "3": [
+        [
+          "MOVE",
+          [
+            0,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            8,
+            5
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "4": [
+        [
+          "MOVE",
+          [
+            0,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            8,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "5": [
+        [
+          "MOVE",
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            8,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            1,
+            5
+          ]
+        ]
+      ],
+      "6": [
+        [
+          "MOVE",
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            7,
+            4
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            2,
+            4
+          ]
+        ]
+      ],
+      "7": [
+        [
+          "MOVE",
+          [
+            0,
+            5
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            7,
+            4
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            6
+          ]
+        ]
+      ],
+      "8": [
+        [
+          "MOVE",
+          [
+            0,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            8,
+            3
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            4
+          ]
+        ]
+      ],
+      "9": [
+        [
+          "MOVE",
+          [
+            0,
+            5
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            8,
+            5
+          ]
+        ],
+        [
+          "MOVE",
+          [
+            0,
+            6
+          ]
+        ]
+      ]
+    },
+    "seatings": "both per opening seed and spec pair",
+    "move_time_limit": null,
+    "counting": "statistics over distinct games: the same full action list counts once; self-play results are from Player 0, other pairings from Greedy, with the same action list in different Greedy seats counted once per seat"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "match_log": "experiments/results/drift_fixes/greedy_proposal/random_N9.jsonl",
+  "wall_seconds": 73.5,
+  "matches_run": 100,
+  "distinct_games": 100,
+  "replay_verification": {
+    "checked": 100,
+    "failed": []
+  },
+  "results": {
+    "overall": {
+      "games": 100,
+      "greedy_goal_wins": {
+        "count": 100,
+        "rate": 1.0,
+        "wilson95": [
+          0.9630051925239981,
+          0.9999999999999999
+        ]
+      },
+      "greedy_goal_losses": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.03699480747600191
+        ]
+      },
+      "draws_total": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.03699480747600191
+        ]
+      },
+      "draws_by_type": {},
+      "truncated": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.03699480747600191
+        ]
+      },
+      "forfeits_won": 0,
+      "forfeits_lost": 0,
+      "categories": {
+        "goal": 100
+      },
+      "mean_length_plies_incl_opening": 37.52,
+      "mean_length_plies_after_opening": 34.52,
+      "greedy_decisions": 1751,
+      "greedy_mean_decision_seconds": 0.03208036892232202,
+      "opponent_decisions": 1701,
+      "opponent_mean_decision_seconds": 0.0017040453573940995
+    },
+    "greedy_as_p0": {
+      "games": 50,
+      "greedy_goal_wins": {
+        "count": 50,
+        "rate": 1.0,
+        "wilson95": [
+          0.9286499658256813,
+          1.0
+        ]
+      },
+      "greedy_goal_losses": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "draws_total": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "draws_by_type": {},
+      "truncated": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "forfeits_won": 0,
+      "forfeits_lost": 0,
+      "categories": {
+        "goal": 50
+      },
+      "mean_length_plies_incl_opening": 34.04,
+      "mean_length_plies_after_opening": 31.04,
+      "greedy_decisions": 776,
+      "greedy_mean_decision_seconds": 0.035758984376303656,
+      "opponent_decisions": 776,
+      "opponent_mean_decision_seconds": 0.001974551873679713
+    },
+    "greedy_as_p1": {
+      "games": 50,
+      "greedy_goal_wins": {
+        "count": 50,
+        "rate": 1.0,
+        "wilson95": [
+          0.9286499658256813,
+          1.0
+        ]
+      },
+      "greedy_goal_losses": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "draws_total": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "draws_by_type": {},
+      "truncated": {
+        "count": 0,
+        "rate": 0.0,
+        "wilson95": [
+          0.0,
+          0.07135003417431873
+        ]
+      },
+      "forfeits_won": 0,
+      "forfeits_lost": 0,
+      "categories": {
+        "goal": 50
+      },
+      "mean_length_plies_incl_opening": 41,
+      "mean_length_plies_after_opening": 38,
+      "greedy_decisions": 975,
+      "greedy_mean_decision_seconds": 0.029152568314845362,
+      "opponent_decisions": 925,
+      "opponent_mean_decision_seconds": 0.0014771123231912498
+    }
+  }
+}
