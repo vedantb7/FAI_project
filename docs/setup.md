@@ -98,7 +98,7 @@ Reproducibility is enforced through strict, centralized pseudo-random number gen
 ## 5. End-to-End Experiment & Artifact Reproduction
 
 ### 1. Generating Publication Report Tables (14 Tables)
-To regenerate all 14 LaTeX (`.tex`) and Markdown (`.md`) tables in `experiments/tables/`:
+To regenerate all 14 LaTeX (`.tex`) and Markdown (`.md`) tables in `experiments/results/final_eval/tables/`:
 ```bash
 python3 scripts/make_tables.py --seed 42
 ```

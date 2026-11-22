@@ -505,7 +505,7 @@ Run & First checkpoint & Final & First step below 0.15 \\
 \end{center}
 
 At 200k steps the 3x3 error was still falling on four of five seeds, so the five seeds were retrained
-from scratch to the proposal's full 5x10\textasciicircum{}5-step budget (same config, \texttt{-{}-steps 500000}). All five end
+from scratch to the proposal's full 5x10\textasciicircum{}5-step budget (same config, \texttt{--steps 500000}). All five end
 below 0.15. The error dips back above 0.15 once or more after the first crossing, and stays below only
 from 340k-481k steps. The 500k runs are new trajectories, not continuations: their weights already
 differ from the 200k runs at the first checkpoint. The released 3x3 models and the other 3x3 results
@@ -710,7 +710,7 @@ Result file & Commit & Command & Seeds \\
 \texttt{drift\_fixes/solve\_N3\_K1\_M2.json}, \texttt{solve\_N4\_K1\_M2/} & \texttt{cf5fe30} (dirty) & \texttt{scripts/run\_experiments.py solve -N <n> -K 1 -M 2 --abc all --max-states 1000000 --max-seconds 1800} & none \\
 \texttt{drift\_fixes/h1\_branching\_depth\_N5.json} & \texttt{cf5fe30} (dirty) & \texttt{scripts/h1\_branching\_depth.py --positions 40} & fixed \\
 \texttt{drift\_fixes/h3\_convergence.json} & \texttt{cf5fe30} (dirty) & \texttt{scripts/h3\_convergence.py checkpoints/runs/4x4\_s42 checkpoints/runs/3x3\_s4\{2..6\}} & from checkpoints \\
-\texttt{drift\_fixes/h3\_convergence\_3x3\_500k.json} & \texttt{c688c48} (clean) & \texttt{scripts/train\_dqn.py -{}-board-size 3 -{}-seed \{42..46\} -{}-steps 500000}, then \texttt{scripts/h3\_convergence.py checkpoints/runs/3x3\_500k\_s4\{2..6\}} & 42-46 \\
+\texttt{drift\_fixes/h3\_convergence\_3x3\_500k.json} & \texttt{c688c48} (clean) & \texttt{scripts/train\_dqn.py --board-size 3 --seed \{42..46\} --steps 500000}, then \texttt{scripts/h3\_convergence.py checkpoints/runs/3x3\_500k\_s4\{2..6\}} & 42-46 \\
 \bottomrule
 \end{longtable}
 \end{center}

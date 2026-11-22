@@ -1,14 +1,22 @@
 """
-Convert report/final_report.md to report/final_report.tex (same content). Handles only what
-the report uses: #/##/### headings, paragraphs, '-' lists, pipe tables, **bold**, `code`.
-Not compiled here (pdflatex is not installed).
+Convert Markdown report to LaTeX. Handles only what the report uses:
+#/##/### headings, paragraphs, '-' lists, pipe tables, **bold**, `code`.
 
-  python scripts/report_md_to_tex.py
+Default src and out:
+  report/project_proposal_report/final_report.md -> report/project_proposal_report/final_report.tex
+
+Usage:
+  python scripts/report_md_to_tex.py [--src SRC] [--out OUT]
 """
+import argparse
 import re
 from pathlib import Path
 
-SRC, OUT = Path("report/final_report.md"), Path("report/final_report.tex")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_SRC = REPO_ROOT / "report" / "project_proposal_report" / "final_report.md"
+DEFAULT_OUT = REPO_ROOT / "report" / "project_proposal_report" / "final_report.tex"
+
+SRC, OUT = DEFAULT_SRC, DEFAULT_OUT
 SPECIAL = {'\\': r'\textbackslash{}', '&': r'\&', '%': r'\%', '$': r'\$', '#': r'\#', '_': r'\_',
            '{': r'\{', '}': r'\}', '~': r'\textasciitilde{}', '^': r'\textasciicircum{}'}
 
@@ -42,7 +50,15 @@ def table(rows):
 
 
 def main():
-    md = SRC.read_text(encoding='utf-8').splitlines()
+    parser = argparse.ArgumentParser(description="Convert Markdown report to LaTeX")
+    parser.add_argument("--src", type=Path, default=DEFAULT_SRC, help="Source markdown file")
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="Output LaTeX file")
+    args = parser.parse_args()
+
+    src_path = args.src if args.src.is_absolute() else Path(args.src)
+    out_path = args.out if args.out.is_absolute() else Path(args.out)
+
+    md = src_path.read_text(encoding='utf-8').splitlines()
     out = [r'\documentclass[11pt]{article}', r'\usepackage[margin=2cm]{geometry}',
            r'\usepackage{booktabs,longtable,hyperref}', r'\usepackage[T1]{fontenc}']
     i, title = 0, None
@@ -82,8 +98,9 @@ def main():
             r'multi-agent RL surveys \cite{busoniu2008comprehensive,zhang2021selective}, '
             r'reinforcement learning \cite{sutton2018reinforcement} and self-play \cite{silver2018alphazero}.',
             r'\bibliographystyle{plain}', r'\bibliography{references}', r'\end{document}']
-    OUT.write_text('\n'.join(out) + '\n', encoding='utf-8')
-    print(f"wrote {OUT}")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text('\n'.join(out) + '\n', encoding='utf-8')
+    print(f"wrote {out_path}")
 
 
 if __name__ == '__main__':

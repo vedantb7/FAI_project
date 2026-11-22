@@ -9,7 +9,10 @@ from __future__ import annotations
 import math
 from collections import deque
 from typing import Any, Dict, List, Optional, Protocol, Sequence, Tuple, runtime_checkable
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 
 @runtime_checkable
@@ -104,6 +107,8 @@ class LinearEvaluator:
     """
 
     def __init__(self, weights: Sequence[float], scale: float = 0.5):
+        if np is None:
+            raise ImportError("LinearEvaluator requires numpy")
         self.weights = np.asarray(weights, dtype=np.float64)
         self.scale = scale
 
