@@ -486,10 +486,10 @@ deterministic and the openings are shared; on 3x3 this match test cannot separat
 values do separate them, against the hypothesis: the warm-up arm has the largest value error,
 above the five-seed default range (0.164-0.190).
 
-\subsection{9.3 H3: value error falls below 0.15 on N <= 4 — holds on 4x4, fails on 3x3}
+\subsection{9.3 H3: value error falls below 0.15 on N <= 4 — holds on 4x4 and on 3x3 at the full 500k budget}
 
 Every saved checkpoint re-scored over all non-terminal states of the exact solve
-(\texttt{drift\_fixes/h3\_convergence.json}). Error = |max legal Q(s) - V*(s)| with V* discounted at
+(\texttt{drift\_fixes/h3\_convergence.json}; 3x3 at 500k: \texttt{drift\_fixes/h3\_convergence\_3x3\_500k.json}). Error = |max legal Q(s) - V*(s)| with V* discounted at
 0.99, a state-value form of the proposal's |Q - Q*|.
 
 \begin{center}\scriptsize
@@ -499,11 +499,17 @@ Run & First checkpoint & Final & First step below 0.15 \\
 \midrule
 4x4 s42 (500k steps) & 0.280 & \textbf{0.083} & \textbf{50,016}, stays below \\
 3x3 s42-s46 (200k steps) & 0.293-0.307 & 0.164-0.190 & never \\
+3x3 s42-s46 (500k steps, new runs) & 0.294-0.308 & \textbf{0.114-0.145} (mean 0.124) & 310,727-400,822; stays below from 340,764-481,057 \\
 \bottomrule
 \end{longtable}
 \end{center}
 
-The 3x3 error was still falling at 200k steps on four of five seeds.
+At 200k steps the 3x3 error was still falling on four of five seeds, so the five seeds were retrained
+from scratch to the proposal's full 5x10\textasciicircum{}5-step budget (same config, \texttt{-{}-steps 500000}). All five end
+below 0.15. The error dips back above 0.15 once or more after the first crossing, and stays below only
+from 340k-481k steps. The 500k runs are new trajectories, not continuations: their weights already
+differ from the 200k runs at the first checkpoint. The released 3x3 models and the other 3x3 results
+remain the 200k runs.
 
 \subsection{9.4 H4: non-additive game length — refuted}
 
@@ -651,9 +657,9 @@ Loss: squared error with a max target & Double DQN target, Huber loss, gradient 
 Adam learning rate 3x10\textasciicircum{}-4 & 1x10\textasciicircum{}-4 & No recorded reason; not compared \\
 10\textasciicircum{}4-step heuristic warm-up & No warm-up by default; tested as an option in H2 & H2 shows no gain and a higher value error with the warm-up (Section 9.2) \\
 Opponent pool refreshed every 5,000 steps & Snapshot every 20k steps; opponents 50\% self, 40\% snapshots, 10\% Greedy & No recorded reason; not compared \\
-5x10\textasciicircum{}5 steps x 5 seeds & 3x3: 200k x 5 seeds; 4x4: 500k x 1; 5x5: 2M x 1; 9x9: 5M x 1 & Compute: one 9x9 run takes more than 23 h (\texttt{final\_dqn/training\_timing\_5x5\_9x9.json}). The team decided on one seed above 3x3 and no retraining of the larger boards \\
+5x10\textasciicircum{}5 steps x 5 seeds & 3x3: 200k x 5 seeds (500k x 5 for H3 only); 4x4: 500k x 1; 5x5: 2M x 1; 9x9: 5M x 1 & Compute: one 9x9 run takes more than 23 h (\texttt{final\_dqn/training\_timing\_5x5\_9x9.json}). The team decided on one seed above 3x3 and no retraining of the larger boards \\
 500 matches per pairing with 2-ply random openings & 40 distinct 4-ply openings x 2 seats per cell (640 matches) & The agents are deterministic: on N5, 2-ply openings give only 9 distinct games, so 500 matches would repeat the same games (Section 5) \\
-H3: mean error below 0.15 across training & Measured on all checkpoints; holds on 4x4, fails on 3x3 & A longer 3x3 run was not done: the proposal fixes the step budget, and the team kept only the proposal's tests \\
+H3: mean error below 0.15 across training & Measured on all checkpoints; holds on 4x4 (500k) and on 3x3 at 500k (all five seeds end at 0.114-0.145); fails on 3x3 at 200k & The released 3x3 models stopped at 200k, under the 5x10\textasciicircum{}5 budget. The five seeds were retrained to 500k for H3 only (Section 9.3) \\
 Ablation of all agents including the DQN & DQN ablation on 3x3 only & Compute; no retraining of larger boards \\
 Contingencies: reward shaping; action pruning for N >= 7 & Not used & Not needed: the DQN learned with the sparse reward, and 9x9 trained without pruning \\
 \bottomrule
@@ -704,6 +710,7 @@ Result file & Commit & Command & Seeds \\
 \texttt{drift\_fixes/solve\_N3\_K1\_M2.json}, \texttt{solve\_N4\_K1\_M2/} & \texttt{cf5fe30} (dirty) & \texttt{scripts/run\_experiments.py solve -N <n> -K 1 -M 2 --abc all --max-states 1000000 --max-seconds 1800} & none \\
 \texttt{drift\_fixes/h1\_branching\_depth\_N5.json} & \texttt{cf5fe30} (dirty) & \texttt{scripts/h1\_branching\_depth.py --positions 40} & fixed \\
 \texttt{drift\_fixes/h3\_convergence.json} & \texttt{cf5fe30} (dirty) & \texttt{scripts/h3\_convergence.py checkpoints/runs/4x4\_s42 checkpoints/runs/3x3\_s4\{2..6\}} & from checkpoints \\
+\texttt{drift\_fixes/h3\_convergence\_3x3\_500k.json} & \texttt{c688c48} (clean) & \texttt{scripts/train\_dqn.py -{}-board-size 3 -{}-seed \{42..46\} -{}-steps 500000}, then \texttt{scripts/h3\_convergence.py checkpoints/runs/3x3\_500k\_s4\{2..6\}} & 42-46 \\
 \bottomrule
 \end{longtable}
 \end{center}

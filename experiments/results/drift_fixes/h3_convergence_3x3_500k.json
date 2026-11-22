@@ -1,0 +1,1858 @@
+{
+  "hypothesis": "H3: mean value error vs exact solution converges below 0.15 (N <= 4)",
+  "error_definition": "|max legal Q(s) - V*(s)|, V* discounted with gamma 0.99, all non-terminal states",
+  "source": {
+    "commit": "c688c488c72d518fb9bf6a22ae666dbd8da53e99",
+    "dirty": false
+  },
+  "command": "python scripts/h3_convergence.py checkpoints/runs/3x3_500k_s42 checkpoints/runs/3x3_500k_s43 checkpoints/runs/3x3_500k_s44 checkpoints/runs/3x3_500k_s45 checkpoints/runs/3x3_500k_s46 --out experiments/results/drift_fixes/h3_convergence_3x3_500k.json",
+  "python": "3.14.3",
+  "date": "2026-11-22T15:28:42+0530",
+  "runs": {
+    "3x3_500k_s42": {
+      "label": "N3_A1B1C1_K1_M1",
+      "states": 138646,
+      "curve": [
+        {
+          "checkpoint": "step_10009.pt",
+          "step": 10009,
+          "mae": 0.294,
+          "value_optimal_rate": 0.8891,
+          "sign_agreement": 0.9526
+        },
+        {
+          "checkpoint": "step_20013.pt",
+          "step": 20013,
+          "mae": 0.2375,
+          "value_optimal_rate": 0.9278,
+          "sign_agreement": 0.9584
+        },
+        {
+          "checkpoint": "step_30054.pt",
+          "step": 30054,
+          "mae": 0.2441,
+          "value_optimal_rate": 0.9397,
+          "sign_agreement": 0.9516
+        },
+        {
+          "checkpoint": "step_40055.pt",
+          "step": 40055,
+          "mae": 0.228,
+          "value_optimal_rate": 0.9395,
+          "sign_agreement": 0.9581
+        },
+        {
+          "checkpoint": "step_50112.pt",
+          "step": 50112,
+          "mae": 0.2306,
+          "value_optimal_rate": 0.9225,
+          "sign_agreement": 0.9685
+        },
+        {
+          "checkpoint": "step_60128.pt",
+          "step": 60128,
+          "mae": 0.2277,
+          "value_optimal_rate": 0.9299,
+          "sign_agreement": 0.9756
+        },
+        {
+          "checkpoint": "step_70128.pt",
+          "step": 70128,
+          "mae": 0.2404,
+          "value_optimal_rate": 0.9271,
+          "sign_agreement": 0.9646
+        },
+        {
+          "checkpoint": "step_80149.pt",
+          "step": 80149,
+          "mae": 0.2332,
+          "value_optimal_rate": 0.944,
+          "sign_agreement": 0.9679
+        },
+        {
+          "checkpoint": "step_90153.pt",
+          "step": 90153,
+          "mae": 0.2352,
+          "value_optimal_rate": 0.9421,
+          "sign_agreement": 0.9733
+        },
+        {
+          "checkpoint": "step_100249.pt",
+          "step": 100249,
+          "mae": 0.2312,
+          "value_optimal_rate": 0.9508,
+          "sign_agreement": 0.9758
+        },
+        {
+          "checkpoint": "step_110286.pt",
+          "step": 110286,
+          "mae": 0.2357,
+          "value_optimal_rate": 0.95,
+          "sign_agreement": 0.9748
+        },
+        {
+          "checkpoint": "step_120331.pt",
+          "step": 120331,
+          "mae": 0.2185,
+          "value_optimal_rate": 0.9574,
+          "sign_agreement": 0.9724
+        },
+        {
+          "checkpoint": "step_130344.pt",
+          "step": 130344,
+          "mae": 0.2111,
+          "value_optimal_rate": 0.9603,
+          "sign_agreement": 0.9751
+        },
+        {
+          "checkpoint": "step_140400.pt",
+          "step": 140400,
+          "mae": 0.2021,
+          "value_optimal_rate": 0.9595,
+          "sign_agreement": 0.9728
+        },
+        {
+          "checkpoint": "step_150405.pt",
+          "step": 150405,
+          "mae": 0.1935,
+          "value_optimal_rate": 0.9602,
+          "sign_agreement": 0.9776
+        },
+        {
+          "checkpoint": "step_160439.pt",
+          "step": 160439,
+          "mae": 0.1923,
+          "value_optimal_rate": 0.9579,
+          "sign_agreement": 0.9714
+        },
+        {
+          "checkpoint": "step_170461.pt",
+          "step": 170461,
+          "mae": 0.1841,
+          "value_optimal_rate": 0.9591,
+          "sign_agreement": 0.9748
+        },
+        {
+          "checkpoint": "step_180504.pt",
+          "step": 180504,
+          "mae": 0.1838,
+          "value_optimal_rate": 0.9556,
+          "sign_agreement": 0.9751
+        },
+        {
+          "checkpoint": "step_190525.pt",
+          "step": 190525,
+          "mae": 0.1778,
+          "value_optimal_rate": 0.9622,
+          "sign_agreement": 0.9747
+        },
+        {
+          "checkpoint": "step_200536.pt",
+          "step": 200536,
+          "mae": 0.1747,
+          "value_optimal_rate": 0.961,
+          "sign_agreement": 0.979
+        },
+        {
+          "checkpoint": "step_210570.pt",
+          "step": 210570,
+          "mae": 0.1678,
+          "value_optimal_rate": 0.9589,
+          "sign_agreement": 0.9764
+        },
+        {
+          "checkpoint": "step_220585.pt",
+          "step": 220585,
+          "mae": 0.171,
+          "value_optimal_rate": 0.9593,
+          "sign_agreement": 0.9779
+        },
+        {
+          "checkpoint": "step_230599.pt",
+          "step": 230599,
+          "mae": 0.164,
+          "value_optimal_rate": 0.9628,
+          "sign_agreement": 0.9811
+        },
+        {
+          "checkpoint": "step_240628.pt",
+          "step": 240628,
+          "mae": 0.1626,
+          "value_optimal_rate": 0.9603,
+          "sign_agreement": 0.9776
+        },
+        {
+          "checkpoint": "step_250650.pt",
+          "step": 250650,
+          "mae": 0.1544,
+          "value_optimal_rate": 0.963,
+          "sign_agreement": 0.9791
+        },
+        {
+          "checkpoint": "step_260651.pt",
+          "step": 260651,
+          "mae": 0.1594,
+          "value_optimal_rate": 0.9647,
+          "sign_agreement": 0.9739
+        },
+        {
+          "checkpoint": "step_270698.pt",
+          "step": 270698,
+          "mae": 0.1519,
+          "value_optimal_rate": 0.9647,
+          "sign_agreement": 0.9763
+        },
+        {
+          "checkpoint": "step_280711.pt",
+          "step": 280711,
+          "mae": 0.15,
+          "value_optimal_rate": 0.9641,
+          "sign_agreement": 0.9757
+        },
+        {
+          "checkpoint": "step_290728.pt",
+          "step": 290728,
+          "mae": 0.1523,
+          "value_optimal_rate": 0.9633,
+          "sign_agreement": 0.9759
+        },
+        {
+          "checkpoint": "step_300733.pt",
+          "step": 300733,
+          "mae": 0.1574,
+          "value_optimal_rate": 0.9643,
+          "sign_agreement": 0.9752
+        },
+        {
+          "checkpoint": "step_310744.pt",
+          "step": 310744,
+          "mae": 0.1537,
+          "value_optimal_rate": 0.9647,
+          "sign_agreement": 0.9791
+        },
+        {
+          "checkpoint": "step_320754.pt",
+          "step": 320754,
+          "mae": 0.1559,
+          "value_optimal_rate": 0.9651,
+          "sign_agreement": 0.9789
+        },
+        {
+          "checkpoint": "step_330758.pt",
+          "step": 330758,
+          "mae": 0.1486,
+          "value_optimal_rate": 0.9668,
+          "sign_agreement": 0.9809
+        },
+        {
+          "checkpoint": "step_340760.pt",
+          "step": 340760,
+          "mae": 0.1501,
+          "value_optimal_rate": 0.9678,
+          "sign_agreement": 0.9805
+        },
+        {
+          "checkpoint": "step_350779.pt",
+          "step": 350779,
+          "mae": 0.1423,
+          "value_optimal_rate": 0.9666,
+          "sign_agreement": 0.9813
+        },
+        {
+          "checkpoint": "step_360806.pt",
+          "step": 360806,
+          "mae": 0.1398,
+          "value_optimal_rate": 0.9667,
+          "sign_agreement": 0.9813
+        },
+        {
+          "checkpoint": "step_370816.pt",
+          "step": 370816,
+          "mae": 0.1397,
+          "value_optimal_rate": 0.9689,
+          "sign_agreement": 0.9802
+        },
+        {
+          "checkpoint": "step_380861.pt",
+          "step": 380861,
+          "mae": 0.1386,
+          "value_optimal_rate": 0.9693,
+          "sign_agreement": 0.9802
+        },
+        {
+          "checkpoint": "step_390862.pt",
+          "step": 390862,
+          "mae": 0.1406,
+          "value_optimal_rate": 0.9677,
+          "sign_agreement": 0.9824
+        },
+        {
+          "checkpoint": "step_400866.pt",
+          "step": 400866,
+          "mae": 0.1374,
+          "value_optimal_rate": 0.9672,
+          "sign_agreement": 0.9821
+        },
+        {
+          "checkpoint": "step_410879.pt",
+          "step": 410879,
+          "mae": 0.1365,
+          "value_optimal_rate": 0.9681,
+          "sign_agreement": 0.9829
+        },
+        {
+          "checkpoint": "step_420910.pt",
+          "step": 420910,
+          "mae": 0.1341,
+          "value_optimal_rate": 0.97,
+          "sign_agreement": 0.9834
+        },
+        {
+          "checkpoint": "step_430918.pt",
+          "step": 430918,
+          "mae": 0.1328,
+          "value_optimal_rate": 0.9694,
+          "sign_agreement": 0.9855
+        },
+        {
+          "checkpoint": "step_440962.pt",
+          "step": 440962,
+          "mae": 0.1388,
+          "value_optimal_rate": 0.9703,
+          "sign_agreement": 0.9855
+        },
+        {
+          "checkpoint": "step_450999.pt",
+          "step": 450999,
+          "mae": 0.1364,
+          "value_optimal_rate": 0.9686,
+          "sign_agreement": 0.9847
+        },
+        {
+          "checkpoint": "step_461037.pt",
+          "step": 461037,
+          "mae": 0.1328,
+          "value_optimal_rate": 0.9718,
+          "sign_agreement": 0.9845
+        },
+        {
+          "checkpoint": "step_471055.pt",
+          "step": 471055,
+          "mae": 0.1275,
+          "value_optimal_rate": 0.974,
+          "sign_agreement": 0.9857
+        },
+        {
+          "checkpoint": "step_481069.pt",
+          "step": 481069,
+          "mae": 0.1271,
+          "value_optimal_rate": 0.9747,
+          "sign_agreement": 0.9866
+        },
+        {
+          "checkpoint": "step_491077.pt",
+          "step": 491077,
+          "mae": 0.1254,
+          "value_optimal_rate": 0.9738,
+          "sign_agreement": 0.9848
+        },
+        {
+          "checkpoint": "step_500015.pt",
+          "step": 500015,
+          "mae": 0.1179,
+          "value_optimal_rate": 0.9711,
+          "sign_agreement": 0.9865
+        },
+        {
+          "checkpoint": "final.pt",
+          "step": 500015,
+          "mae": 0.1179,
+          "value_optimal_rate": 0.9711,
+          "sign_agreement": 0.9865
+        }
+      ],
+      "final_mae": 0.1179,
+      "min_mae": 0.1179,
+      "min_mae_step": 500015,
+      "first_step_below_threshold": 330758,
+      "final_below_threshold": true,
+      "stays_below_after_first_crossing": false
+    },
+    "3x3_500k_s43": {
+      "label": "N3_A1B1C1_K1_M1",
+      "states": 138646,
+      "curve": [
+        {
+          "checkpoint": "step_10001.pt",
+          "step": 10001,
+          "mae": 0.3077,
+          "value_optimal_rate": 0.8997,
+          "sign_agreement": 0.9458
+        },
+        {
+          "checkpoint": "step_20023.pt",
+          "step": 20023,
+          "mae": 0.2444,
+          "value_optimal_rate": 0.9262,
+          "sign_agreement": 0.959
+        },
+        {
+          "checkpoint": "step_30027.pt",
+          "step": 30027,
+          "mae": 0.2553,
+          "value_optimal_rate": 0.9363,
+          "sign_agreement": 0.9411
+        },
+        {
+          "checkpoint": "step_40072.pt",
+          "step": 40072,
+          "mae": 0.2421,
+          "value_optimal_rate": 0.9414,
+          "sign_agreement": 0.9557
+        },
+        {
+          "checkpoint": "step_50102.pt",
+          "step": 50102,
+          "mae": 0.2231,
+          "value_optimal_rate": 0.932,
+          "sign_agreement": 0.979
+        },
+        {
+          "checkpoint": "step_60109.pt",
+          "step": 60109,
+          "mae": 0.2268,
+          "value_optimal_rate": 0.936,
+          "sign_agreement": 0.9783
+        },
+        {
+          "checkpoint": "step_70110.pt",
+          "step": 70110,
+          "mae": 0.2394,
+          "value_optimal_rate": 0.9482,
+          "sign_agreement": 0.9677
+        },
+        {
+          "checkpoint": "step_80120.pt",
+          "step": 80120,
+          "mae": 0.2335,
+          "value_optimal_rate": 0.9472,
+          "sign_agreement": 0.9673
+        },
+        {
+          "checkpoint": "step_90158.pt",
+          "step": 90158,
+          "mae": 0.2249,
+          "value_optimal_rate": 0.9476,
+          "sign_agreement": 0.9732
+        },
+        {
+          "checkpoint": "step_100180.pt",
+          "step": 100180,
+          "mae": 0.2177,
+          "value_optimal_rate": 0.9522,
+          "sign_agreement": 0.9753
+        },
+        {
+          "checkpoint": "step_110182.pt",
+          "step": 110182,
+          "mae": 0.2155,
+          "value_optimal_rate": 0.9525,
+          "sign_agreement": 0.975
+        },
+        {
+          "checkpoint": "step_120189.pt",
+          "step": 120189,
+          "mae": 0.2135,
+          "value_optimal_rate": 0.9533,
+          "sign_agreement": 0.9733
+        },
+        {
+          "checkpoint": "step_130256.pt",
+          "step": 130256,
+          "mae": 0.1997,
+          "value_optimal_rate": 0.9577,
+          "sign_agreement": 0.981
+        },
+        {
+          "checkpoint": "step_140268.pt",
+          "step": 140268,
+          "mae": 0.1952,
+          "value_optimal_rate": 0.9584,
+          "sign_agreement": 0.9804
+        },
+        {
+          "checkpoint": "step_150286.pt",
+          "step": 150286,
+          "mae": 0.1902,
+          "value_optimal_rate": 0.9592,
+          "sign_agreement": 0.9742
+        },
+        {
+          "checkpoint": "step_160290.pt",
+          "step": 160290,
+          "mae": 0.1914,
+          "value_optimal_rate": 0.9599,
+          "sign_agreement": 0.97
+        },
+        {
+          "checkpoint": "step_170308.pt",
+          "step": 170308,
+          "mae": 0.1789,
+          "value_optimal_rate": 0.9629,
+          "sign_agreement": 0.976
+        },
+        {
+          "checkpoint": "step_180309.pt",
+          "step": 180309,
+          "mae": 0.1772,
+          "value_optimal_rate": 0.9625,
+          "sign_agreement": 0.9742
+        },
+        {
+          "checkpoint": "step_190339.pt",
+          "step": 190339,
+          "mae": 0.1727,
+          "value_optimal_rate": 0.9639,
+          "sign_agreement": 0.9744
+        },
+        {
+          "checkpoint": "step_200344.pt",
+          "step": 200344,
+          "mae": 0.1735,
+          "value_optimal_rate": 0.9623,
+          "sign_agreement": 0.9782
+        },
+        {
+          "checkpoint": "step_210366.pt",
+          "step": 210366,
+          "mae": 0.1741,
+          "value_optimal_rate": 0.9664,
+          "sign_agreement": 0.9807
+        },
+        {
+          "checkpoint": "step_220386.pt",
+          "step": 220386,
+          "mae": 0.1755,
+          "value_optimal_rate": 0.9631,
+          "sign_agreement": 0.9792
+        },
+        {
+          "checkpoint": "step_230449.pt",
+          "step": 230449,
+          "mae": 0.1761,
+          "value_optimal_rate": 0.961,
+          "sign_agreement": 0.978
+        },
+        {
+          "checkpoint": "step_240452.pt",
+          "step": 240452,
+          "mae": 0.1773,
+          "value_optimal_rate": 0.9601,
+          "sign_agreement": 0.9742
+        },
+        {
+          "checkpoint": "step_250473.pt",
+          "step": 250473,
+          "mae": 0.1739,
+          "value_optimal_rate": 0.9638,
+          "sign_agreement": 0.9745
+        },
+        {
+          "checkpoint": "step_260483.pt",
+          "step": 260483,
+          "mae": 0.1846,
+          "value_optimal_rate": 0.9584,
+          "sign_agreement": 0.9722
+        },
+        {
+          "checkpoint": "step_270488.pt",
+          "step": 270488,
+          "mae": 0.185,
+          "value_optimal_rate": 0.9612,
+          "sign_agreement": 0.9747
+        },
+        {
+          "checkpoint": "step_280501.pt",
+          "step": 280501,
+          "mae": 0.1811,
+          "value_optimal_rate": 0.9626,
+          "sign_agreement": 0.9754
+        },
+        {
+          "checkpoint": "step_290519.pt",
+          "step": 290519,
+          "mae": 0.1719,
+          "value_optimal_rate": 0.96,
+          "sign_agreement": 0.977
+        },
+        {
+          "checkpoint": "step_300529.pt",
+          "step": 300529,
+          "mae": 0.168,
+          "value_optimal_rate": 0.961,
+          "sign_agreement": 0.9745
+        },
+        {
+          "checkpoint": "step_310647.pt",
+          "step": 310647,
+          "mae": 0.1653,
+          "value_optimal_rate": 0.9615,
+          "sign_agreement": 0.9779
+        },
+        {
+          "checkpoint": "step_320651.pt",
+          "step": 320651,
+          "mae": 0.1705,
+          "value_optimal_rate": 0.9579,
+          "sign_agreement": 0.9775
+        },
+        {
+          "checkpoint": "step_330657.pt",
+          "step": 330657,
+          "mae": 0.1705,
+          "value_optimal_rate": 0.9598,
+          "sign_agreement": 0.9782
+        },
+        {
+          "checkpoint": "step_340709.pt",
+          "step": 340709,
+          "mae": 0.1709,
+          "value_optimal_rate": 0.9561,
+          "sign_agreement": 0.9751
+        },
+        {
+          "checkpoint": "step_350714.pt",
+          "step": 350714,
+          "mae": 0.1735,
+          "value_optimal_rate": 0.9573,
+          "sign_agreement": 0.9721
+        },
+        {
+          "checkpoint": "step_360732.pt",
+          "step": 360732,
+          "mae": 0.1662,
+          "value_optimal_rate": 0.9563,
+          "sign_agreement": 0.9768
+        },
+        {
+          "checkpoint": "step_370735.pt",
+          "step": 370735,
+          "mae": 0.1529,
+          "value_optimal_rate": 0.9624,
+          "sign_agreement": 0.9814
+        },
+        {
+          "checkpoint": "step_380790.pt",
+          "step": 380790,
+          "mae": 0.1539,
+          "value_optimal_rate": 0.9645,
+          "sign_agreement": 0.9804
+        },
+        {
+          "checkpoint": "step_390817.pt",
+          "step": 390817,
+          "mae": 0.1516,
+          "value_optimal_rate": 0.967,
+          "sign_agreement": 0.9791
+        },
+        {
+          "checkpoint": "step_400822.pt",
+          "step": 400822,
+          "mae": 0.1496,
+          "value_optimal_rate": 0.966,
+          "sign_agreement": 0.9802
+        },
+        {
+          "checkpoint": "step_410868.pt",
+          "step": 410868,
+          "mae": 0.1475,
+          "value_optimal_rate": 0.9658,
+          "sign_agreement": 0.9807
+        },
+        {
+          "checkpoint": "step_420892.pt",
+          "step": 420892,
+          "mae": 0.16,
+          "value_optimal_rate": 0.9655,
+          "sign_agreement": 0.9815
+        },
+        {
+          "checkpoint": "step_430892.pt",
+          "step": 430892,
+          "mae": 0.1511,
+          "value_optimal_rate": 0.9675,
+          "sign_agreement": 0.9801
+        },
+        {
+          "checkpoint": "step_440901.pt",
+          "step": 440901,
+          "mae": 0.1517,
+          "value_optimal_rate": 0.9681,
+          "sign_agreement": 0.9788
+        },
+        {
+          "checkpoint": "step_450933.pt",
+          "step": 450933,
+          "mae": 0.1475,
+          "value_optimal_rate": 0.9697,
+          "sign_agreement": 0.9814
+        },
+        {
+          "checkpoint": "step_460977.pt",
+          "step": 460977,
+          "mae": 0.1525,
+          "value_optimal_rate": 0.9694,
+          "sign_agreement": 0.9806
+        },
+        {
+          "checkpoint": "step_471036.pt",
+          "step": 471036,
+          "mae": 0.1525,
+          "value_optimal_rate": 0.9718,
+          "sign_agreement": 0.9806
+        },
+        {
+          "checkpoint": "step_481057.pt",
+          "step": 481057,
+          "mae": 0.1491,
+          "value_optimal_rate": 0.9733,
+          "sign_agreement": 0.9812
+        },
+        {
+          "checkpoint": "step_491088.pt",
+          "step": 491088,
+          "mae": 0.145,
+          "value_optimal_rate": 0.9734,
+          "sign_agreement": 0.982
+        },
+        {
+          "checkpoint": "step_500027.pt",
+          "step": 500027,
+          "mae": 0.1452,
+          "value_optimal_rate": 0.9719,
+          "sign_agreement": 0.9789
+        },
+        {
+          "checkpoint": "final.pt",
+          "step": 500027,
+          "mae": 0.1452,
+          "value_optimal_rate": 0.9719,
+          "sign_agreement": 0.9789
+        }
+      ],
+      "final_mae": 0.1452,
+      "min_mae": 0.145,
+      "min_mae_step": 491088,
+      "first_step_below_threshold": 400822,
+      "final_below_threshold": true,
+      "stays_below_after_first_crossing": false
+    },
+    "3x3_500k_s44": {
+      "label": "N3_A1B1C1_K1_M1",
+      "states": 138646,
+      "curve": [
+        {
+          "checkpoint": "step_10001.pt",
+          "step": 10001,
+          "mae": 0.3023,
+          "value_optimal_rate": 0.8814,
+          "sign_agreement": 0.9513
+        },
+        {
+          "checkpoint": "step_20017.pt",
+          "step": 20017,
+          "mae": 0.2523,
+          "value_optimal_rate": 0.9188,
+          "sign_agreement": 0.9626
+        },
+        {
+          "checkpoint": "step_30017.pt",
+          "step": 30017,
+          "mae": 0.2593,
+          "value_optimal_rate": 0.9417,
+          "sign_agreement": 0.9532
+        },
+        {
+          "checkpoint": "step_40023.pt",
+          "step": 40023,
+          "mae": 0.2453,
+          "value_optimal_rate": 0.9491,
+          "sign_agreement": 0.9673
+        },
+        {
+          "checkpoint": "step_50068.pt",
+          "step": 50068,
+          "mae": 0.222,
+          "value_optimal_rate": 0.9478,
+          "sign_agreement": 0.9852
+        },
+        {
+          "checkpoint": "step_60113.pt",
+          "step": 60113,
+          "mae": 0.2295,
+          "value_optimal_rate": 0.95,
+          "sign_agreement": 0.9816
+        },
+        {
+          "checkpoint": "step_70156.pt",
+          "step": 70156,
+          "mae": 0.2438,
+          "value_optimal_rate": 0.9385,
+          "sign_agreement": 0.9728
+        },
+        {
+          "checkpoint": "step_80161.pt",
+          "step": 80161,
+          "mae": 0.2458,
+          "value_optimal_rate": 0.9334,
+          "sign_agreement": 0.9745
+        },
+        {
+          "checkpoint": "step_90192.pt",
+          "step": 90192,
+          "mae": 0.2339,
+          "value_optimal_rate": 0.9333,
+          "sign_agreement": 0.9718
+        },
+        {
+          "checkpoint": "step_100224.pt",
+          "step": 100224,
+          "mae": 0.2268,
+          "value_optimal_rate": 0.9404,
+          "sign_agreement": 0.9772
+        },
+        {
+          "checkpoint": "step_110268.pt",
+          "step": 110268,
+          "mae": 0.232,
+          "value_optimal_rate": 0.9481,
+          "sign_agreement": 0.9739
+        },
+        {
+          "checkpoint": "step_120276.pt",
+          "step": 120276,
+          "mae": 0.2326,
+          "value_optimal_rate": 0.9493,
+          "sign_agreement": 0.9692
+        },
+        {
+          "checkpoint": "step_130301.pt",
+          "step": 130301,
+          "mae": 0.2254,
+          "value_optimal_rate": 0.9477,
+          "sign_agreement": 0.9714
+        },
+        {
+          "checkpoint": "step_140347.pt",
+          "step": 140347,
+          "mae": 0.2159,
+          "value_optimal_rate": 0.9521,
+          "sign_agreement": 0.9721
+        },
+        {
+          "checkpoint": "step_150356.pt",
+          "step": 150356,
+          "mae": 0.2189,
+          "value_optimal_rate": 0.9472,
+          "sign_agreement": 0.9654
+        },
+        {
+          "checkpoint": "step_160374.pt",
+          "step": 160374,
+          "mae": 0.2172,
+          "value_optimal_rate": 0.9512,
+          "sign_agreement": 0.9694
+        },
+        {
+          "checkpoint": "step_170376.pt",
+          "step": 170376,
+          "mae": 0.2207,
+          "value_optimal_rate": 0.9513,
+          "sign_agreement": 0.9683
+        },
+        {
+          "checkpoint": "step_180419.pt",
+          "step": 180419,
+          "mae": 0.2021,
+          "value_optimal_rate": 0.9537,
+          "sign_agreement": 0.9762
+        },
+        {
+          "checkpoint": "step_190529.pt",
+          "step": 190529,
+          "mae": 0.1928,
+          "value_optimal_rate": 0.9543,
+          "sign_agreement": 0.9748
+        },
+        {
+          "checkpoint": "step_200548.pt",
+          "step": 200548,
+          "mae": 0.1851,
+          "value_optimal_rate": 0.9572,
+          "sign_agreement": 0.9787
+        },
+        {
+          "checkpoint": "step_210550.pt",
+          "step": 210550,
+          "mae": 0.1919,
+          "value_optimal_rate": 0.9587,
+          "sign_agreement": 0.9786
+        },
+        {
+          "checkpoint": "step_220582.pt",
+          "step": 220582,
+          "mae": 0.1853,
+          "value_optimal_rate": 0.959,
+          "sign_agreement": 0.978
+        },
+        {
+          "checkpoint": "step_230599.pt",
+          "step": 230599,
+          "mae": 0.1747,
+          "value_optimal_rate": 0.9553,
+          "sign_agreement": 0.9744
+        },
+        {
+          "checkpoint": "step_240607.pt",
+          "step": 240607,
+          "mae": 0.1728,
+          "value_optimal_rate": 0.9557,
+          "sign_agreement": 0.9749
+        },
+        {
+          "checkpoint": "step_250611.pt",
+          "step": 250611,
+          "mae": 0.1688,
+          "value_optimal_rate": 0.9583,
+          "sign_agreement": 0.9761
+        },
+        {
+          "checkpoint": "step_260624.pt",
+          "step": 260624,
+          "mae": 0.159,
+          "value_optimal_rate": 0.9587,
+          "sign_agreement": 0.9806
+        },
+        {
+          "checkpoint": "step_270641.pt",
+          "step": 270641,
+          "mae": 0.1621,
+          "value_optimal_rate": 0.9611,
+          "sign_agreement": 0.977
+        },
+        {
+          "checkpoint": "step_280655.pt",
+          "step": 280655,
+          "mae": 0.1601,
+          "value_optimal_rate": 0.9619,
+          "sign_agreement": 0.9726
+        },
+        {
+          "checkpoint": "step_290683.pt",
+          "step": 290683,
+          "mae": 0.1588,
+          "value_optimal_rate": 0.9642,
+          "sign_agreement": 0.9753
+        },
+        {
+          "checkpoint": "step_300694.pt",
+          "step": 300694,
+          "mae": 0.15,
+          "value_optimal_rate": 0.9679,
+          "sign_agreement": 0.9764
+        },
+        {
+          "checkpoint": "step_310727.pt",
+          "step": 310727,
+          "mae": 0.1475,
+          "value_optimal_rate": 0.9665,
+          "sign_agreement": 0.9819
+        },
+        {
+          "checkpoint": "step_320739.pt",
+          "step": 320739,
+          "mae": 0.1674,
+          "value_optimal_rate": 0.9689,
+          "sign_agreement": 0.977
+        },
+        {
+          "checkpoint": "step_330740.pt",
+          "step": 330740,
+          "mae": 0.1543,
+          "value_optimal_rate": 0.9664,
+          "sign_agreement": 0.9747
+        },
+        {
+          "checkpoint": "step_340754.pt",
+          "step": 340754,
+          "mae": 0.1528,
+          "value_optimal_rate": 0.9666,
+          "sign_agreement": 0.9761
+        },
+        {
+          "checkpoint": "step_350767.pt",
+          "step": 350767,
+          "mae": 0.1415,
+          "value_optimal_rate": 0.9681,
+          "sign_agreement": 0.9809
+        },
+        {
+          "checkpoint": "step_360793.pt",
+          "step": 360793,
+          "mae": 0.1417,
+          "value_optimal_rate": 0.9686,
+          "sign_agreement": 0.9768
+        },
+        {
+          "checkpoint": "step_370807.pt",
+          "step": 370807,
+          "mae": 0.1444,
+          "value_optimal_rate": 0.9672,
+          "sign_agreement": 0.9712
+        },
+        {
+          "checkpoint": "step_380827.pt",
+          "step": 380827,
+          "mae": 0.1406,
+          "value_optimal_rate": 0.969,
+          "sign_agreement": 0.9747
+        },
+        {
+          "checkpoint": "step_390828.pt",
+          "step": 390828,
+          "mae": 0.1383,
+          "value_optimal_rate": 0.9682,
+          "sign_agreement": 0.9749
+        },
+        {
+          "checkpoint": "step_400831.pt",
+          "step": 400831,
+          "mae": 0.1513,
+          "value_optimal_rate": 0.9681,
+          "sign_agreement": 0.9769
+        },
+        {
+          "checkpoint": "step_410884.pt",
+          "step": 410884,
+          "mae": 0.135,
+          "value_optimal_rate": 0.9697,
+          "sign_agreement": 0.9808
+        },
+        {
+          "checkpoint": "step_420919.pt",
+          "step": 420919,
+          "mae": 0.1337,
+          "value_optimal_rate": 0.9682,
+          "sign_agreement": 0.9776
+        },
+        {
+          "checkpoint": "step_430923.pt",
+          "step": 430923,
+          "mae": 0.1327,
+          "value_optimal_rate": 0.9666,
+          "sign_agreement": 0.9787
+        },
+        {
+          "checkpoint": "step_440930.pt",
+          "step": 440930,
+          "mae": 0.131,
+          "value_optimal_rate": 0.9675,
+          "sign_agreement": 0.9866
+        },
+        {
+          "checkpoint": "step_450946.pt",
+          "step": 450946,
+          "mae": 0.1306,
+          "value_optimal_rate": 0.9657,
+          "sign_agreement": 0.9864
+        },
+        {
+          "checkpoint": "step_460949.pt",
+          "step": 460949,
+          "mae": 0.125,
+          "value_optimal_rate": 0.9681,
+          "sign_agreement": 0.9877
+        },
+        {
+          "checkpoint": "step_470950.pt",
+          "step": 470950,
+          "mae": 0.1275,
+          "value_optimal_rate": 0.9688,
+          "sign_agreement": 0.9865
+        },
+        {
+          "checkpoint": "step_480956.pt",
+          "step": 480956,
+          "mae": 0.1256,
+          "value_optimal_rate": 0.9693,
+          "sign_agreement": 0.9878
+        },
+        {
+          "checkpoint": "step_490980.pt",
+          "step": 490980,
+          "mae": 0.1202,
+          "value_optimal_rate": 0.9705,
+          "sign_agreement": 0.9885
+        },
+        {
+          "checkpoint": "step_500004.pt",
+          "step": 500004,
+          "mae": 0.1137,
+          "value_optimal_rate": 0.9695,
+          "sign_agreement": 0.988
+        },
+        {
+          "checkpoint": "final.pt",
+          "step": 500004,
+          "mae": 0.1137,
+          "value_optimal_rate": 0.9695,
+          "sign_agreement": 0.988
+        }
+      ],
+      "final_mae": 0.1137,
+      "min_mae": 0.1137,
+      "min_mae_step": 500004,
+      "first_step_below_threshold": 310727,
+      "final_below_threshold": true,
+      "stays_below_after_first_crossing": false
+    },
+    "3x3_500k_s45": {
+      "label": "N3_A1B1C1_K1_M1",
+      "states": 138646,
+      "curve": [
+        {
+          "checkpoint": "step_10006.pt",
+          "step": 10006,
+          "mae": 0.3051,
+          "value_optimal_rate": 0.9048,
+          "sign_agreement": 0.9558
+        },
+        {
+          "checkpoint": "step_20039.pt",
+          "step": 20039,
+          "mae": 0.2426,
+          "value_optimal_rate": 0.9288,
+          "sign_agreement": 0.9631
+        },
+        {
+          "checkpoint": "step_30057.pt",
+          "step": 30057,
+          "mae": 0.2272,
+          "value_optimal_rate": 0.9317,
+          "sign_agreement": 0.9599
+        },
+        {
+          "checkpoint": "step_40085.pt",
+          "step": 40085,
+          "mae": 0.221,
+          "value_optimal_rate": 0.9401,
+          "sign_agreement": 0.9764
+        },
+        {
+          "checkpoint": "step_50092.pt",
+          "step": 50092,
+          "mae": 0.2295,
+          "value_optimal_rate": 0.9474,
+          "sign_agreement": 0.9833
+        },
+        {
+          "checkpoint": "step_60138.pt",
+          "step": 60138,
+          "mae": 0.2365,
+          "value_optimal_rate": 0.951,
+          "sign_agreement": 0.9827
+        },
+        {
+          "checkpoint": "step_70160.pt",
+          "step": 70160,
+          "mae": 0.2382,
+          "value_optimal_rate": 0.9484,
+          "sign_agreement": 0.9761
+        },
+        {
+          "checkpoint": "step_80161.pt",
+          "step": 80161,
+          "mae": 0.2333,
+          "value_optimal_rate": 0.9481,
+          "sign_agreement": 0.9739
+        },
+        {
+          "checkpoint": "step_90174.pt",
+          "step": 90174,
+          "mae": 0.2298,
+          "value_optimal_rate": 0.9516,
+          "sign_agreement": 0.9762
+        },
+        {
+          "checkpoint": "step_100188.pt",
+          "step": 100188,
+          "mae": 0.2175,
+          "value_optimal_rate": 0.9593,
+          "sign_agreement": 0.9804
+        },
+        {
+          "checkpoint": "step_110198.pt",
+          "step": 110198,
+          "mae": 0.2161,
+          "value_optimal_rate": 0.9603,
+          "sign_agreement": 0.9806
+        },
+        {
+          "checkpoint": "step_120242.pt",
+          "step": 120242,
+          "mae": 0.2101,
+          "value_optimal_rate": 0.9593,
+          "sign_agreement": 0.9802
+        },
+        {
+          "checkpoint": "step_130252.pt",
+          "step": 130252,
+          "mae": 0.1996,
+          "value_optimal_rate": 0.9612,
+          "sign_agreement": 0.9786
+        },
+        {
+          "checkpoint": "step_140258.pt",
+          "step": 140258,
+          "mae": 0.1933,
+          "value_optimal_rate": 0.9525,
+          "sign_agreement": 0.9801
+        },
+        {
+          "checkpoint": "step_150360.pt",
+          "step": 150360,
+          "mae": 0.1934,
+          "value_optimal_rate": 0.959,
+          "sign_agreement": 0.9781
+        },
+        {
+          "checkpoint": "step_160411.pt",
+          "step": 160411,
+          "mae": 0.1987,
+          "value_optimal_rate": 0.9547,
+          "sign_agreement": 0.9755
+        },
+        {
+          "checkpoint": "step_170413.pt",
+          "step": 170413,
+          "mae": 0.1808,
+          "value_optimal_rate": 0.9585,
+          "sign_agreement": 0.9792
+        },
+        {
+          "checkpoint": "step_180469.pt",
+          "step": 180469,
+          "mae": 0.1816,
+          "value_optimal_rate": 0.9621,
+          "sign_agreement": 0.9782
+        },
+        {
+          "checkpoint": "step_190494.pt",
+          "step": 190494,
+          "mae": 0.1768,
+          "value_optimal_rate": 0.9637,
+          "sign_agreement": 0.98
+        },
+        {
+          "checkpoint": "step_200513.pt",
+          "step": 200513,
+          "mae": 0.18,
+          "value_optimal_rate": 0.9605,
+          "sign_agreement": 0.9806
+        },
+        {
+          "checkpoint": "step_210523.pt",
+          "step": 210523,
+          "mae": 0.1836,
+          "value_optimal_rate": 0.9626,
+          "sign_agreement": 0.9794
+        },
+        {
+          "checkpoint": "step_220558.pt",
+          "step": 220558,
+          "mae": 0.1755,
+          "value_optimal_rate": 0.9613,
+          "sign_agreement": 0.9809
+        },
+        {
+          "checkpoint": "step_230562.pt",
+          "step": 230562,
+          "mae": 0.1785,
+          "value_optimal_rate": 0.9644,
+          "sign_agreement": 0.9843
+        },
+        {
+          "checkpoint": "step_240568.pt",
+          "step": 240568,
+          "mae": 0.175,
+          "value_optimal_rate": 0.9638,
+          "sign_agreement": 0.9816
+        },
+        {
+          "checkpoint": "step_250628.pt",
+          "step": 250628,
+          "mae": 0.1607,
+          "value_optimal_rate": 0.9634,
+          "sign_agreement": 0.984
+        },
+        {
+          "checkpoint": "step_260664.pt",
+          "step": 260664,
+          "mae": 0.1582,
+          "value_optimal_rate": 0.9679,
+          "sign_agreement": 0.9834
+        },
+        {
+          "checkpoint": "step_270666.pt",
+          "step": 270666,
+          "mae": 0.1587,
+          "value_optimal_rate": 0.9663,
+          "sign_agreement": 0.9824
+        },
+        {
+          "checkpoint": "step_280667.pt",
+          "step": 280667,
+          "mae": 0.1609,
+          "value_optimal_rate": 0.964,
+          "sign_agreement": 0.9818
+        },
+        {
+          "checkpoint": "step_290682.pt",
+          "step": 290682,
+          "mae": 0.1517,
+          "value_optimal_rate": 0.9653,
+          "sign_agreement": 0.9824
+        },
+        {
+          "checkpoint": "step_300692.pt",
+          "step": 300692,
+          "mae": 0.1505,
+          "value_optimal_rate": 0.9656,
+          "sign_agreement": 0.9781
+        },
+        {
+          "checkpoint": "step_310692.pt",
+          "step": 310692,
+          "mae": 0.1531,
+          "value_optimal_rate": 0.9654,
+          "sign_agreement": 0.9802
+        },
+        {
+          "checkpoint": "step_320718.pt",
+          "step": 320718,
+          "mae": 0.1494,
+          "value_optimal_rate": 0.968,
+          "sign_agreement": 0.9821
+        },
+        {
+          "checkpoint": "step_330739.pt",
+          "step": 330739,
+          "mae": 0.1519,
+          "value_optimal_rate": 0.9704,
+          "sign_agreement": 0.983
+        },
+        {
+          "checkpoint": "step_340764.pt",
+          "step": 340764,
+          "mae": 0.1479,
+          "value_optimal_rate": 0.9713,
+          "sign_agreement": 0.984
+        },
+        {
+          "checkpoint": "step_350774.pt",
+          "step": 350774,
+          "mae": 0.1482,
+          "value_optimal_rate": 0.9695,
+          "sign_agreement": 0.9822
+        },
+        {
+          "checkpoint": "step_360795.pt",
+          "step": 360795,
+          "mae": 0.142,
+          "value_optimal_rate": 0.9711,
+          "sign_agreement": 0.9848
+        },
+        {
+          "checkpoint": "step_370853.pt",
+          "step": 370853,
+          "mae": 0.1398,
+          "value_optimal_rate": 0.969,
+          "sign_agreement": 0.9844
+        },
+        {
+          "checkpoint": "step_380867.pt",
+          "step": 380867,
+          "mae": 0.1408,
+          "value_optimal_rate": 0.9664,
+          "sign_agreement": 0.9827
+        },
+        {
+          "checkpoint": "step_390883.pt",
+          "step": 390883,
+          "mae": 0.1412,
+          "value_optimal_rate": 0.9667,
+          "sign_agreement": 0.9825
+        },
+        {
+          "checkpoint": "step_400935.pt",
+          "step": 400935,
+          "mae": 0.1409,
+          "value_optimal_rate": 0.9702,
+          "sign_agreement": 0.9869
+        },
+        {
+          "checkpoint": "step_410939.pt",
+          "step": 410939,
+          "mae": 0.135,
+          "value_optimal_rate": 0.9726,
+          "sign_agreement": 0.9867
+        },
+        {
+          "checkpoint": "step_421008.pt",
+          "step": 421008,
+          "mae": 0.129,
+          "value_optimal_rate": 0.9706,
+          "sign_agreement": 0.9878
+        },
+        {
+          "checkpoint": "step_431010.pt",
+          "step": 431010,
+          "mae": 0.1338,
+          "value_optimal_rate": 0.9707,
+          "sign_agreement": 0.984
+        },
+        {
+          "checkpoint": "step_441021.pt",
+          "step": 441021,
+          "mae": 0.1198,
+          "value_optimal_rate": 0.9741,
+          "sign_agreement": 0.9875
+        },
+        {
+          "checkpoint": "step_451059.pt",
+          "step": 451059,
+          "mae": 0.1254,
+          "value_optimal_rate": 0.972,
+          "sign_agreement": 0.988
+        },
+        {
+          "checkpoint": "step_461121.pt",
+          "step": 461121,
+          "mae": 0.125,
+          "value_optimal_rate": 0.9715,
+          "sign_agreement": 0.984
+        },
+        {
+          "checkpoint": "step_471131.pt",
+          "step": 471131,
+          "mae": 0.1198,
+          "value_optimal_rate": 0.97,
+          "sign_agreement": 0.9831
+        },
+        {
+          "checkpoint": "step_481141.pt",
+          "step": 481141,
+          "mae": 0.1202,
+          "value_optimal_rate": 0.9701,
+          "sign_agreement": 0.9845
+        },
+        {
+          "checkpoint": "step_491157.pt",
+          "step": 491157,
+          "mae": 0.1219,
+          "value_optimal_rate": 0.9723,
+          "sign_agreement": 0.9838
+        },
+        {
+          "checkpoint": "step_500048.pt",
+          "step": 500048,
+          "mae": 0.1247,
+          "value_optimal_rate": 0.9745,
+          "sign_agreement": 0.9863
+        },
+        {
+          "checkpoint": "final.pt",
+          "step": 500048,
+          "mae": 0.1247,
+          "value_optimal_rate": 0.9745,
+          "sign_agreement": 0.9863
+        }
+      ],
+      "final_mae": 0.1247,
+      "min_mae": 0.1198,
+      "min_mae_step": 441021,
+      "first_step_below_threshold": 320718,
+      "final_below_threshold": true,
+      "stays_below_after_first_crossing": false
+    },
+    "3x3_500k_s46": {
+      "label": "N3_A1B1C1_K1_M1",
+      "states": 138646,
+      "curve": [
+        {
+          "checkpoint": "step_10035.pt",
+          "step": 10035,
+          "mae": 0.2942,
+          "value_optimal_rate": 0.8928,
+          "sign_agreement": 0.9318
+        },
+        {
+          "checkpoint": "step_20048.pt",
+          "step": 20048,
+          "mae": 0.2317,
+          "value_optimal_rate": 0.9177,
+          "sign_agreement": 0.96
+        },
+        {
+          "checkpoint": "step_30072.pt",
+          "step": 30072,
+          "mae": 0.218,
+          "value_optimal_rate": 0.9392,
+          "sign_agreement": 0.9493
+        },
+        {
+          "checkpoint": "step_40083.pt",
+          "step": 40083,
+          "mae": 0.2142,
+          "value_optimal_rate": 0.9406,
+          "sign_agreement": 0.9707
+        },
+        {
+          "checkpoint": "step_50095.pt",
+          "step": 50095,
+          "mae": 0.2122,
+          "value_optimal_rate": 0.9475,
+          "sign_agreement": 0.9795
+        },
+        {
+          "checkpoint": "step_60150.pt",
+          "step": 60150,
+          "mae": 0.2185,
+          "value_optimal_rate": 0.9595,
+          "sign_agreement": 0.9791
+        },
+        {
+          "checkpoint": "step_70194.pt",
+          "step": 70194,
+          "mae": 0.2322,
+          "value_optimal_rate": 0.9535,
+          "sign_agreement": 0.9667
+        },
+        {
+          "checkpoint": "step_80206.pt",
+          "step": 80206,
+          "mae": 0.2176,
+          "value_optimal_rate": 0.956,
+          "sign_agreement": 0.9719
+        },
+        {
+          "checkpoint": "step_90257.pt",
+          "step": 90257,
+          "mae": 0.2167,
+          "value_optimal_rate": 0.96,
+          "sign_agreement": 0.9726
+        },
+        {
+          "checkpoint": "step_100259.pt",
+          "step": 100259,
+          "mae": 0.2142,
+          "value_optimal_rate": 0.9623,
+          "sign_agreement": 0.9755
+        },
+        {
+          "checkpoint": "step_110299.pt",
+          "step": 110299,
+          "mae": 0.2099,
+          "value_optimal_rate": 0.9603,
+          "sign_agreement": 0.9736
+        },
+        {
+          "checkpoint": "step_120322.pt",
+          "step": 120322,
+          "mae": 0.2063,
+          "value_optimal_rate": 0.9615,
+          "sign_agreement": 0.9716
+        },
+        {
+          "checkpoint": "step_130423.pt",
+          "step": 130423,
+          "mae": 0.2043,
+          "value_optimal_rate": 0.9588,
+          "sign_agreement": 0.972
+        },
+        {
+          "checkpoint": "step_140429.pt",
+          "step": 140429,
+          "mae": 0.1841,
+          "value_optimal_rate": 0.9578,
+          "sign_agreement": 0.9761
+        },
+        {
+          "checkpoint": "step_150446.pt",
+          "step": 150446,
+          "mae": 0.1797,
+          "value_optimal_rate": 0.9589,
+          "sign_agreement": 0.9783
+        },
+        {
+          "checkpoint": "step_160468.pt",
+          "step": 160468,
+          "mae": 0.1699,
+          "value_optimal_rate": 0.9576,
+          "sign_agreement": 0.9792
+        },
+        {
+          "checkpoint": "step_170468.pt",
+          "step": 170468,
+          "mae": 0.174,
+          "value_optimal_rate": 0.9578,
+          "sign_agreement": 0.9812
+        },
+        {
+          "checkpoint": "step_180486.pt",
+          "step": 180486,
+          "mae": 0.1742,
+          "value_optimal_rate": 0.9531,
+          "sign_agreement": 0.9795
+        },
+        {
+          "checkpoint": "step_190515.pt",
+          "step": 190515,
+          "mae": 0.1805,
+          "value_optimal_rate": 0.9528,
+          "sign_agreement": 0.9777
+        },
+        {
+          "checkpoint": "step_200536.pt",
+          "step": 200536,
+          "mae": 0.1759,
+          "value_optimal_rate": 0.9555,
+          "sign_agreement": 0.9775
+        },
+        {
+          "checkpoint": "step_210556.pt",
+          "step": 210556,
+          "mae": 0.1697,
+          "value_optimal_rate": 0.9516,
+          "sign_agreement": 0.9761
+        },
+        {
+          "checkpoint": "step_220571.pt",
+          "step": 220571,
+          "mae": 0.1745,
+          "value_optimal_rate": 0.9586,
+          "sign_agreement": 0.9788
+        },
+        {
+          "checkpoint": "step_230605.pt",
+          "step": 230605,
+          "mae": 0.162,
+          "value_optimal_rate": 0.9611,
+          "sign_agreement": 0.9784
+        },
+        {
+          "checkpoint": "step_240662.pt",
+          "step": 240662,
+          "mae": 0.1574,
+          "value_optimal_rate": 0.9635,
+          "sign_agreement": 0.9759
+        },
+        {
+          "checkpoint": "step_250665.pt",
+          "step": 250665,
+          "mae": 0.1706,
+          "value_optimal_rate": 0.9643,
+          "sign_agreement": 0.9798
+        },
+        {
+          "checkpoint": "step_260698.pt",
+          "step": 260698,
+          "mae": 0.1613,
+          "value_optimal_rate": 0.9644,
+          "sign_agreement": 0.9782
+        },
+        {
+          "checkpoint": "step_270731.pt",
+          "step": 270731,
+          "mae": 0.157,
+          "value_optimal_rate": 0.9651,
+          "sign_agreement": 0.9746
+        },
+        {
+          "checkpoint": "step_280732.pt",
+          "step": 280732,
+          "mae": 0.15,
+          "value_optimal_rate": 0.9677,
+          "sign_agreement": 0.9805
+        },
+        {
+          "checkpoint": "step_290757.pt",
+          "step": 290757,
+          "mae": 0.1569,
+          "value_optimal_rate": 0.9636,
+          "sign_agreement": 0.9786
+        },
+        {
+          "checkpoint": "step_300765.pt",
+          "step": 300765,
+          "mae": 0.1537,
+          "value_optimal_rate": 0.9668,
+          "sign_agreement": 0.983
+        },
+        {
+          "checkpoint": "step_310813.pt",
+          "step": 310813,
+          "mae": 0.1459,
+          "value_optimal_rate": 0.967,
+          "sign_agreement": 0.9829
+        },
+        {
+          "checkpoint": "step_320835.pt",
+          "step": 320835,
+          "mae": 0.1509,
+          "value_optimal_rate": 0.9649,
+          "sign_agreement": 0.9825
+        },
+        {
+          "checkpoint": "step_330867.pt",
+          "step": 330867,
+          "mae": 0.1467,
+          "value_optimal_rate": 0.9662,
+          "sign_agreement": 0.9821
+        },
+        {
+          "checkpoint": "step_340877.pt",
+          "step": 340877,
+          "mae": 0.155,
+          "value_optimal_rate": 0.9633,
+          "sign_agreement": 0.9791
+        },
+        {
+          "checkpoint": "step_350918.pt",
+          "step": 350918,
+          "mae": 0.1379,
+          "value_optimal_rate": 0.9693,
+          "sign_agreement": 0.9814
+        },
+        {
+          "checkpoint": "step_360958.pt",
+          "step": 360958,
+          "mae": 0.1292,
+          "value_optimal_rate": 0.9703,
+          "sign_agreement": 0.9836
+        },
+        {
+          "checkpoint": "step_370971.pt",
+          "step": 370971,
+          "mae": 0.1282,
+          "value_optimal_rate": 0.9721,
+          "sign_agreement": 0.9844
+        },
+        {
+          "checkpoint": "step_380989.pt",
+          "step": 380989,
+          "mae": 0.1276,
+          "value_optimal_rate": 0.9736,
+          "sign_agreement": 0.9857
+        },
+        {
+          "checkpoint": "step_391005.pt",
+          "step": 391005,
+          "mae": 0.134,
+          "value_optimal_rate": 0.9717,
+          "sign_agreement": 0.9851
+        },
+        {
+          "checkpoint": "step_401008.pt",
+          "step": 401008,
+          "mae": 0.1321,
+          "value_optimal_rate": 0.971,
+          "sign_agreement": 0.9854
+        },
+        {
+          "checkpoint": "step_411046.pt",
+          "step": 411046,
+          "mae": 0.1409,
+          "value_optimal_rate": 0.971,
+          "sign_agreement": 0.9822
+        },
+        {
+          "checkpoint": "step_421054.pt",
+          "step": 421054,
+          "mae": 0.1403,
+          "value_optimal_rate": 0.9711,
+          "sign_agreement": 0.9814
+        },
+        {
+          "checkpoint": "step_431059.pt",
+          "step": 431059,
+          "mae": 0.1404,
+          "value_optimal_rate": 0.9721,
+          "sign_agreement": 0.9818
+        },
+        {
+          "checkpoint": "step_441069.pt",
+          "step": 441069,
+          "mae": 0.1387,
+          "value_optimal_rate": 0.976,
+          "sign_agreement": 0.9836
+        },
+        {
+          "checkpoint": "step_451092.pt",
+          "step": 451092,
+          "mae": 0.1267,
+          "value_optimal_rate": 0.9752,
+          "sign_agreement": 0.986
+        },
+        {
+          "checkpoint": "step_461128.pt",
+          "step": 461128,
+          "mae": 0.1335,
+          "value_optimal_rate": 0.9751,
+          "sign_agreement": 0.9825
+        },
+        {
+          "checkpoint": "step_471221.pt",
+          "step": 471221,
+          "mae": 0.1225,
+          "value_optimal_rate": 0.9761,
+          "sign_agreement": 0.9831
+        },
+        {
+          "checkpoint": "step_481225.pt",
+          "step": 481225,
+          "mae": 0.1184,
+          "value_optimal_rate": 0.9789,
+          "sign_agreement": 0.9851
+        },
+        {
+          "checkpoint": "step_491227.pt",
+          "step": 491227,
+          "mae": 0.1163,
+          "value_optimal_rate": 0.9758,
+          "sign_agreement": 0.9864
+        },
+        {
+          "checkpoint": "step_500055.pt",
+          "step": 500055,
+          "mae": 0.1198,
+          "value_optimal_rate": 0.9767,
+          "sign_agreement": 0.9862
+        },
+        {
+          "checkpoint": "final.pt",
+          "step": 500055,
+          "mae": 0.1198,
+          "value_optimal_rate": 0.9767,
+          "sign_agreement": 0.9862
+        }
+      ],
+      "final_mae": 0.1198,
+      "min_mae": 0.1163,
+      "min_mae_step": 491227,
+      "first_step_below_threshold": 310813,
+      "final_below_threshold": true,
+      "stays_below_after_first_crossing": false
+    }
+  }
+}
