@@ -6,7 +6,11 @@ mutation, leaving state completely unchanged.
 """
 from __future__ import annotations
 
-import pytest
+try:
+    import pytest
+except ImportError as exc:
+    import unittest
+    raise unittest.SkipTest(f"pytest required: {exc}") from exc
 from tests.helpers import make_engine, snapshot
 from wallz_engine import WallzEngine
 

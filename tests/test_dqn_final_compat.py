@@ -20,10 +20,15 @@ import os
 import random
 import unittest
 
-import numpy as np
+try:
+    import numpy as np
+    from agents.dqn.encoding import encode_observation, mirror_observation
+except ImportError:
+    NUMPY = False
+else:
+    NUMPY = True
 
 from wallz_engine import WallzEngine
-from agents.dqn.encoding import encode_observation, mirror_observation
 from scripts.final_dqn_lib import (RULE_CELLS, engine_accepts, mirror_key, random_positions,
                                    restore, swap_roles_key)
 try:
@@ -64,6 +69,7 @@ def play(e, *actions):
         e.apply_action(a, update_clock=False)
 
 
+@unittest.skipUnless(NUMPY, "NumPy required")
 class TestMaskEqualsEngine(unittest.TestCase):
     def test_mask_equals_validator_for_every_id(self):
         seen_types = set()
@@ -181,6 +187,7 @@ class TestMaskEqualsEngine(unittest.TestCase):
         self.assertFalse([a for a in codec.legal_ids(e) if 4 <= a < 8])
 
 
+@unittest.skipUnless(NUMPY, "NumPy required")
 class TestEncoding(unittest.TestCase):
     def test_planes_match_engine_fields(self):
         for n, cell, e in positions():
@@ -258,6 +265,7 @@ class TestEncoding(unittest.TestCase):
         self.assertIn(('HOP', (2, 2)), y.get_legal_actions())
 
 
+@unittest.skipUnless(NUMPY, "NumPy required")
 class TestCodec(unittest.TestCase):
     def test_every_legal_action_has_unique_valid_id_and_round_trips(self):
         hops = 0
@@ -294,7 +302,7 @@ class TestCodec(unittest.TestCase):
                     self.assertEqual(mact[1], (act[1][0], n - 2 - act[1][1], act[1][2]))
 
 
-@unittest.skipUnless(TORCH, "torch not installed: training machinery not checked")
+@unittest.skipUnless(NUMPY and TORCH, "NumPy and Torch required")
 class TestTrainingMachinery(unittest.TestCase):
     """Task 6: opponent sampler, replay buffer, target network, checkpoints."""
 
@@ -420,7 +428,7 @@ class TestTrainingMachinery(unittest.TestCase):
             self.assertTrue(torch.equal(v, b.trainer.online_net.state_dict()[k]))
 
 
-@unittest.skipUnless(TORCH, "torch not installed: self-play legality not checked")
+@unittest.skipUnless(NUMPY and TORCH, "NumPy and Torch required")
 class TestAgentsPlayLegally(unittest.TestCase):
     def test_self_play_never_illegal(self):
         from agents.dqn.trainer import DQNConfig, DQNTrainer

@@ -1,14 +1,20 @@
 """Unit tests for Phase 6: Evaluation Function and Feature Extraction (P6.1, P6.2, C7)."""
 import math
 import unittest
-import numpy as np
+try:
+    import numpy as np
+    from evaluation.features import extract_features, FEATURE_NAMES
+except ImportError:
+    NUMPY_AVAILABLE = False
+else:
+    NUMPY_AVAILABLE = True
 
 from agents.evaluation_fn import EvaluationFunction, HEvaluator, LinearEvaluator
 from agents.minimax import MinimaxAgent
-from evaluation.features import extract_features, FEATURE_NAMES
 from wallz_engine import WallzEngine
 
 
+@unittest.skipUnless(NUMPY_AVAILABLE, "NumPy required")
 class TestEvaluationFunction(unittest.TestCase):
     def setUp(self):
         self.rules = {'A': True, 'B': True, 'C': True, 'K': 1, 'M': 2}

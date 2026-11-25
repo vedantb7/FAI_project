@@ -1,8 +1,17 @@
 """Gate X-2: Validation of BFS Pathfinding against NetworkX Independent Reference (P9.2)."""
+from __future__ import annotations
+
 import math
 import random
 import unittest
-import networkx as nx
+
+try:
+    import networkx as nx
+except ImportError:
+    nx = None
+    NX_AVAILABLE = False
+else:
+    NX_AVAILABLE = True
 
 from src.modified_wallz.pathfinding import bfs_distance
 from wallz_engine import WallzEngine
@@ -67,6 +76,7 @@ def networkx_shortest_path_to_goal(nx_graph: nx.Graph, pawn: tuple, goal_row: in
     return min_dist
 
 
+@unittest.skipUnless(NX_AVAILABLE, "networkx required")
 class TestBFSNetworkXEquivalence(unittest.TestCase):
     def test_x2_bfs_matches_networkx_exhaustive_random_layouts(self):
         """

@@ -185,7 +185,7 @@ npm --prefix web/frontend ci
 npm --prefix web/frontend run build
 .venv/bin/python -m web.backend.app --port 5000
 ```
-Open **`http://localhost:5000`** in your browser to interact with the Play, Arena, Training, Replays, and Rules views.
+Open **`http://localhost:5000`** in your browser to interact with the **Overview**, **Rules**, **Play**, **How it works**, and **Results** views.
 
 For development with hot module replacement:
 ```bash

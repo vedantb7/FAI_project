@@ -13,7 +13,11 @@ from __future__ import annotations
 import json
 import os
 import re
-import pytest
+try:
+    import pytest
+except ImportError as exc:
+    import unittest
+    raise unittest.SkipTest(f"pytest required: {exc}") from exc
 
 from evaluation.match_runner import MatchConfig, RandomAgent, run_match
 from evaluation.metrics import outcome_for

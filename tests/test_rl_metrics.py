@@ -1,10 +1,15 @@
 """Unit tests for RL Evaluation Metrics (P2.1)."""
 import unittest
-import numpy as np
+try:
+    import numpy as np
+    from evaluation.rl_metrics import interquartile_mean, bootstrap_ci, iqm_with_ci
+except ImportError:
+    NUMPY_AVAILABLE = False
+else:
+    NUMPY_AVAILABLE = True
 
-from evaluation.rl_metrics import interquartile_mean, bootstrap_ci, iqm_with_ci
 
-
+@unittest.skipUnless(NUMPY_AVAILABLE, "NumPy required")
 class TestRLMetrics(unittest.TestCase):
     def test_iqm_basic(self):
         # Symmetric uniform data: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10

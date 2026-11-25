@@ -44,6 +44,7 @@ report/**/*.log
 .idea/
 .claude/
 .agents/
+.codegraph/
 skills-lock.json
 .DS_Store
 *.swp

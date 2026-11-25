@@ -15,9 +15,13 @@ from __future__ import annotations
 
 import json
 import os
-import pytest
-from hypothesis import given, settings
-from hypothesis import strategies as st
+try:
+    import pytest
+    from hypothesis import given, settings
+    from hypothesis import strategies as st
+except ImportError as exc:
+    import unittest
+    raise unittest.SkipTest(f"pytest and hypothesis required: {exc}") from exc
 
 from agents.greedy import GreedyAgent
 from evaluation.match_runner import MatchConfig, run_match

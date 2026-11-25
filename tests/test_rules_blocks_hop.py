@@ -12,7 +12,11 @@ Verifies:
 from __future__ import annotations
 
 import json
-import pytest
+try:
+    import pytest
+except ImportError as exc:
+    import unittest
+    raise unittest.SkipTest(f"pytest required: {exc}") from exc
 
 from tests.helpers import key_from_json, make_engine, pass_move, snapshot
 from wallz_engine import WallzEngine

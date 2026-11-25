@@ -1,5 +1,9 @@
 """Smoke test for scripts/benchmark_latency.py on the 3x3 release model."""
-import pytest
+try:
+    import pytest
+except ImportError as exc:
+    import unittest
+    raise unittest.SkipTest(f"pytest required: {exc}") from exc
 
 pytest.importorskip("torch")
 

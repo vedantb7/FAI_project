@@ -294,7 +294,7 @@ Hardware, software, training times and latency for each release DQN model:
 The consolidated course submission report is maintained under `report/final_report/` and includes all manuscript assets and compilation tools:
 
 - **PDF Report**:
-  - `report/final_report/final_report.pdf` (7-page compiled report; course limit is 8 pages)
+  - `report/final_report/final_report.pdf` (8-page compiled report; course limit is 8 pages)
 - **LaTeX Source**:
   - `report/final_report/final_report.tex` (Manuscript source; the only source of the report text)
 - **Bibliography**:

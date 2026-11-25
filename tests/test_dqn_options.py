@@ -5,14 +5,20 @@ import random
 import tempfile
 import unittest
 
-import numpy as np
-import torch
+try:
+    import numpy as np
+    import torch
 
-from agents.dqn.agent import load_checkpoint, save_checkpoint
-from agents.dqn.encoding import encode_observation, mirror_observation, num_planes
-from agents.dqn.self_play import SelfPlayManager
-from agents.dqn.trainer import DQNConfig, DQNTrainer
-from tests.test_action_codec import mirror_engine
+    from agents.dqn.agent import load_checkpoint, save_checkpoint
+    from agents.dqn.encoding import encode_observation, mirror_observation, num_planes
+    from agents.dqn.self_play import SelfPlayManager
+    from agents.dqn.trainer import DQNConfig, DQNTrainer
+    from tests.test_action_codec import mirror_engine
+except ImportError:
+    DEPS_AVAILABLE = False
+else:
+    DEPS_AVAILABLE = True
+
 from wallz_engine import WallzEngine
 
 
@@ -28,6 +34,7 @@ def _played(n=5, plies=10, seed=0):
     return e
 
 
+@unittest.skipUnless(DEPS_AVAILABLE, "PyTorch and NumPy required")
 class TestObsV2(unittest.TestCase):
     def test_v1_unchanged_and_v2_extends_it(self):
         for seed in range(5):
@@ -74,6 +81,7 @@ class TestObsV2(unittest.TestCase):
             num_planes(3)
 
 
+@unittest.skipUnless(DEPS_AVAILABLE, "PyTorch and NumPy required")
 class TestTrainerOptions(unittest.TestCase):
     def _trainer(self, **kw):
         cfg = DQNConfig(board_size=3, rules={'A': True, 'B': True, 'C': True, 'K': 1, 'M': 1},

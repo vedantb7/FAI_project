@@ -12,9 +12,12 @@ from __future__ import annotations
 import random
 import time
 import unittest
-import pytest
-from hypothesis import given, settings
-from hypothesis import strategies as st
+try:
+    import pytest
+    from hypothesis import given, settings
+    from hypothesis import strategies as st
+except ImportError as exc:
+    raise unittest.SkipTest(f"pytest and hypothesis required: {exc}") from exc
 
 from src.modified_wallz.config import WallzConfig
 from tests.helpers import illegal_action_pool, key_from_json, make_engine, random_reachable, snapshot

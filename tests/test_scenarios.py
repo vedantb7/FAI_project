@@ -5,7 +5,11 @@ through `scenario_runner` and satisfies all inline and terminal expectations.
 """
 from __future__ import annotations
 
-import pytest
+try:
+    import pytest
+except ImportError as exc:
+    import unittest
+    raise unittest.SkipTest(f"pytest required: {exc}") from exc
 
 from tests.scenario_runner import load_scenarios, run_scenario
 

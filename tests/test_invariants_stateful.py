@@ -1,8 +1,11 @@
 """Gate X-1: Hypothesis RuleBasedStateMachine for Engine Invariants and Legality Fuzzing (P9.1)."""
 import random
 import unittest
-from hypothesis import strategies as st, settings, Phase
-from hypothesis.stateful import RuleBasedStateMachine, rule, initialize, invariant
+try:
+    from hypothesis import strategies as st, settings, Phase
+    from hypothesis.stateful import RuleBasedStateMachine, rule, initialize, invariant
+except ImportError as exc:
+    raise unittest.SkipTest(f"hypothesis required: {exc}") from exc
 
 from wallz_engine import WallzEngine
 from src.modified_wallz.config import WallzConfig

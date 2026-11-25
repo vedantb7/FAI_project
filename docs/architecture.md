@@ -162,11 +162,11 @@ Browser (React 18 + TS) ──[HTTP REST]──> Flask Backend ──> WallzEngi
 - **No Rule Duplication**: The React frontend contains **zero game logic**. It never computes legal moves, shortest paths, or collision checks. All legal targets (`state.legal`) and path polylines (`state.paths`) are provided by the backend serialization of the engine.
 - **Contract C-GEOM**: Board geometry calculations (`geometry.ts`) strictly translate grid coordinates to SVG canvas space (with Row 0 at the bottom and Row $N-1$ at the top).
 - **Five Primary Views**:
-  - `Play`: Interactive human vs AI or AI vs AI game session with undo, move hints ("Ask AI"), and error toasts.
-  - `Arena`: Synchronous AI vs AI tournaments with speed slider, dual think panels, and Wilson 95% confidence intervals.
-  - `Training`: Real-time Recharts dashboards for DQN training curves (win-rate, TD-loss, epsilon), training loop diagram, and benchmark summaries.
-  - `Replays`: Replay browser discovering experiment records, interactive scrubber, step-by-step frame inspection, and JSON upload.
-  - `Rules`: Interactive explorer running all 9 canonical rule scenarios with live invariant verification badges and markdown viewer for `docs/game_rules.md`.
+  - `Overview` (`/`): Explains the three rule changes (A, B, C) with mini board diagrams and a quick **Play against an agent** launcher.
+  - `Rules` (`/rules`): Interactive 9-lesson explorer running canonical rule scenarios from `tests/scenarios/*.json` with engine verification badges and a markdown viewer for `docs/game_rules.md`.
+  - `Play` (`/play`): Interactive human vs AI or AI vs AI game session with presets, undo, worked step introspection ("Ask for a hint"), exact-solver position values, and URL presets.
+  - `How it works` (`/method`): Interactive explanation of the state model, six action types, agent value estimation, and solve-coverage grid backed by `findings.json`.
+  - `Results` (`/results`): Research showcase cards for H1–H4 and RQ1–RQ3 with verdicts, Recharts visualizations, provenance metadata, and "Try it" game links backed by `findings.json`.
 
 ### Flask Application Backend (`web/backend/`)
 - **`serialize.py`**: Converts `WallzEngine` state into Contract C-STATE JSON (positions, inventories, walls with `latest` flag, blocked cell timers, grouped legal actions, and shortest path cell coordinates).

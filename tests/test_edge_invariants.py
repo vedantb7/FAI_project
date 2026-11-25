@@ -10,7 +10,11 @@ import collections
 import random
 import sys
 
-import pytest
+try:
+    import pytest
+except ImportError as exc:
+    import unittest
+    raise unittest.SkipTest(f"pytest required: {exc}") from exc
 
 from wallz_engine import WallzEngine
 from src.modified_wallz.board import WallzBoard
